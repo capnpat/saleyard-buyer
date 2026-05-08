@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="description" content="A live-bidding companion for Australian saleyard buyers.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Saleyard">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#0D0D0D">
+  <meta name="format-detection" content="telephone=no">
+
+  <title>Saleyard Buyer</title>
+
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800;900&family=JetBrains+Mono:wght@500;700&display=swap">
+
+  <style>
+    /* Base */
+    html, body { margin: 0; padding: 0; }
+    body {
+      background: #F7F3EA;
+      color: #0D0D0D;
+      font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -webkit-text-size-adjust: 100%;
+      overscroll-behavior-y: none;
+    }
+    #root { min-height: 100vh; }
+
+    /* Component styles */
+    .arc { font-family: 'Archivo', system-ui, sans-serif; letter-spacing: -0.01em; }
+    .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+    .field {
+      width: 100%; padding: 14px 14px; border: 1.5px solid #1A1A1A;
+      border-radius: 8px; background: #FFFFFF; font-size: 22px;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-variant-numeric: tabular-nums; outline: none;
+      -webkit-appearance: none; appearance: none;
+      box-sizing: border-box;
+    }
+    .field:focus { box-shadow: 0 0 0 3px rgba(26,26,26,0.15); }
+    .field.over { border-color: #B91C1C; background: #FEF2F2; }
+    .lbl { font-family: 'Archivo', system-ui, sans-serif; font-weight: 600;
+           font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+           color: #4B4B4B; margin-bottom: 6px; display: block; }
+    .btn { font-family: 'Archivo', system-ui, sans-serif; font-weight: 800;
+           letter-spacing: 0.04em; border-radius: 8px; padding: 16px 18px;
+           border: 1.5px solid #1A1A1A; cursor: pointer; transition: transform 0.05s ease;
+           -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+    .btn:active { transform: translateY(1px); }
+    .btn-primary { background: #0D0D0D; color: #FAFAFA; }
+    .btn-primary:disabled { background: #C8C8C8; border-color: #C8C8C8; color: #6B6B6B; cursor: not-allowed; }
+    .btn-ghost { background: #FFFFFF; color: #0D0D0D; }
+    .btn-warn { background: #B91C1C; color: #FFFFFF; border-color: #B91C1C; }
+    .card { background: #FFFFFF; border: 1.5px solid #1A1A1A; border-radius: 12px; }
+    .pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px;
+            border-radius: 999px; font-family: 'Archivo', sans-serif; font-weight: 700;
+            font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
+    .row-line { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; }
+    .modal-bg { position: fixed; inset: 0; background: rgba(13,13,13,0.55); z-index: 50;
+                display: flex; align-items: center; justify-content: center; padding: 16px; }
+    .modal { background: #FFFFFF; border: 1.5px solid #1A1A1A; border-radius: 12px;
+             max-width: 560px; width: 100%; max-height: 90vh; overflow-y: auto; }
+    input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    input[type=number] { -moz-appearance: textfield; }
+    .toast { position: fixed; bottom: 110px; left: 50%; transform: translateX(-50%);
+             background: #0D0D0D; color: #FAFAFA; padding: 12px 20px; border-radius: 8px;
+             font-family: 'Archivo', sans-serif; font-weight: 600; z-index: 60;
+             box-shadow: 0 8px 24px rgba(0,0,0,0.25); }
+
+    /* Wide-screen split layout */
+    @media (min-width: 1024px) {
+      .grid-2 { grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); }
+    }
+
+    /* Loading splash */
+    .splash {
+      position: fixed; inset: 0; background: #F7F3EA;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Archivo', system-ui, sans-serif;
+      font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase;
+      color: #6B6B6B;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"><div class="splash">Loading…</div></div>
+
+  <!--
+    window.storage polyfill: backed by localStorage.
+    The app code uses an async key-value API; this shim adapts it to localStorage
+    so the same component code runs both inside Claude.ai and as a standalone PWA.
+  -->
+  <script>
+    (function () {
+      window.storage = {
+        get: function (key) {
+          return new Promise(function (resolve) {
+            try {
+              var v = localStorage.getItem(key);
+              resolve(v === null ? null : { key: key, value: v });
+            } catch (e) { resolve(null); }
+          });
+        },
+        set: function (key, value) {
+          return new Promise(function (resolve) {
+            try {
+              localStorage.setItem(key, value);
+              resolve({ key: key, value: value });
+            } catch (e) { resolve(null); }
+          });
+        },
+        delete: function (key) {
+          return new Promise(function (resolve) {
+            try {
+              localStorage.removeItem(key);
+              resolve({ key: key, deleted: true });
+            } catch (e) { resolve(null); }
+          });
+        }
+      };
+    })();
+  </script>
+
+  <!-- Service worker for offline support -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('service-worker.js').catch(function () {});
+      });
+    }
+  </script>
+
+  <!-- Bundled libraries (no CDN required at runtime) -->
+  <script src="lib/react.production.min.js"></script>
+  <script src="lib/react-dom.production.min.js"></script>
+  <script src="lib/xlsx.full.min.js"></script>
+
+  <!-- Compiled application -->
+  <script src="app.js"></script>
+</body>
+</html>

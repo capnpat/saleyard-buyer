@@ -8,8 +8,9 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Saleyard">
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="theme-color" content="#0D0D0D">
+  <meta name="theme-color" content="#050507">
   <meta name="format-detection" content="telephone=no">
+  <meta name="color-scheme" content="dark">
 
   <title>Saleyard Buyer</title>
 
@@ -26,8 +27,8 @@
     /* Base */
     html, body { margin: 0; padding: 0; }
     body {
-      background: #F7F3EA;
-      color: #0D0D0D;
+      background: #0F0F10;
+      color: #EAEAEC;
       font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
       -webkit-font-smoothing: antialiased;
       -webkit-text-size-adjust: 100%;
@@ -39,66 +40,69 @@
     .arc { font-family: 'Archivo', system-ui, sans-serif; letter-spacing: -0.01em; }
     .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; }
     .field {
-      width: 100%; padding: 14px 14px; border: 1.5px solid #1A1A1A;
-      border-radius: 8px; background: #FFFFFF; font-size: 22px;
+      width: 100%; padding: 14px 14px; border: 1.5px solid #3A3A3F;
+      border-radius: 8px; background: #242427; color: #EAEAEC;
+      font-size: 22px;
       font-family: 'JetBrains Mono', ui-monospace, monospace;
       font-variant-numeric: tabular-nums; outline: none;
       -webkit-appearance: none; appearance: none;
+      caret-color: #FFD66B;
       box-sizing: border-box;
     }
-    .field:focus { box-shadow: 0 0 0 3px rgba(26,26,26,0.15); }
-    .field.over { border-color: #B91C1C; background: #FEF2F2; }
+    .field::placeholder { color: #9A9AA1; }
+    .field:focus { box-shadow: 0 0 0 3px rgba(234,234,236,0.12); border-color: #EAEAEC; }
+    .field.over { border-color: #F87171; background: rgba(248,113,113,0.08); }
     .lbl { font-family: 'Archivo', system-ui, sans-serif; font-weight: 600;
            font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
-           color: #4B4B4B; margin-bottom: 6px; display: block; }
+           color: #B0B0B5; margin-bottom: 6px; display: block; }
     .btn { font-family: 'Archivo', system-ui, sans-serif; font-weight: 800;
            letter-spacing: 0.04em; border-radius: 8px; padding: 16px 18px;
-           border: 1.5px solid #1A1A1A; cursor: pointer; transition: transform 0.05s ease;
+           border: 1.5px solid #3A3A3F; cursor: pointer; transition: transform 0.05s ease;
            -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
     .btn:active { transform: translateY(1px); }
-    .btn-primary { background: #0D0D0D; color: #FAFAFA; }
-    .btn-primary:disabled { background: #C8C8C8; border-color: #C8C8C8; color: #6B6B6B; cursor: not-allowed; }
-    .btn-ghost { background: #FFFFFF; color: #0D0D0D; }
-    .btn-warn { background: #B91C1C; color: #FFFFFF; border-color: #B91C1C; }
-    .card { background: #FFFFFF; border: 1.5px solid #1A1A1A; border-radius: 12px; }
+    .btn-primary { background: #EAEAEC; color: #0D0D0F; border-color: #EAEAEC; }
+    .btn-primary:disabled { background: #2E2E32; border-color: #2E2E32; color: #6B6B70; cursor: not-allowed; }
+    .btn-ghost { background: transparent; color: #EAEAEC; border-color: #3A3A3F; }
+    .btn-warn { background: #DC2626; color: #FFFFFF; border-color: #DC2626; }
+    .card { background: #1A1A1C; border: 1.5px solid #3A3A3F; border-radius: 12px; }
     .pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px;
             border-radius: 999px; font-family: 'Archivo', sans-serif; font-weight: 700;
             font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
     .row-line { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; }
-    .modal-bg { position: fixed; inset: 0; background: rgba(13,13,13,0.55); z-index: 50;
+    .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 50;
                 display: flex; align-items: center; justify-content: center; padding: 16px; }
-    .modal { background: #FFFFFF; border: 1.5px solid #1A1A1A; border-radius: 12px;
-             max-width: 560px; width: 100%; max-height: 90vh; overflow-y: auto; }
+    .modal { background: #1A1A1C; border: 1.5px solid #3A3A3F; border-radius: 12px;
+             max-width: 560px; width: 100%; max-height: 90vh; overflow-y: auto; color: #EAEAEC; }
     input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
     input[type=number] { -moz-appearance: textfield; }
     .toast { position: fixed; bottom: 110px; left: 50%; transform: translateX(-50%);
-             background: #0D0D0D; color: #FAFAFA; padding: 12px 20px; border-radius: 8px;
-             font-family: 'Archivo', sans-serif; font-weight: 600; z-index: 60;
-             box-shadow: 0 8px 24px rgba(0,0,0,0.25); }
+             background: #EAEAEC; color: #0D0D0F; padding: 12px 20px; border-radius: 8px;
+             font-family: 'Archivo', sans-serif; font-weight: 700; z-index: 60;
+             box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+    select.field { background-image: linear-gradient(45deg, transparent 50%, #EAEAEC 50%),
+                                     linear-gradient(135deg, #EAEAEC 50%, transparent 50%);
+                   background-position: calc(100% - 18px) calc(50% - 3px),
+                                        calc(100% - 12px) calc(50% - 3px);
+                   background-size: 6px 6px, 6px 6px; background-repeat: no-repeat;
+                   padding-right: 32px; }
+    select.field option { background: #242427; color: #EAEAEC; }
 
-    /* Wide-screen split layout */
     @media (min-width: 1024px) {
       .grid-2 { grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); }
     }
 
-    /* Loading splash */
     .splash {
-      position: fixed; inset: 0; background: #F7F3EA;
+      position: fixed; inset: 0; background: #0F0F10;
       display: flex; align-items: center; justify-content: center;
       font-family: 'Archivo', system-ui, sans-serif;
       font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase;
-      color: #6B6B6B;
+      color: #9A9AA1;
     }
   </style>
 </head>
 <body>
   <div id="root"><div class="splash">Loading…</div></div>
 
-  <!--
-    window.storage polyfill: backed by localStorage.
-    The app code uses an async key-value API; this shim adapts it to localStorage
-    so the same component code runs both inside Claude.ai and as a standalone PWA.
-  -->
   <script>
     (function () {
       window.storage = {
@@ -130,7 +134,6 @@
     })();
   </script>
 
-  <!-- Service worker for offline support -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function () {
@@ -139,12 +142,10 @@
     }
   </script>
 
-  <!-- Bundled libraries (no CDN required at runtime) -->
   <script src="lib/react.production.min.js"></script>
   <script src="lib/react-dom.production.min.js"></script>
   <script src="lib/xlsx.full.min.js"></script>
 
-  <!-- Compiled application -->
   <script src="app.js"></script>
 </body>
 </html>

@@ -22,7 +22,7 @@ function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" !=
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 // Saleyard Buyer Tool
 // Author: Patrick Coole
-// A live-bidding companion for Australian saleyard buyers, designed for iPad.
+// Night-theme edition.
 
 var _React = React,
   useState = _React.useState,
@@ -61,31 +61,52 @@ var DEFAULT_LINES = [{
   name: 'Bucks',
   category: 'goat'
 }];
+
+// Category colours, tuned for a dark canvas
 var CAT = {
   male: {
-    solid: '#1E3A8A',
-    soft: '#E1E7F4',
+    solid: '#5B82CC',
+    soft: '#1B2540',
     ink: '#FFFFFF',
     label: 'Male sheep'
   },
   female: {
-    solid: '#BE185D',
-    soft: '#FBE3EE',
+    solid: '#E04A8F',
+    soft: '#3A1626',
     ink: '#FFFFFF',
     label: 'Female sheep'
   },
   goat: {
-    solid: '#7C3A0F',
-    soft: '#EFE2D2',
+    solid: '#C97849',
+    soft: '#2D1A0E',
     ink: '#FFFFFF',
     label: 'Goat'
   },
   mixed: {
-    solid: '#3F3F46',
-    soft: '#E4E4E7',
-    ink: '#FFFFFF',
+    solid: '#9CA0AB',
+    soft: '#25272C',
+    ink: '#0D0D0F',
     label: 'Mixed sex'
   }
+};
+
+// Theme tokens
+var T = {
+  bgBody: '#0F0F10',
+  bgHeader: '#050507',
+  bgCard: '#1A1A1C',
+  bgField: '#242427',
+  bgInset: '#161618',
+  borderH: '#3A3A3F',
+  borderS: '#2A2A2E',
+  text: '#EAEAEC',
+  textMute: '#9A9AA1',
+  textLbl: '#B0B0B5',
+  accent: '#FFD66B',
+  warnBdr: '#F87171',
+  warnBg: 'rgba(248,113,113,0.08)',
+  warnTxt: '#FCA5A5',
+  editBg: '#2A2618'
 };
 var STORAGE_KEY = 'saleyard-state-v1';
 
@@ -96,6 +117,9 @@ var fmt2 = function fmt2(n) {
 };
 var fmt1 = function fmt1(n) {
   return Number.isFinite(n) ? n.toFixed(1) : '0.0';
+};
+var fmt0 = function fmt0(n) {
+  return Number.isFinite(n) ? Math.round(n).toLocaleString('en-AU') : '0';
 };
 var fmtInt = function fmtInt(n) {
   return Number.isFinite(n) ? Math.round(n).toLocaleString('en-AU') : '0';
@@ -222,8 +246,6 @@ function App() {
       return clearTimeout(t);
     };
   }, [lines, budgets, purchases, buyerEmail, loaded]);
-
-  // Toast helper
   function showToast(msg) {
     setToast(msg);
     setTimeout(function () {
@@ -515,7 +537,7 @@ function App() {
             file = new File([blob], filename, {
               type: blob.type
             });
-            summaryText = "Saleyard purchases summary for ".concat(today, "\n\n") + "Pens: ".concat(totals.pens, "\n") + "Total head: ".concat(totals.head, "\n") + "Total weight: ".concat(fmt1(totals.kg), " kg\n") + "Total spent: $".concat(fmt2(totals.dollars), " (GST free)\n") + "Average $/kg: $".concat(fmt2(totals.avgPpk), "\n") + "Average $/head: $".concat(fmt2(totals.avgPph)); // Try Web Share API with file (best on iPad/iOS Safari)
+            summaryText = "Saleyard purchases summary for ".concat(today, "\n\n") + "Pens: ".concat(totals.pens, "\n") + "Total head: ".concat(totals.head, "\n") + "Total weight: ".concat(fmt1(totals.kg), " kg\n") + "Total spent: $".concat(fmt2(totals.dollars), " (GST free)\n") + "Average $/kg: $".concat(fmt2(totals.avgPpk), "\n") + "Average $/head: $".concat(fmt2(totals.avgPph));
             if (!(navigator.canShare && navigator.canShare({
               files: [file]
             }))) {
@@ -535,7 +557,6 @@ function App() {
             _context3.p = 4;
             _t3 = _context3.v;
           case 5:
-            // Fallback: download then mailto
             url = URL.createObjectURL(blob);
             a = document.createElement('a');
             a.href = url;
@@ -604,7 +625,7 @@ function App() {
       style: {
         fontSize: 9,
         fontWeight: 600,
-        opacity: selected ? 0.85 : 0.7,
+        opacity: 0.85,
         marginTop: 2
       }
     }, line.name));
@@ -616,7 +637,7 @@ function App() {
     return /*#__PURE__*/React.createElement("div", {
       style: {
         minHeight: '100vh',
-        background: '#F7F3EA',
+        background: T.bgBody,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center'
@@ -627,7 +648,7 @@ function App() {
         fontWeight: 800,
         letterSpacing: '0.1em',
         textTransform: 'uppercase',
-        color: '#6B6B6B'
+        color: T.textMute
       }
     }, "Loading\u2026"));
   }
@@ -639,16 +660,16 @@ function App() {
   });
   return /*#__PURE__*/React.createElement("div", {
     style: {
-      background: '#F7F3EA',
+      background: T.bgBody,
       minHeight: '100vh',
-      color: '#0D0D0D',
+      color: T.text,
       paddingBottom: 110
     }
   }, /*#__PURE__*/React.createElement("header", {
     style: {
-      background: '#0D0D0D',
-      color: '#FAFAFA',
-      borderBottom: '1.5px solid #0D0D0D',
+      background: T.bgHeader,
+      color: T.text,
+      borderBottom: "1.5px solid ".concat(T.borderS),
       padding: '14px 16px',
       position: 'sticky',
       top: 0,
@@ -676,7 +697,7 @@ function App() {
       fontSize: 11,
       letterSpacing: '0.12em',
       textTransform: 'uppercase',
-      opacity: 0.65
+      color: T.textMute
     }
   }, todayStr, " \xB7 GST free")), /*#__PURE__*/React.createElement("div", {
     style: {
@@ -687,33 +708,27 @@ function App() {
     className: "btn arc",
     onClick: emailSummary,
     style: {
-      background: '#FAFAFA',
-      color: '#0D0D0D',
-      borderColor: '#FAFAFA',
+      background: T.text,
+      color: '#0D0D0F',
+      borderColor: T.text,
       padding: '10px 14px',
       fontSize: 13
     }
   }, "EMAIL"), /*#__PURE__*/React.createElement("button", {
-    className: "btn arc",
+    className: "btn arc btn-ghost",
     onClick: function onClick() {
       return setShowSettings(true);
     },
     style: {
-      background: 'transparent',
-      color: '#FAFAFA',
-      borderColor: '#FAFAFA',
       padding: '10px 14px',
       fontSize: 13
     }
   }, "SETTINGS"), /*#__PURE__*/React.createElement("button", {
-    className: "btn arc",
+    className: "btn arc btn-ghost",
     onClick: function onClick() {
       return setShowResetConfirm(true);
     },
     style: {
-      background: 'transparent',
-      color: '#FAFAFA',
-      borderColor: '#FAFAFA',
       padding: '10px 14px',
       fontSize: 13
     }
@@ -858,8 +873,8 @@ function App() {
       gap: 12,
       marginBottom: 14,
       padding: 14,
-      background: '#F7F3EA',
-      border: '1.5px dashed #1A1A1A',
+      background: T.bgInset,
+      border: "1.5px dashed ".concat(T.borderH),
       borderRadius: 10
     }
   }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
@@ -873,7 +888,7 @@ function App() {
   }, fmt1(dTotalKg), " ", /*#__PURE__*/React.createElement("span", {
     style: {
       fontSize: 13,
-      color: '#6B6B6B'
+      color: T.textMute
     }
   }, "kg"))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
     className: "lbl"
@@ -886,10 +901,10 @@ function App() {
   }, "$", fmt2(dTotal)))), overBudget && /*#__PURE__*/React.createElement("div", {
     style: {
       padding: '10px 12px',
-      background: '#FEF2F2',
-      border: '1.5px solid #B91C1C',
+      background: T.warnBg,
+      border: "1.5px solid ".concat(T.warnBdr),
       borderRadius: 8,
-      color: '#B91C1C',
+      color: T.warnTxt,
       marginBottom: 12
     }
   }, /*#__PURE__*/React.createElement("span", {
@@ -898,7 +913,7 @@ function App() {
       fontWeight: 800,
       letterSpacing: '0.04em'
     }
-  }, "OVER BUDGET \u2014 your ceiling for ", draft.lineCode, " is $", fmt2(lineBudget), "/kg")), /*#__PURE__*/React.createElement("button", {
+  }, "OVER BUDGET, your ceiling for ", draft.lineCode, " is $", fmt2(lineBudget), "/kg")), /*#__PURE__*/React.createElement("button", {
     className: "btn btn-primary arc",
     style: {
       width: '100%',
@@ -932,10 +947,10 @@ function App() {
     style: {
       padding: 32,
       textAlign: 'center',
-      border: '1.5px dashed #B5B0A4',
+      border: "1.5px dashed ".concat(T.borderH),
       borderRadius: 10,
-      background: '#FBF8F1',
-      color: '#6B6B6B'
+      background: T.bgInset,
+      color: T.textMute
     },
     className: "arc"
   }, "No pens recorded yet.") : /*#__PURE__*/React.createElement("div", {
@@ -951,10 +966,10 @@ function App() {
     return /*#__PURE__*/React.createElement("div", {
       key: p.id,
       style: {
-        border: '1.5px solid #1A1A1A',
+        border: "1.5px solid ".concat(T.borderH),
         borderRadius: 10,
         padding: 12,
-        background: editingId === p.id ? '#FFFBEA' : '#FFFFFF'
+        background: editingId === p.id ? T.editBg : T.bgInset
       }
     }, /*#__PURE__*/React.createElement("div", {
       style: {
@@ -996,9 +1011,9 @@ function App() {
       style: {
         padding: '6px 10px',
         fontSize: 11,
-        background: '#FEF2F2',
-        color: '#B91C1C',
-        borderColor: '#B91C1C'
+        background: 'transparent',
+        color: T.warnBdr,
+        borderColor: T.warnBdr
       },
       onClick: function onClick() {
         return deletePurchase(p.id);
@@ -1060,7 +1075,7 @@ function App() {
       style: {
         marginTop: 8,
         paddingTop: 8,
-        borderTop: '1px dashed #C8C2B3',
+        borderTop: "1px dashed ".concat(T.borderS),
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'baseline'
@@ -1084,19 +1099,19 @@ function App() {
       left: 0,
       right: 0,
       zIndex: 40,
-      background: '#0D0D0D',
-      color: '#FAFAFA',
+      background: T.bgHeader,
+      color: T.text,
       padding: '12px 16px calc(12px + env(safe-area-inset-bottom)) 16px',
-      borderTop: '2px solid #0D0D0D',
-      boxShadow: '0 -8px 24px rgba(0,0,0,0.18)'
+      borderTop: "1.5px solid ".concat(T.borderS),
+      boxShadow: '0 -8px 24px rgba(0,0,0,0.45)'
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
       maxWidth: 1280,
       margin: '0 auto',
       display: 'grid',
-      gridTemplateColumns: 'repeat(5, minmax(0, 1fr))',
-      gap: 12
+      gridTemplateColumns: 'repeat(6, minmax(0, 1fr))',
+      gap: 10
     }
   }, /*#__PURE__*/React.createElement(Totals, {
     label: "Pens",
@@ -1107,6 +1122,10 @@ function App() {
   }), /*#__PURE__*/React.createElement(Totals, {
     label: "Total kg",
     value: fmt1(totals.kg)
+  }), /*#__PURE__*/React.createElement(Totals, {
+    label: "Total $",
+    value: "$".concat(fmt0(totals.dollars)),
+    accent: true
   }), /*#__PURE__*/React.createElement(Totals, {
     label: "Avg $/kg",
     value: "$".concat(fmt2(totals.avgPpk)),
@@ -1152,7 +1171,7 @@ function App() {
   }, "Start a new day?"), /*#__PURE__*/React.createElement("p", {
     style: {
       margin: '0 0 16px 0',
-      color: '#4B4B4B'
+      color: T.textLbl
     }
   }, "All ", totals.pens, " recorded pen", totals.pens === 1 ? '' : 's', " will be cleared. Budgets, line types and your email will be kept. Consider emailing the summary first."), /*#__PURE__*/React.createElement("div", {
     style: {
@@ -1173,7 +1192,7 @@ function App() {
     style: {
       textAlign: 'center',
       padding: '20px 16px 0 16px',
-      color: '#9A9A9A',
+      color: T.textMute,
       fontSize: 11,
       letterSpacing: '0.08em',
       textTransform: 'uppercase'
@@ -1198,18 +1217,18 @@ function Totals(_ref5) {
     className: "arc",
     style: {
       fontWeight: 600,
-      fontSize: 10,
+      fontSize: 9,
       letterSpacing: '0.14em',
       textTransform: 'uppercase',
-      opacity: 0.7
+      color: '#9A9AA1'
     }
   }, label), /*#__PURE__*/React.createElement("div", {
     className: "mono",
     style: {
       fontWeight: 700,
-      fontSize: 18,
+      fontSize: 16,
       marginTop: 2,
-      color: accent ? '#FFD66B' : '#FAFAFA',
+      color: accent ? '#FFD66B' : '#EAEAEC',
       whiteSpace: 'nowrap',
       overflow: 'hidden',
       textOverflow: 'ellipsis'
@@ -1332,10 +1351,10 @@ function SettingsModal(_ref6) {
       key: l.code,
       className: "row-line",
       style: {
-        border: '1.5px solid #1A1A1A',
+        border: "1.5px solid ".concat(T.borderH),
         borderRadius: 8,
         padding: '8px 10px',
-        background: '#FFF'
+        background: T.bgInset
       }
     }, /*#__PURE__*/React.createElement("span", {
       className: "pill",
@@ -1347,13 +1366,14 @@ function SettingsModal(_ref6) {
       className: "arc",
       style: {
         fontWeight: 700,
-        fontSize: 14
+        fontSize: 14,
+        color: T.text
       }
     }, l.name), /*#__PURE__*/React.createElement("div", {
       className: "arc",
       style: {
         fontSize: 11,
-        color: '#6B6B6B',
+        color: T.textMute,
         textTransform: 'uppercase',
         letterSpacing: '0.08em'
       }
@@ -1367,7 +1387,7 @@ function SettingsModal(_ref6) {
       className: "mono",
       style: {
         fontSize: 13,
-        color: '#4B4B4B'
+        color: T.textMute
       }
     }, "$"), /*#__PURE__*/React.createElement("input", {
       type: "text",
@@ -1382,15 +1402,15 @@ function SettingsModal(_ref6) {
       onChange: function onChange(e) {
         return onSetBudget(l.code, e.target.value.replace(/[^0-9.]/g, ''));
       },
-      placeholder: "\u2014"
+      placeholder: "not set"
     }), /*#__PURE__*/React.createElement("button", {
       className: "btn arc",
       style: {
         padding: '6px 8px',
         fontSize: 10,
-        background: '#FEF2F2',
-        color: '#B91C1C',
-        borderColor: '#B91C1C'
+        background: 'transparent',
+        color: T.warnBdr,
+        borderColor: T.warnBdr
       },
       onClick: function onClick() {
         return onRemoveLine(l.code);
@@ -1398,7 +1418,7 @@ function SettingsModal(_ref6) {
     }, "\xD7")));
   }))), /*#__PURE__*/React.createElement("div", {
     style: {
-      borderTop: '1.5px dashed #B5B0A4',
+      borderTop: "1.5px dashed ".concat(T.borderS),
       paddingTop: 14
     }
   }, /*#__PURE__*/React.createElement("label", {
@@ -1464,6 +1484,6 @@ function SettingsModal(_ref6) {
   }, "ADD LINE"))));
 }
 
-// Mount the app
+// Mount
 var root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(React.createElement(App));

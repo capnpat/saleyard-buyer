@@ -2,9 +2,9 @@
 // Author: Patrick Coole.
 //
 // Strategy: precache the full app shell on install so subsequent loads work
-// fully offline. Use stale-while-revalidate for everything else (fonts).
+// fully offline. Use stale-while-revalidate for cross-origin fetches (fonts).
 
-const CACHE_NAME = 'saleyard-v1';
+const CACHE_NAME = 'saleyard-v2';
 
 const APP_SHELL = [
   './',
@@ -38,8 +38,9 @@ self.addEventListener('fetch', (event) => {
   const req = event.request;
   if (req.method !== 'GET') return;
 
-  // Same-origin: cache-first.
   const url = new URL(req.url);
+
+  // Same-origin: cache-first.
   if (url.origin === self.location.origin) {
     event.respondWith(
       caches.match(req).then((cached) => {
@@ -56,7 +57,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Cross-origin (e.g. Google Fonts): stale-while-revalidate.
+  // Cross-origin (Google Fonts): stale-while-revalidate.
   event.respondWith(
     caches.match(req).then((cached) => {
       const network = fetch(req).then((res) => {

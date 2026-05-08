@@ -1,5 +1,6 @@
 "use strict";
 
+function _createForOfIteratorHelper(r, e) { var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (!t) { if (Array.isArray(r) || (t = _unsupportedIterableToArray(r)) || e && r && "number" == typeof r.length) { t && (r = t); var _n2 = 0, F = function F() {}; return { s: F, n: function n() { return _n2 >= r.length ? { done: !0 } : { done: !1, value: r[_n2++] }; }, e: function e(r) { throw r; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var o, a = !0, u = !1; return { s: function s() { t = t.call(r); }, n: function n() { var r = t.next(); return a = r.done, r; }, e: function e(r) { u = !0, o = r; }, f: function f() { try { a || null == t["return"] || t["return"](); } finally { if (u) throw o; } } }; }
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
@@ -22,7 +23,7 @@ function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" !=
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 // Saleyard Buyer Tool
 // Author: Patrick Coole
-// Night-theme, v3.
+// Night-theme, with dashboard.
 
 var _React = React,
   useState = _React.useState,
@@ -154,40 +155,48 @@ function App() {
     setBudgets = _useState6[1];
   var _useState7 = useState({}),
     _useState8 = _slicedToArray(_useState7, 2),
-    defaultWeights = _useState8[0],
-    setDefaultWeights = _useState8[1];
+    estimatedPpks = _useState8[0],
+    setEstimatedPpks = _useState8[1];
   var _useState9 = useState({}),
     _useState0 = _slicedToArray(_useState9, 2),
-    bidSteps = _useState0[0],
-    setBidSteps = _useState0[1];
-  var _useState1 = useState([]),
+    defaultWeights = _useState0[0],
+    setDefaultWeights = _useState0[1];
+  var _useState1 = useState({}),
     _useState10 = _slicedToArray(_useState1, 2),
-    purchases = _useState10[0],
-    setPurchases = _useState10[1];
-  var _useState11 = useState(emptyDraft()),
+    bidSteps = _useState10[0],
+    setBidSteps = _useState10[1];
+  var _useState11 = useState([]),
     _useState12 = _slicedToArray(_useState11, 2),
-    draft = _useState12[0],
-    setDraft = _useState12[1];
-  var _useState13 = useState(null),
+    purchases = _useState12[0],
+    setPurchases = _useState12[1];
+  var _useState13 = useState(emptyDraft()),
     _useState14 = _slicedToArray(_useState13, 2),
-    editingId = _useState14[0],
-    setEditingId = _useState14[1];
-  var _useState15 = useState(''),
+    draft = _useState14[0],
+    setDraft = _useState14[1];
+  var _useState15 = useState(null),
     _useState16 = _slicedToArray(_useState15, 2),
-    buyerEmail = _useState16[0],
-    setBuyerEmail = _useState16[1];
-  var _useState17 = useState(false),
+    editingId = _useState16[0],
+    setEditingId = _useState16[1];
+  var _useState17 = useState(''),
     _useState18 = _slicedToArray(_useState17, 2),
-    showSettings = _useState18[0],
-    setShowSettings = _useState18[1];
+    buyerEmail = _useState18[0],
+    setBuyerEmail = _useState18[1];
   var _useState19 = useState(false),
     _useState20 = _slicedToArray(_useState19, 2),
-    showResetConfirm = _useState20[0],
-    setShowResetConfirm = _useState20[1];
-  var _useState21 = useState(null),
+    showSettings = _useState20[0],
+    setShowSettings = _useState20[1];
+  var _useState21 = useState(false),
     _useState22 = _slicedToArray(_useState21, 2),
-    toast = _useState22[0],
-    setToast = _useState22[1]; // {message, undo?}
+    showResetConfirm = _useState22[0],
+    setShowResetConfirm = _useState22[1];
+  var _useState23 = useState(null),
+    _useState24 = _slicedToArray(_useState23, 2),
+    toast = _useState24[0],
+    setToast = _useState24[1];
+  var _useState25 = useState('buying'),
+    _useState26 = _slicedToArray(_useState25, 2),
+    view = _useState26[0],
+    setView = _useState26[1]; // 'buying' or 'dashboard' // {message, undo?}
 
   var draftRef = useRef(null);
   var toastTimer = useRef(null);
@@ -208,6 +217,7 @@ function App() {
               data = JSON.parse(result.value);
               if (Array.isArray(data.lines) && data.lines.length) setLines(data.lines);
               if (data.budgets && _typeof(data.budgets) === 'object') setBudgets(data.budgets);
+              if (data.estimatedPpks && _typeof(data.estimatedPpks) === 'object') setEstimatedPpks(data.estimatedPpks);
               if (data.defaultWeights && _typeof(data.defaultWeights) === 'object') setDefaultWeights(data.defaultWeights);
               if (data.bidSteps && _typeof(data.bidSteps) === 'object') setBidSteps(data.bidSteps);
               if (Array.isArray(data.purchases)) setPurchases(data.purchases);
@@ -243,6 +253,7 @@ function App() {
             return window.storage.set(STORAGE_KEY, JSON.stringify({
               lines: lines,
               budgets: budgets,
+              estimatedPpks: estimatedPpks,
               defaultWeights: defaultWeights,
               bidSteps: bidSteps,
               purchases: purchases,
@@ -263,7 +274,7 @@ function App() {
     return function () {
       return clearTimeout(t);
     };
-  }, [lines, budgets, defaultWeights, bidSteps, purchases, draft, buyerEmail, loaded]);
+  }, [lines, budgets, estimatedPpks, defaultWeights, bidSteps, purchases, draft, buyerEmail, loaded]);
 
   // Toast helpers, supports an optional UNDO button
   function showToast(message, undo) {
@@ -382,6 +393,20 @@ function App() {
     });
   }
 
+  // Set $/kg from a preset button, also updates $/head when weight is known
+  function setPresetPpk(price) {
+    setDraft(function (prev) {
+      var next = _objectSpread({}, prev);
+      next.pricePerKg = price.toFixed(2);
+      next.lastEditedPrice = 'pricePerKg';
+      var wt = parseFloat(next.wtPerHead);
+      if (Number.isFinite(wt) && wt > 0) {
+        next.pricePerHead = (price * wt).toFixed(2);
+      }
+      return next;
+    });
+  }
+
   // Computed for the current draft
   var dHead = parseInt(draft.head, 10);
   var dWt = parseFloat(draft.wtPerHead);
@@ -393,6 +418,15 @@ function App() {
   var lineBudget = draft.lineCode ? budgets[draft.lineCode] : undefined;
   var overBudget = !!lineBudget && Number.isFinite(dPpk) && dPpk > lineBudget;
   var headroom = lineBudget && Number.isFinite(dPpk) && dPpk > 0 ? lineBudget - dPpk : null;
+
+  // Preset prices for the selected line: estimate -10c, -5c, estimate, +5c, +10c
+  var lineEstimate = draft.lineCode ? estimatedPpks[draft.lineCode] : undefined;
+  var presets = useMemo(function () {
+    if (!lineEstimate) return [];
+    return [-0.10, -0.05, 0, 0.05, 0.10].map(function (d) {
+      return round2(Math.max(0, lineEstimate + d));
+    });
+  }, [lineEstimate]);
 
   // Today's running average $/kg for the selected line (bought only)
   var lineDayAvg = useMemo(function () {
@@ -525,6 +559,7 @@ function App() {
     setEditingId(null);
     setDraft(emptyDraft());
     setShowResetConfirm(false);
+    setView('buying');
     showToast('New day started');
   }
 
@@ -557,6 +592,16 @@ function App() {
 
   function setBudgetFor(code, val) {
     setBudgets(function (prev) {
+      var next = _objectSpread({}, prev);
+      if (val === '' || val == null) delete next[code];else {
+        var v = parseFloat(val);
+        if (Number.isFinite(v) && v > 0) next[code] = v;
+      }
+      return next;
+    });
+  }
+  function setEstimatedPpkFor(code, val) {
+    setEstimatedPpks(function (prev) {
       var next = _objectSpread({}, prev);
       if (val === '' || val == null) delete next[code];else {
         var v = parseFloat(val);
@@ -611,6 +656,11 @@ function App() {
       });
     });
     setBudgets(function (prev) {
+      var n = _objectSpread({}, prev);
+      delete n[code];
+      return n;
+    });
+    setEstimatedPpks(function (prev) {
       var n = _objectSpread({}, prev);
       delete n[code];
       return n;
@@ -963,6 +1013,18 @@ function App() {
     }
   }, /*#__PURE__*/React.createElement("button", {
     className: "btn arc",
+    onClick: function onClick() {
+      return setView(view === 'buying' ? 'dashboard' : 'buying');
+    },
+    style: {
+      background: view === 'dashboard' ? T.accent : 'transparent',
+      color: view === 'dashboard' ? '#0D0D0F' : T.text,
+      borderColor: view === 'dashboard' ? T.accent : T.borderH,
+      padding: '10px 14px',
+      fontSize: 13
+    }
+  }, view === 'buying' ? 'STATS' : 'BIDDING'), /*#__PURE__*/React.createElement("button", {
+    className: "btn arc",
     onClick: emailSummary,
     style: {
       background: T.text,
@@ -998,7 +1060,7 @@ function App() {
       maxWidth: 1280,
       margin: '0 auto'
     }
-  }, /*#__PURE__*/React.createElement("style", null, "\n          @media (min-width: 1024px) {\n            .grid-2 { grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); }\n          }\n        "), /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("style", null, "\n          @media (min-width: 1024px) {\n            .grid-2 { grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); }\n          }\n        "), view === 'buying' && /*#__PURE__*/React.createElement("div", {
     className: "grid-2",
     style: {
       display: 'grid',
@@ -1159,7 +1221,23 @@ function App() {
       return bumpPrice('kg', +1);
     },
     "aria-label": "increase price per kg"
-  }, "+")), priceContext()), /*#__PURE__*/React.createElement("div", {
+  }, "+")), presets.length > 0 && /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(5, 1fr)',
+      gap: 6,
+      marginTop: 8
+    }
+  }, presets.map(function (price, i) {
+    return /*#__PURE__*/React.createElement("button", {
+      key: i,
+      type: "button",
+      className: "btn-preset arc ".concat(i === 2 ? 'target' : ''),
+      onClick: function onClick() {
+        return setPresetPpk(price);
+      }
+    }, "$", price.toFixed(2));
+  })), priceContext()), /*#__PURE__*/React.createElement("div", {
     style: {
       marginBottom: 14
     }
@@ -1465,7 +1543,13 @@ function App() {
         fontSize: 18
       }
     }, "$", fmt2(p.total))));
-  }))))), /*#__PURE__*/React.createElement("div", {
+  })))), view === 'dashboard' && /*#__PURE__*/React.createElement(Dashboard, {
+    purchases: purchases,
+    lines: lines,
+    totals: totals,
+    budgets: budgets,
+    estimatedPpks: estimatedPpks
+  })), /*#__PURE__*/React.createElement("div", {
     style: {
       position: 'fixed',
       bottom: 0,
@@ -1514,10 +1598,12 @@ function App() {
   }, toast.undo.label)), showSettings && /*#__PURE__*/React.createElement(SettingsModal, {
     lines: lines,
     budgets: budgets,
+    estimatedPpks: estimatedPpks,
     defaultWeights: defaultWeights,
     bidSteps: bidSteps,
     buyerEmail: buyerEmail,
     onSetBudget: setBudgetFor,
+    onSetEstimatedPpk: setEstimatedPpkFor,
     onSetDefaultWeight: setDefaultWeightFor,
     onSetBidStep: setBidStepFor,
     onSetEmail: setBuyerEmail,
@@ -1617,32 +1703,34 @@ function Totals(_ref5) {
 function SettingsModal(_ref6) {
   var lines = _ref6.lines,
     budgets = _ref6.budgets,
+    estimatedPpks = _ref6.estimatedPpks,
     defaultWeights = _ref6.defaultWeights,
     bidSteps = _ref6.bidSteps,
     buyerEmail = _ref6.buyerEmail,
     onSetBudget = _ref6.onSetBudget,
+    onSetEstimatedPpk = _ref6.onSetEstimatedPpk,
     onSetDefaultWeight = _ref6.onSetDefaultWeight,
     onSetBidStep = _ref6.onSetBidStep,
     onSetEmail = _ref6.onSetEmail,
     onAddLine = _ref6.onAddLine,
     onRemoveLine = _ref6.onRemoveLine,
     onClose = _ref6.onClose;
-  var _useState23 = useState(''),
-    _useState24 = _slicedToArray(_useState23, 2),
-    newCode = _useState24[0],
-    setNewCode = _useState24[1];
-  var _useState25 = useState(''),
-    _useState26 = _slicedToArray(_useState25, 2),
-    newName = _useState26[0],
-    setNewName = _useState26[1];
-  var _useState27 = useState('male'),
+  var _useState27 = useState(''),
     _useState28 = _slicedToArray(_useState27, 2),
-    newCat = _useState28[0],
-    setNewCat = _useState28[1];
-  var _useState29 = useState(buyerEmail || ''),
+    newCode = _useState28[0],
+    setNewCode = _useState28[1];
+  var _useState29 = useState(''),
     _useState30 = _slicedToArray(_useState29, 2),
-    emailInput = _useState30[0],
-    setEmailInput = _useState30[1];
+    newName = _useState30[0],
+    setNewName = _useState30[1];
+  var _useState31 = useState('male'),
+    _useState32 = _slicedToArray(_useState31, 2),
+    newCat = _useState32[0],
+    setNewCat = _useState32[1];
+  var _useState33 = useState(buyerEmail || ''),
+    _useState34 = _slicedToArray(_useState33, 2),
+    emailInput = _useState34[0],
+    setEmailInput = _useState34[1];
   function handleAdd() {
     if (!newCode.trim() || !newName.trim()) return;
     onAddLine(newCode, newName, newCat);
@@ -1722,7 +1810,7 @@ function SettingsModal(_ref6) {
     }
   }, /*#__PURE__*/React.createElement("label", {
     className: "lbl"
-  }, "Lines \xB7 ceiling $/kg \xB7 default kg \xB7 step $"), /*#__PURE__*/React.createElement("div", {
+  }, "Lines \xB7 ceiling \xB7 estimate \xB7 default kg \xB7 step"), /*#__PURE__*/React.createElement("div", {
     className: "arc",
     style: {
       fontSize: 11,
@@ -1730,7 +1818,7 @@ function SettingsModal(_ref6) {
       marginBottom: 8,
       letterSpacing: '0.04em'
     }
-  }, "Default kg pre-fills the weight when you tap a line. Step is how much the +/\u2212 buttons bump $/kg by. Default step is $0.05."), /*#__PURE__*/React.createElement("div", {
+  }, "Estimated $/kg drives the 5 quick-tap preset buttons under the price field (estimate \xB1 5c, \xB1 10c). Default kg pre-fills the weight when you tap a line. Step is how much the +/\u2212 buttons bump by. Default step is $0.05."), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',
       flexDirection: 'column',
@@ -1796,10 +1884,18 @@ function SettingsModal(_ref6) {
     }, "\xD7")), /*#__PURE__*/React.createElement("div", {
       style: {
         display: 'grid',
-        gridTemplateColumns: 'repeat(3, 1fr)',
+        gridTemplateColumns: 'repeat(2, 1fr)',
         gap: 8
       }
     }, /*#__PURE__*/React.createElement(SmallInput, {
+      label: "Estimated $/kg",
+      prefix: "$",
+      value: estimatedPpks[l.code] != null ? String(estimatedPpks[l.code]) : '',
+      onChange: function onChange(v) {
+        return onSetEstimatedPpk(l.code, v);
+      },
+      placeholder: "for presets"
+    }), /*#__PURE__*/React.createElement(SmallInput, {
       label: "Ceiling $/kg",
       prefix: "$",
       value: budgets[l.code] != null ? String(budgets[l.code]) : '',
@@ -1942,6 +2038,531 @@ function SmallInput(_ref7) {
       color: T.textMute
     }
   }, suffix)));
+}
+
+// ----- Dashboard view -----
+
+function niceMax(value) {
+  if (!Number.isFinite(value) || value <= 0) return 1;
+  var exp = Math.floor(Math.log10(value));
+  var mantissa = value / Math.pow(10, exp);
+  var nice;
+  if (mantissa <= 1) nice = 1;else if (mantissa <= 2) nice = 2;else if (mantissa <= 5) nice = 5;else nice = 10;
+  return nice * Math.pow(10, exp);
+}
+function Dashboard(_ref8) {
+  var purchases = _ref8.purchases,
+    lines = _ref8.lines,
+    totals = _ref8.totals,
+    budgets = _ref8.budgets,
+    estimatedPpks = _ref8.estimatedPpks;
+  var bought = useMemo(function () {
+    return purchases.filter(function (p) {
+      return !p.watched;
+    });
+  }, [purchases]);
+  var watchedCount = purchases.length - bought.length;
+
+  // Per-line aggregates, sorted by total spend descending
+  var byLine = useMemo(function () {
+    var map = {};
+    var _iterator = _createForOfIteratorHelper(bought),
+      _step;
+    try {
+      var _loop = function _loop() {
+        var p = _step.value;
+        if (!map[p.lineCode]) {
+          var line = lines.find(function (l) {
+            return l.code === p.lineCode;
+          });
+          map[p.lineCode] = {
+            code: p.lineCode,
+            name: line ? line.name : p.lineCode,
+            category: line ? line.category : 'mixed',
+            head: 0,
+            kg: 0,
+            total: 0,
+            pens: 0
+          };
+        }
+        map[p.lineCode].head += p.head;
+        map[p.lineCode].kg += p.totalKg;
+        map[p.lineCode].total += p.total;
+        map[p.lineCode].pens += 1;
+      };
+      for (_iterator.s(); !(_step = _iterator.n()).done;) {
+        _loop();
+      }
+    } catch (err) {
+      _iterator.e(err);
+    } finally {
+      _iterator.f();
+    }
+    return Object.values(map).map(function (l) {
+      return _objectSpread(_objectSpread({}, l), {}, {
+        avgPpk: l.kg > 0 ? l.total / l.kg : 0
+      });
+    }).sort(function (a, b) {
+      return b.total - a.total;
+    });
+  }, [bought, lines]);
+
+  // Cumulative spend points, sorted in time
+  var cumPoints = useMemo(function () {
+    if (bought.length === 0) return [];
+    var sorted = _toConsumableArray(bought).sort(function (a, b) {
+      return (a.timestamp || '').localeCompare(b.timestamp || '');
+    });
+    var cum = 0;
+    var start = {
+      time: new Date(sorted[0].timestamp || Date.now()),
+      cum: 0
+    };
+    return [start].concat(_toConsumableArray(sorted.map(function (p) {
+      cum += p.total;
+      return {
+        time: new Date(p.timestamp || Date.now()),
+        cum: cum,
+        line: p.lineCode
+      };
+    })));
+  }, [bought]);
+  if (bought.length === 0) {
+    return /*#__PURE__*/React.createElement("section", {
+      className: "card",
+      style: {
+        padding: 40,
+        textAlign: 'center'
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "arc",
+      style: {
+        fontWeight: 800,
+        fontSize: 14,
+        letterSpacing: '0.10em',
+        textTransform: 'uppercase',
+        color: T.textMute
+      }
+    }, "Dashboard fills in once you start recording pens"), watchedCount > 0 && /*#__PURE__*/React.createElement("div", {
+      className: "arc",
+      style: {
+        marginTop: 8,
+        fontSize: 12,
+        color: T.textMute
+      }
+    }, "(", watchedCount, " watched pen", watchedCount === 1 ? '' : 's', " so far)"));
+  }
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 16
+    }
+  }, /*#__PURE__*/React.createElement(DashStatTiles, {
+    totals: totals,
+    watchedCount: watchedCount
+  }), /*#__PURE__*/React.createElement(DashByLine, {
+    items: byLine,
+    ceilings: budgets,
+    estimates: estimatedPpks
+  }), cumPoints.length >= 2 && /*#__PURE__*/React.createElement(DashCumulative, {
+    points: cumPoints
+  }));
+}
+function SectionTitle(_ref9) {
+  var children = _ref9.children;
+  return /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontWeight: 800,
+      fontSize: 11,
+      letterSpacing: '0.16em',
+      textTransform: 'uppercase',
+      color: T.textMute,
+      marginBottom: 14
+    }
+  }, children);
+}
+function DashStatTiles(_ref0) {
+  var totals = _ref0.totals,
+    watchedCount = _ref0.watchedCount;
+  var tiles = [{
+    label: 'Pens',
+    value: fmtInt(totals.pens)
+  }, {
+    label: 'Head',
+    value: fmtInt(totals.head)
+  }, {
+    label: 'Total kg',
+    value: fmt1(totals.kg)
+  }, {
+    label: 'Total $',
+    value: "$".concat(fmt0(totals.dollars)),
+    accent: true
+  }, {
+    label: 'Avg $/kg',
+    value: "$".concat(fmt2(totals.avgPpk)),
+    accent: true
+  }, {
+    label: 'Avg $/hd',
+    value: "$".concat(fmt2(totals.avgPph)),
+    accent: true
+  }];
+  return /*#__PURE__*/React.createElement("section", {
+    className: "card",
+    style: {
+      padding: 16
+    }
+  }, /*#__PURE__*/React.createElement(SectionTitle, null, "Today at a glance", watchedCount > 0 ? " \xB7 ".concat(watchedCount, " watched") : ''), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+      gap: 10
+    }
+  }, tiles.map(function (t) {
+    return /*#__PURE__*/React.createElement("div", {
+      key: t.label,
+      style: {
+        background: T.bgInset,
+        border: "1.5px solid ".concat(T.borderS),
+        borderRadius: 10,
+        padding: 14
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "arc",
+      style: {
+        fontWeight: 600,
+        fontSize: 10,
+        letterSpacing: '0.12em',
+        textTransform: 'uppercase',
+        color: T.textMute
+      }
+    }, t.label), /*#__PURE__*/React.createElement("div", {
+      className: "mono",
+      style: {
+        fontWeight: 800,
+        fontSize: 26,
+        marginTop: 4,
+        color: t.accent ? T.accent : T.text,
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis'
+      }
+    }, t.value));
+  })));
+}
+function DashByLine(_ref1) {
+  var items = _ref1.items,
+    ceilings = _ref1.ceilings,
+    estimates = _ref1.estimates;
+  if (items.length === 0) return null;
+  var maxTotal = Math.max.apply(Math, _toConsumableArray(items.map(function (i) {
+    return i.total;
+  })));
+  var maxAvg = Math.max.apply(Math, _toConsumableArray(items.map(function (i) {
+    return i.avgPpk;
+  })));
+  return /*#__PURE__*/React.createElement("section", {
+    className: "card",
+    style: {
+      padding: 16
+    }
+  }, /*#__PURE__*/React.createElement(SectionTitle, null, "Spend by line"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 14
+    }
+  }, items.map(function (item) {
+    var cat = CAT[item.category];
+    var totalPct = item.total / maxTotal * 100;
+    var ceiling = ceilings[item.code];
+    var estimate = estimates[item.code];
+    var avgPct = maxAvg > 0 ? item.avgPpk / maxAvg * 100 : 0;
+    // Ceiling/estimate markers are positioned on the avg-$/kg bar, scaled to maxAvg
+    var ceilingPct = ceiling && maxAvg > 0 ? Math.min(100, ceiling / maxAvg * 100) : null;
+    var estimatePct = estimate && maxAvg > 0 ? Math.min(100, estimate / maxAvg * 100) : null;
+    return /*#__PURE__*/React.createElement("div", {
+      key: item.code
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 6,
+        gap: 8
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: 8,
+        minWidth: 0
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "pill",
+      style: {
+        background: cat.solid,
+        color: cat.ink
+      }
+    }, item.code), /*#__PURE__*/React.createElement("span", {
+      className: "arc",
+      style: {
+        fontWeight: 700,
+        fontSize: 13,
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis'
+      }
+    }, item.name)), /*#__PURE__*/React.createElement("div", {
+      className: "mono",
+      style: {
+        fontWeight: 800,
+        fontSize: 15,
+        color: T.text
+      }
+    }, "$", fmt0(item.total))), /*#__PURE__*/React.createElement("div", {
+      style: {
+        height: 12,
+        background: T.bgInset,
+        border: "1.5px solid ".concat(T.borderS),
+        borderRadius: 6,
+        overflow: 'hidden',
+        position: 'relative'
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        width: "".concat(totalPct, "%"),
+        height: '100%',
+        background: cat.solid
+      }
+    })), /*#__PURE__*/React.createElement("div", {
+      className: "arc",
+      style: {
+        marginTop: 6,
+        fontSize: 11,
+        color: T.textMute,
+        display: 'flex',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: 6
+      }
+    }, /*#__PURE__*/React.createElement("span", null, item.pens, " pen", item.pens === 1 ? '' : 's', " \xB7 ", fmtInt(item.head), " head \xB7 ", fmt1(item.kg), " kg"), /*#__PURE__*/React.createElement("span", {
+      className: "mono",
+      style: {
+        color: T.text,
+        fontWeight: 700
+      }
+    }, "$", fmt2(item.avgPpk), "/kg", ceiling ? /*#__PURE__*/React.createElement("span", {
+      style: {
+        color: T.textMute,
+        fontWeight: 600
+      }
+    }, " \xB7 ceiling $", fmt2(ceiling)) : null, estimate ? /*#__PURE__*/React.createElement("span", {
+      style: {
+        color: T.textMute,
+        fontWeight: 600
+      }
+    }, " \xB7 est $", fmt2(estimate)) : null)), maxAvg > 0 && /*#__PURE__*/React.createElement("div", {
+      style: {
+        marginTop: 4,
+        height: 4,
+        background: T.bgInset,
+        borderRadius: 2,
+        position: 'relative',
+        overflow: 'visible'
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        width: "".concat(avgPct, "%"),
+        height: '100%',
+        background: T.text,
+        borderRadius: 2
+      }
+    }), ceilingPct != null && /*#__PURE__*/React.createElement("div", {
+      style: {
+        position: 'absolute',
+        top: -3,
+        height: 10,
+        width: 2,
+        left: "calc(".concat(ceilingPct, "% - 1px)"),
+        background: T.warnBdr
+      },
+      title: "Ceiling $".concat(fmt2(ceiling))
+    }), estimatePct != null && /*#__PURE__*/React.createElement("div", {
+      style: {
+        position: 'absolute',
+        top: -3,
+        height: 10,
+        width: 2,
+        left: "calc(".concat(estimatePct, "% - 1px)"),
+        background: T.accent
+      },
+      title: "Estimate $".concat(fmt2(estimate))
+    })));
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      marginTop: 14,
+      paddingTop: 10,
+      borderTop: "1px dashed ".concat(T.borderS),
+      fontSize: 10,
+      color: T.textMute,
+      letterSpacing: '0.04em',
+      display: 'flex',
+      gap: 14,
+      flexWrap: 'wrap'
+    }
+  }, /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("span", {
+    style: {
+      display: 'inline-block',
+      width: 16,
+      height: 4,
+      background: T.text,
+      verticalAlign: 'middle',
+      marginRight: 4
+    }
+  }), " Avg $/kg"), /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("span", {
+    style: {
+      display: 'inline-block',
+      width: 2,
+      height: 10,
+      background: T.warnBdr,
+      verticalAlign: 'middle',
+      marginRight: 4
+    }
+  }), " Ceiling"), /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("span", {
+    style: {
+      display: 'inline-block',
+      width: 2,
+      height: 10,
+      background: T.accent,
+      verticalAlign: 'middle',
+      marginRight: 4
+    }
+  }), " Estimate")));
+}
+function DashCumulative(_ref10) {
+  var points = _ref10.points;
+  // SVG dimensions; viewBox scales with container width
+  var W = 600,
+    H = 240;
+  var PAD = {
+    t: 16,
+    r: 14,
+    b: 30,
+    l: 60
+  };
+  var innerW = W - PAD.l - PAD.r;
+  var innerH = H - PAD.t - PAD.b;
+  var startMs = points[0].time.getTime();
+  var endMs = points[points.length - 1].time.getTime();
+  var range = Math.max(60000, endMs - startMs); // at least 1 minute
+  var rawMax = points[points.length - 1].cum;
+  var yMax = niceMax(rawMax);
+  var xCoord = function xCoord(t) {
+    return PAD.l + (t.getTime() - startMs) / range * innerW;
+  };
+  var yCoord = function yCoord(v) {
+    return PAD.t + innerH - v / yMax * innerH;
+  };
+  var pathD = points.map(function (p, i) {
+    return "".concat(i === 0 ? 'M' : 'L', " ").concat(xCoord(p.time).toFixed(2), " ").concat(yCoord(p.cum).toFixed(2));
+  }).join(' ');
+
+  // Build a closed area below the line for fill
+  var areaD = pathD + " L ".concat(xCoord(points[points.length - 1].time).toFixed(2), " ").concat((PAD.t + innerH).toFixed(2)) + " L ".concat(xCoord(points[0].time).toFixed(2), " ").concat((PAD.t + innerH).toFixed(2), " Z");
+
+  // Y ticks at 0, 25%, 50%, 75%, 100% of yMax
+  var yTicks = [0, 0.25, 0.5, 0.75, 1].map(function (f) {
+    return f * yMax;
+  });
+
+  // X ticks: start, midpoint, end
+  var midMs = startMs + (endMs - startMs) / 2;
+  var xTicks = [{
+    time: new Date(startMs),
+    anchor: 'start'
+  }, {
+    time: new Date(midMs),
+    anchor: 'middle'
+  }, {
+    time: new Date(endMs),
+    anchor: 'end'
+  }];
+  var formatTime = function formatTime(d) {
+    return d.toLocaleTimeString('en-AU', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    });
+  };
+  return /*#__PURE__*/React.createElement("section", {
+    className: "card",
+    style: {
+      padding: 16
+    }
+  }, /*#__PURE__*/React.createElement(SectionTitle, null, "Cumulative spend through the day"), /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 ".concat(W, " ").concat(H),
+    style: {
+      width: '100%',
+      height: 'auto',
+      display: 'block'
+    },
+    preserveAspectRatio: "none"
+  }, yTicks.map(function (v, i) {
+    return /*#__PURE__*/React.createElement("line", {
+      key: i,
+      x1: PAD.l,
+      x2: W - PAD.r,
+      y1: yCoord(v),
+      y2: yCoord(v),
+      stroke: T.borderS,
+      strokeWidth: "1",
+      strokeDasharray: i === 0 ? '0' : '2 4'
+    });
+  }), yTicks.map(function (v, i) {
+    return /*#__PURE__*/React.createElement("text", {
+      key: i,
+      x: PAD.l - 8,
+      y: yCoord(v) + 4,
+      fontSize: "11",
+      fontFamily: "JetBrains Mono",
+      fill: T.textMute,
+      textAnchor: "end"
+    }, "$", fmt0(v));
+  }), xTicks.map(function (t, i) {
+    return /*#__PURE__*/React.createElement("text", {
+      key: i,
+      x: xCoord(t.time),
+      y: H - 8,
+      fontSize: "11",
+      fontFamily: "JetBrains Mono",
+      fill: T.textMute,
+      textAnchor: t.anchor
+    }, formatTime(t.time));
+  }), /*#__PURE__*/React.createElement("path", {
+    d: areaD,
+    fill: T.accent,
+    fillOpacity: "0.10"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: pathD,
+    stroke: T.accent,
+    strokeWidth: "2",
+    fill: "none",
+    strokeLinejoin: "round",
+    strokeLinecap: "round"
+  }), points.map(function (p, i) {
+    return i > 0 && /*#__PURE__*/React.createElement("circle", {
+      key: i,
+      cx: xCoord(p.time),
+      cy: yCoord(p.cum),
+      r: "3.5",
+      fill: T.accent,
+      stroke: T.bgCard,
+      strokeWidth: "2"
+    });
+  })));
 }
 
 // Mount

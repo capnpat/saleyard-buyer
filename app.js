@@ -4,13 +4,13 @@ function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArra
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
 function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
 function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
 function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
-function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
-function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
 function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
@@ -22,7 +22,7 @@ function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" !=
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 // Saleyard Buyer Tool
 // Author: Patrick Coole
-// Night-theme edition.
+// Night-theme, v3.
 
 var _React = React,
   useState = _React.useState,
@@ -61,8 +61,6 @@ var DEFAULT_LINES = [{
   name: 'Bucks',
   category: 'goat'
 }];
-
-// Category colours, tuned for a dark canvas
 var CAT = {
   male: {
     solid: '#5B82CC',
@@ -89,8 +87,6 @@ var CAT = {
     label: 'Mixed sex'
   }
 };
-
-// Theme tokens
 var T = {
   bgBody: '#0F0F10',
   bgHeader: '#050507',
@@ -106,9 +102,11 @@ var T = {
   warnBdr: '#F87171',
   warnBg: 'rgba(248,113,113,0.08)',
   warnTxt: '#FCA5A5',
+  okTxt: '#86EFAC',
   editBg: '#2A2618'
 };
 var STORAGE_KEY = 'saleyard-state-v1';
+var DEFAULT_KG_STEP = 0.05;
 
 // ----- Helpers -----
 
@@ -124,9 +122,13 @@ var fmt0 = function fmt0(n) {
 var fmtInt = function fmtInt(n) {
   return Number.isFinite(n) ? Math.round(n).toLocaleString('en-AU') : '0';
 };
+var round2 = function round2(n) {
+  return Math.round(n * 100) / 100;
+};
 function emptyDraft() {
   return {
     lineCode: '',
+    penNumber: '',
     head: '',
     wtPerHead: '',
     pricePerKg: '',
@@ -150,35 +152,45 @@ function App() {
     _useState6 = _slicedToArray(_useState5, 2),
     budgets = _useState6[0],
     setBudgets = _useState6[1];
-  var _useState7 = useState([]),
+  var _useState7 = useState({}),
     _useState8 = _slicedToArray(_useState7, 2),
-    purchases = _useState8[0],
-    setPurchases = _useState8[1];
-  var _useState9 = useState(emptyDraft()),
+    defaultWeights = _useState8[0],
+    setDefaultWeights = _useState8[1];
+  var _useState9 = useState({}),
     _useState0 = _slicedToArray(_useState9, 2),
-    draft = _useState0[0],
-    setDraft = _useState0[1];
-  var _useState1 = useState(null),
+    bidSteps = _useState0[0],
+    setBidSteps = _useState0[1];
+  var _useState1 = useState([]),
     _useState10 = _slicedToArray(_useState1, 2),
-    editingId = _useState10[0],
-    setEditingId = _useState10[1];
-  var _useState11 = useState(''),
+    purchases = _useState10[0],
+    setPurchases = _useState10[1];
+  var _useState11 = useState(emptyDraft()),
     _useState12 = _slicedToArray(_useState11, 2),
-    buyerEmail = _useState12[0],
-    setBuyerEmail = _useState12[1];
-  var _useState13 = useState(false),
+    draft = _useState12[0],
+    setDraft = _useState12[1];
+  var _useState13 = useState(null),
     _useState14 = _slicedToArray(_useState13, 2),
-    showSettings = _useState14[0],
-    setShowSettings = _useState14[1];
-  var _useState15 = useState(false),
+    editingId = _useState14[0],
+    setEditingId = _useState14[1];
+  var _useState15 = useState(''),
     _useState16 = _slicedToArray(_useState15, 2),
-    showResetConfirm = _useState16[0],
-    setShowResetConfirm = _useState16[1];
-  var _useState17 = useState(null),
+    buyerEmail = _useState16[0],
+    setBuyerEmail = _useState16[1];
+  var _useState17 = useState(false),
     _useState18 = _slicedToArray(_useState17, 2),
-    toast = _useState18[0],
-    setToast = _useState18[1];
+    showSettings = _useState18[0],
+    setShowSettings = _useState18[1];
+  var _useState19 = useState(false),
+    _useState20 = _slicedToArray(_useState19, 2),
+    showResetConfirm = _useState20[0],
+    setShowResetConfirm = _useState20[1];
+  var _useState21 = useState(null),
+    _useState22 = _slicedToArray(_useState21, 2),
+    toast = _useState22[0],
+    setToast = _useState22[1]; // {message, undo?}
+
   var draftRef = useRef(null);
+  var toastTimer = useRef(null);
 
   // Load persisted state
   useEffect(function () {
@@ -196,7 +208,10 @@ function App() {
               data = JSON.parse(result.value);
               if (Array.isArray(data.lines) && data.lines.length) setLines(data.lines);
               if (data.budgets && _typeof(data.budgets) === 'object') setBudgets(data.budgets);
+              if (data.defaultWeights && _typeof(data.defaultWeights) === 'object') setDefaultWeights(data.defaultWeights);
+              if (data.bidSteps && _typeof(data.bidSteps) === 'object') setBidSteps(data.bidSteps);
               if (Array.isArray(data.purchases)) setPurchases(data.purchases);
+              if (data.draft && _typeof(data.draft) === 'object') setDraft(_objectSpread(_objectSpread({}, emptyDraft()), data.draft));
               if (typeof data.buyerEmail === 'string') setBuyerEmail(data.buyerEmail);
             }
             _context.n = 3;
@@ -215,7 +230,7 @@ function App() {
     }))();
   }, []);
 
-  // Save when state changes (debounced)
+  // Save when state changes (debounced, includes draft for crash recovery)
   useEffect(function () {
     if (!loaded) return;
     var t = setTimeout(/*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
@@ -228,7 +243,10 @@ function App() {
             return window.storage.set(STORAGE_KEY, JSON.stringify({
               lines: lines,
               budgets: budgets,
+              defaultWeights: defaultWeights,
+              bidSteps: bidSteps,
               purchases: purchases,
+              draft: draft,
               buyerEmail: buyerEmail
             }));
           case 1:
@@ -245,21 +263,48 @@ function App() {
     return function () {
       return clearTimeout(t);
     };
-  }, [lines, budgets, purchases, buyerEmail, loaded]);
-  function showToast(msg) {
-    setToast(msg);
-    setTimeout(function () {
+  }, [lines, budgets, defaultWeights, bidSteps, purchases, draft, buyerEmail, loaded]);
+
+  // Toast helpers, supports an optional UNDO button
+  function showToast(message, undo) {
+    if (toastTimer.current) clearTimeout(toastTimer.current);
+    setToast({
+      message: message,
+      undo: undo
+    });
+    var dwell = undo ? 6000 : 2200;
+    toastTimer.current = setTimeout(function () {
       return setToast(null);
-    }, 2200);
+    }, dwell);
+  }
+  function clearToast() {
+    if (toastTimer.current) clearTimeout(toastTimer.current);
+    setToast(null);
   }
 
   // ----- Bid entry handlers -----
 
   function pickLine(code) {
     setDraft(function (prev) {
-      return _objectSpread(_objectSpread({}, prev), {}, {
+      var next = _objectSpread(_objectSpread({}, prev), {}, {
         lineCode: code
       });
+      // Pre-fill default weight if set and weight field is empty
+      if (!next.wtPerHead && defaultWeights[code]) {
+        next.wtPerHead = String(defaultWeights[code]);
+        // Recompute the dependent price if a price was already typed
+        var wt = parseFloat(next.wtPerHead);
+        if (Number.isFinite(wt) && wt > 0) {
+          if (next.lastEditedPrice === 'pricePerKg' && next.pricePerKg !== '') {
+            var pk = parseFloat(next.pricePerKg);
+            if (Number.isFinite(pk)) next.pricePerHead = (pk * wt).toFixed(2);
+          } else if (next.lastEditedPrice === 'pricePerHead' && next.pricePerHead !== '') {
+            var ph = parseFloat(next.pricePerHead);
+            if (Number.isFinite(ph)) next.pricePerKg = (ph / wt).toFixed(2);
+          }
+        }
+      }
+      return next;
     });
   }
   function updateField(field, value) {
@@ -269,17 +314,13 @@ function App() {
       var wtValid = Number.isFinite(wt) && wt > 0;
       if (field === 'pricePerKg') {
         next.lastEditedPrice = 'pricePerKg';
-        if (value === '') {
-          next.pricePerHead = '';
-        } else if (wtValid) {
+        if (value === '') next.pricePerHead = '';else if (wtValid) {
           var v = parseFloat(value);
           if (Number.isFinite(v)) next.pricePerHead = (v * wt).toFixed(2);
         }
       } else if (field === 'pricePerHead') {
         next.lastEditedPrice = 'pricePerHead';
-        if (value === '') {
-          next.pricePerKg = '';
-        } else if (wtValid) {
+        if (value === '') next.pricePerKg = '';else if (wtValid) {
           var _v = parseFloat(value);
           if (Number.isFinite(_v)) next.pricePerKg = (_v / wt).toFixed(2);
         }
@@ -299,6 +340,48 @@ function App() {
     });
   }
 
+  // Step the price up or down, in $/kg or $/head
+  function bumpPrice(which, dir) {
+    setDraft(function (prev) {
+      var next = _objectSpread({}, prev);
+      var wt = parseFloat(next.wtPerHead);
+      var wtValid = Number.isFinite(wt) && wt > 0;
+      var kgStep = next.lineCode && Number.isFinite(bidSteps[next.lineCode]) ? bidSteps[next.lineCode] : DEFAULT_KG_STEP;
+      if (which === 'kg') {
+        var cur = parseFloat(next.pricePerKg);
+        var start = Number.isFinite(cur) ? cur : 0;
+        var n = round2(start + dir * kgStep);
+        if (n < 0) n = 0;
+        next.pricePerKg = n.toFixed(2);
+        next.lastEditedPrice = 'pricePerKg';
+        if (wtValid) next.pricePerHead = (n * wt).toFixed(2);
+      } else {
+        // $/head step is kgStep × weight if weight is set, otherwise $1
+        var headStep = wtValid ? round2(kgStep * wt) : 1;
+        var _cur = parseFloat(next.pricePerHead);
+        var _start = Number.isFinite(_cur) ? _cur : 0;
+        var _n = round2(_start + dir * headStep);
+        if (_n < 0) _n = 0;
+        next.pricePerHead = _n.toFixed(2);
+        next.lastEditedPrice = 'pricePerHead';
+        if (wtValid) next.pricePerKg = (_n / wt).toFixed(2);
+      }
+      return next;
+    });
+  }
+  function sameAsLast() {
+    if (purchases.length === 0) return;
+    var last = purchases[0];
+    setDraft(function (prev) {
+      return _objectSpread(_objectSpread({}, emptyDraft()), {}, {
+        lineCode: last.lineCode,
+        penNumber: '',
+        head: String(last.head),
+        wtPerHead: String(last.wtPerHead)
+      });
+    });
+  }
+
   // Computed for the current draft
   var dHead = parseInt(draft.head, 10);
   var dWt = parseFloat(draft.wtPerHead);
@@ -309,37 +392,81 @@ function App() {
   var dValid = !!draft.lineCode && dHead > 0 && dWt > 0 && dPpk > 0 && dPph > 0;
   var lineBudget = draft.lineCode ? budgets[draft.lineCode] : undefined;
   var overBudget = !!lineBudget && Number.isFinite(dPpk) && dPpk > lineBudget;
-  function recordPurchase() {
+  var headroom = lineBudget && Number.isFinite(dPpk) && dPpk > 0 ? lineBudget - dPpk : null;
+
+  // Today's running average $/kg for the selected line (bought only)
+  var lineDayAvg = useMemo(function () {
+    if (!draft.lineCode) return null;
+    var matches = purchases.filter(function (p) {
+      return p.lineCode === draft.lineCode && !p.watched;
+    });
+    if (matches.length === 0) return null;
+    var kg = matches.reduce(function (s, p) {
+      return s + p.totalKg;
+    }, 0);
+    var dol = matches.reduce(function (s, p) {
+      return s + p.total;
+    }, 0);
+    return kg > 0 ? dol / kg : null;
+  }, [purchases, draft.lineCode]);
+  function commitEntry(asWatched) {
     var _purchases$find;
     if (!dValid) return;
+    var isNew = !editingId;
     var entry = {
       id: editingId || Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
       lineCode: draft.lineCode,
+      penNumber: draft.penNumber.trim(),
       head: dHead,
       wtPerHead: dWt,
       pricePerKg: dPpk,
       pricePerHead: dPph,
       totalKg: dTotalKg,
       total: dTotal,
+      watched: !!asWatched,
       timestamp: editingId ? ((_purchases$find = purchases.find(function (p) {
         return p.id === editingId;
       })) === null || _purchases$find === void 0 ? void 0 : _purchases$find.timestamp) || new Date().toISOString() : new Date().toISOString()
     };
     if (editingId) {
+      var previous = purchases.find(function (p) {
+        return p.id === editingId;
+      });
       setPurchases(function (prev) {
         return prev.map(function (p) {
           return p.id === editingId ? entry : p;
         });
       });
       setEditingId(null);
-      showToast('Pen updated');
+      setDraft(emptyDraft());
+      showToast('Pen updated', {
+        label: 'UNDO',
+        run: function run() {
+          if (previous) setPurchases(function (prev) {
+            return prev.map(function (p) {
+              return p.id === editingId ? previous : p;
+            });
+          });
+          clearToast();
+        }
+      });
     } else {
       setPurchases(function (prev) {
         return [entry].concat(_toConsumableArray(prev));
       });
-      showToast('Pen recorded');
+      setDraft(emptyDraft());
+      showToast(asWatched ? 'Watched pen logged' : 'Pen recorded', {
+        label: 'UNDO',
+        run: function run() {
+          setPurchases(function (prev) {
+            return prev.filter(function (p) {
+              return p.id !== entry.id;
+            });
+          });
+          clearToast();
+        }
+      });
     }
-    setDraft(emptyDraft());
   }
   function startEdit(id) {
     var p = purchases.find(function (x) {
@@ -348,6 +475,7 @@ function App() {
     if (!p) return;
     setDraft({
       lineCode: p.lineCode,
+      penNumber: p.penNumber || '',
       head: String(p.head),
       wtPerHead: String(p.wtPerHead),
       pricePerKg: p.pricePerKg.toFixed(2),
@@ -367,13 +495,30 @@ function App() {
     setDraft(emptyDraft());
   }
   function deletePurchase(id) {
-    if (!window.confirm('Delete this pen from the day\'s record?')) return;
+    var removed = purchases.find(function (p) {
+      return p.id === id;
+    });
+    if (!removed) return;
     setPurchases(function (prev) {
       return prev.filter(function (p) {
         return p.id !== id;
       });
     });
     if (editingId === id) cancelEdit();
+    showToast('Pen deleted', {
+      label: 'UNDO',
+      run: function run() {
+        setPurchases(function (prev) {
+          // Reinsert preserving order by timestamp (newest first)
+          var next = [].concat(_toConsumableArray(prev), [removed]);
+          next.sort(function (a, b) {
+            return (b.timestamp || '').localeCompare(a.timestamp || '');
+          });
+          return next;
+        });
+        clearToast();
+      }
+    });
   }
   function resetDay() {
     setPurchases([]);
@@ -383,19 +528,23 @@ function App() {
     showToast('New day started');
   }
 
-  // Totals (weighted averages)
+  // Day totals (bought only). Watched are tracked but not part of spend.
   var totals = useMemo(function () {
-    var head = purchases.reduce(function (s, p) {
+    var bought = purchases.filter(function (p) {
+      return !p.watched;
+    });
+    var head = bought.reduce(function (s, p) {
       return s + p.head;
     }, 0);
-    var kg = purchases.reduce(function (s, p) {
+    var kg = bought.reduce(function (s, p) {
       return s + p.totalKg;
     }, 0);
-    var dollars = purchases.reduce(function (s, p) {
+    var dollars = bought.reduce(function (s, p) {
       return s + p.total;
     }, 0);
     return {
-      pens: purchases.length,
+      pens: bought.length,
+      watched: purchases.length - bought.length,
       head: head,
       kg: kg,
       dollars: dollars,
@@ -409,9 +558,27 @@ function App() {
   function setBudgetFor(code, val) {
     setBudgets(function (prev) {
       var next = _objectSpread({}, prev);
-      if (val === '' || val == null) {
-        delete next[code];
-      } else {
+      if (val === '' || val == null) delete next[code];else {
+        var v = parseFloat(val);
+        if (Number.isFinite(v) && v > 0) next[code] = v;
+      }
+      return next;
+    });
+  }
+  function setDefaultWeightFor(code, val) {
+    setDefaultWeights(function (prev) {
+      var next = _objectSpread({}, prev);
+      if (val === '' || val == null) delete next[code];else {
+        var v = parseFloat(val);
+        if (Number.isFinite(v) && v > 0) next[code] = v;
+      }
+      return next;
+    });
+  }
+  function setBidStepFor(code, val) {
+    setBidSteps(function (prev) {
+      var next = _objectSpread({}, prev);
+      if (val === '' || val == null) delete next[code];else {
         var v = parseFloat(val);
         if (Number.isFinite(v) && v > 0) next[code] = v;
       }
@@ -448,6 +615,16 @@ function App() {
       delete n[code];
       return n;
     });
+    setDefaultWeights(function (prev) {
+      var n = _objectSpread({}, prev);
+      delete n[code];
+      return n;
+    });
+    setBidSteps(function (prev) {
+      var n = _objectSpread({}, prev);
+      delete n[code];
+      return n;
+    });
   }
 
   // ----- Email / export -----
@@ -459,11 +636,13 @@ function App() {
         return l.code === p.lineCode;
       });
       return {
-        Pen: i + 1,
+        '#': i + 1,
         Time: new Date(p.timestamp).toLocaleTimeString('en-AU', {
           hour: '2-digit',
           minute: '2-digit'
         }),
+        Result: p.watched ? 'Watched' : 'Bought',
+        Pen: p.penNumber || '',
         Line: line ? line.name : p.lineCode,
         Code: p.lineCode,
         Head: p.head,
@@ -478,13 +657,16 @@ function App() {
       Metric: 'Sale date',
       Value: today
     }, {
-      Metric: 'Pens purchased',
+      Metric: 'Pens bought',
       Value: totals.pens
     }, {
-      Metric: 'Total head',
+      Metric: 'Pens watched (not bought)',
+      Value: totals.watched
+    }, {
+      Metric: 'Total head bought',
       Value: totals.head
     }, {
-      Metric: 'Total weight (kg)',
+      Metric: 'Total weight bought (kg)',
       Value: Number(totals.kg.toFixed(1))
     }, {
       Metric: 'Total spent ($, GST free)',
@@ -498,9 +680,9 @@ function App() {
     }];
     var wb = XLSX.utils.book_new();
     var ws1 = XLSX.utils.json_to_sheet(rows.length ? rows : [{
-      Note: 'No purchases recorded'
+      Note: 'No pens recorded'
     }]);
-    XLSX.utils.book_append_sheet(wb, ws1, 'Purchases');
+    XLSX.utils.book_append_sheet(wb, ws1, 'Pens');
     var ws2 = XLSX.utils.json_to_sheet(summary);
     XLSX.utils.book_append_sheet(wb, ws2, 'Summary');
     var arr = XLSX.write(wb, {
@@ -530,14 +712,14 @@ function App() {
               _context3.n = 1;
               break;
             }
-            alert('No purchases recorded yet.');
+            alert('No pens recorded yet.');
             return _context3.a(2);
           case 1:
             _buildXlsx = buildXlsx(), blob = _buildXlsx.blob, filename = _buildXlsx.filename, today = _buildXlsx.today;
             file = new File([blob], filename, {
               type: blob.type
             });
-            summaryText = "Saleyard purchases summary for ".concat(today, "\n\n") + "Pens: ".concat(totals.pens, "\n") + "Total head: ".concat(totals.head, "\n") + "Total weight: ".concat(fmt1(totals.kg), " kg\n") + "Total spent: $".concat(fmt2(totals.dollars), " (GST free)\n") + "Average $/kg: $".concat(fmt2(totals.avgPpk), "\n") + "Average $/head: $".concat(fmt2(totals.avgPph));
+            summaryText = "Saleyard summary for ".concat(today, "\n\n") + "Pens bought: ".concat(totals.pens) + (totals.watched ? " \xB7 watched: ".concat(totals.watched) : '') + "\n" + "Total head: ".concat(totals.head, "\n") + "Total weight: ".concat(fmt1(totals.kg), " kg\n") + "Total spent: $".concat(fmt2(totals.dollars), " (GST free)\n") + "Average $/kg: $".concat(fmt2(totals.avgPpk), "\n") + "Average $/head: $".concat(fmt2(totals.avgPph));
             if (!(navigator.canShare && navigator.canShare({
               files: [file]
             }))) {
@@ -548,7 +730,7 @@ function App() {
             _context3.n = 3;
             return navigator.share({
               files: [file],
-              title: "Saleyard purchases ".concat(today),
+              title: "Saleyard ".concat(today),
               text: summaryText
             });
           case 3:
@@ -567,12 +749,12 @@ function App() {
             URL.revokeObjectURL(url);
             if (buyerEmail) {
               body = encodeURIComponent(summaryText + "\n\nSpreadsheet ".concat(filename, " downloaded to your device. Attach it from the Files app."));
-              subject = encodeURIComponent("Saleyard purchases ".concat(today));
+              subject = encodeURIComponent("Saleyard ".concat(today));
               setTimeout(function () {
                 window.location.href = "mailto:".concat(buyerEmail, "?subject=").concat(subject, "&body=").concat(body);
               }, 200);
             } else {
-              showToast('Spreadsheet downloaded. Add your email in Settings to also pre-fill an email.');
+              showToast('Spreadsheet downloaded. Set your email in Settings to also pre-fill an email.');
             }
           case 6:
             return _context3.a(2);
@@ -582,7 +764,8 @@ function App() {
     return _emailSummary.apply(this, arguments);
   }
   function LinePill(_ref3) {
-    var code = _ref3.code;
+    var code = _ref3.code,
+      watched = _ref3.watched;
     var line = lines.find(function (l) {
       return l.code === code;
     });
@@ -590,8 +773,9 @@ function App() {
     return /*#__PURE__*/React.createElement("span", {
       className: "pill",
       style: {
-        background: cat.solid,
-        color: cat.ink
+        background: watched ? 'transparent' : cat.solid,
+        color: watched ? T.textMute : cat.ink,
+        border: watched ? "1.5px solid ".concat(T.borderH) : 'none'
       }
     }, code);
   }
@@ -631,6 +815,78 @@ function App() {
     }, line.name));
   }
 
+  // The contextual line of text under the $/kg input. Combines:
+  //  * today's running average for the line
+  //  * budget headroom (or over-budget by how much)
+  function priceContext() {
+    var code = draft.lineCode;
+    var parts = [];
+    if (code) {
+      if (lineDayAvg != null) {
+        var delta = '';
+        if (Number.isFinite(dPpk) && dPpk > 0) {
+          var d = dPpk - lineDayAvg;
+          if (Math.abs(d) >= 0.005) {
+            var sign = d > 0 ? '+' : '−';
+            delta = " (".concat(sign, "$").concat(fmt2(Math.abs(d)), ")");
+          } else {
+            delta = ' (on avg)';
+          }
+        }
+        parts.push({
+          text: "".concat(code, " avg today $").concat(fmt2(lineDayAvg)).concat(delta),
+          color: T.textMute
+        });
+      } else {
+        parts.push({
+          text: "no ".concat(code, " bought yet today"),
+          color: T.textMute
+        });
+      }
+    }
+    if (lineBudget) {
+      if (Number.isFinite(dPpk) && dPpk > 0) {
+        if (headroom != null && headroom >= 0) {
+          parts.push({
+            text: "$".concat(fmt2(headroom), " under your $").concat(fmt2(lineBudget), " ceiling"),
+            color: T.okTxt
+          });
+        } else if (headroom != null && headroom < 0) {
+          parts.push({
+            text: "over by $".concat(fmt2(-headroom), " (ceiling $").concat(fmt2(lineBudget), ")"),
+            color: T.warnTxt
+          });
+        }
+      } else {
+        parts.push({
+          text: "ceiling $".concat(fmt2(lineBudget), "/kg"),
+          color: T.textMute
+        });
+      }
+    }
+    if (parts.length === 0) return null;
+    return /*#__PURE__*/React.createElement("div", {
+      className: "arc",
+      style: {
+        fontSize: 12,
+        fontWeight: 600,
+        marginTop: 6,
+        letterSpacing: '0.02em'
+      }
+    }, parts.map(function (p, i) {
+      return /*#__PURE__*/React.createElement("span", {
+        key: i,
+        style: {
+          color: p.color
+        }
+      }, i > 0 ? /*#__PURE__*/React.createElement("span", {
+        style: {
+          color: T.borderH
+        }
+      }, ' · ') : null, p.text);
+    }));
+  }
+
   // ----- JSX -----
 
   if (!loaded) {
@@ -658,6 +914,7 @@ function App() {
     month: 'short',
     year: 'numeric'
   });
+  var sameAsLastDisabled = purchases.length === 0 || !!editingId;
   return /*#__PURE__*/React.createElement("div", {
     style: {
       background: T.bgBody,
@@ -759,7 +1016,8 @@ function App() {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      marginBottom: 14
+      marginBottom: 14,
+      gap: 8
     }
   }, /*#__PURE__*/React.createElement("h2", {
     className: "arc",
@@ -770,16 +1028,29 @@ function App() {
       letterSpacing: '0.06em',
       textTransform: 'uppercase'
     }
-  }, editingId ? 'Edit pen' : 'Bid working'), editingId && /*#__PURE__*/React.createElement("button", {
+  }, editingId ? 'Edit pen' : 'Bid working'), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 6
+    }
+  }, !editingId && /*#__PURE__*/React.createElement("button", {
+    className: "btn arc btn-ghost",
+    onClick: sameAsLast,
+    disabled: sameAsLastDisabled,
+    style: {
+      padding: '8px 12px',
+      fontSize: 11
+    }
+  }, "SAME AS LAST"), editingId && /*#__PURE__*/React.createElement("button", {
     className: "btn arc btn-ghost",
     style: {
       padding: '8px 12px',
       fontSize: 12
     },
     onClick: cancelEdit
-  }, "CANCEL EDIT")), /*#__PURE__*/React.createElement("div", {
+  }, "CANCEL EDIT"))), /*#__PURE__*/React.createElement("div", {
     style: {
-      marginBottom: 16
+      marginBottom: 14
     }
   }, /*#__PURE__*/React.createElement("label", {
     className: "lbl"
@@ -798,13 +1069,30 @@ function App() {
   }))), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'grid',
-      gridTemplateColumns: '1fr 1fr',
-      gap: 12,
+      gridTemplateColumns: '1fr 1fr 1.2fr',
+      gap: 10,
       marginBottom: 12
     }
   }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
     className: "lbl"
-  }, "Head in pen"), /*#__PURE__*/React.createElement("input", {
+  }, "Pen #"), /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    inputMode: "text",
+    className: "field",
+    style: {
+      fontSize: 18
+    },
+    value: draft.penNumber,
+    onChange: function onChange(e) {
+      return updateField('penNumber', e.target.value.slice(0, 8));
+    },
+    onFocus: function onFocus(e) {
+      return e.target.select();
+    },
+    placeholder: "opt"
+  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    className: "lbl"
+  }, "Head"), /*#__PURE__*/React.createElement("input", {
     type: "text",
     inputMode: "numeric",
     pattern: "[0-9]*",
@@ -819,7 +1107,7 @@ function App() {
     placeholder: "0"
   })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
     className: "lbl"
-  }, "Est. weight per head (kg)"), /*#__PURE__*/React.createElement("input", {
+  }, "Est. kg per head"), /*#__PURE__*/React.createElement("input", {
     type: "text",
     inputMode: "decimal",
     className: "field",
@@ -833,17 +1121,22 @@ function App() {
     placeholder: "0.0"
   }))), /*#__PURE__*/React.createElement("div", {
     style: {
-      display: 'grid',
-      gridTemplateColumns: '1fr 1fr',
-      gap: 12,
-      marginBottom: 14
+      marginBottom: 12
     }
-  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+  }, /*#__PURE__*/React.createElement("label", {
     className: "lbl"
-  }, "$ per kg ", lineBudget ? "\xB7 max $".concat(fmt2(lineBudget)) : ''), /*#__PURE__*/React.createElement("input", {
+  }, "$ per kg"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 6
+    }
+  }, /*#__PURE__*/React.createElement("input", {
     type: "text",
     inputMode: "decimal",
     className: "field ".concat(overBudget ? 'over' : ''),
+    style: {
+      flex: 1
+    },
     value: draft.pricePerKg,
     onChange: function onChange(e) {
       return updateField('pricePerKg', e.target.value.replace(/[^0-9.]/g, ''));
@@ -852,12 +1145,38 @@ function App() {
       return e.target.select();
     },
     placeholder: "0.00"
-  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+  }), /*#__PURE__*/React.createElement("button", {
+    className: "btn-step arc",
+    type: "button",
+    onClick: function onClick() {
+      return bumpPrice('kg', -1);
+    },
+    "aria-label": "decrease price per kg"
+  }, "\u2212"), /*#__PURE__*/React.createElement("button", {
+    className: "btn-step arc",
+    type: "button",
+    onClick: function onClick() {
+      return bumpPrice('kg', +1);
+    },
+    "aria-label": "increase price per kg"
+  }, "+")), priceContext()), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 14
+    }
+  }, /*#__PURE__*/React.createElement("label", {
     className: "lbl"
-  }, "$ per head"), /*#__PURE__*/React.createElement("input", {
+  }, "$ per head"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 6
+    }
+  }, /*#__PURE__*/React.createElement("input", {
     type: "text",
     inputMode: "decimal",
     className: "field",
+    style: {
+      flex: 1
+    },
     value: draft.pricePerHead,
     onChange: function onChange(e) {
       return updateField('pricePerHead', e.target.value.replace(/[^0-9.]/g, ''));
@@ -866,7 +1185,21 @@ function App() {
       return e.target.select();
     },
     placeholder: "0.00"
-  }))), /*#__PURE__*/React.createElement("div", {
+  }), /*#__PURE__*/React.createElement("button", {
+    className: "btn-step arc",
+    type: "button",
+    onClick: function onClick() {
+      return bumpPrice('head', -1);
+    },
+    "aria-label": "decrease price per head"
+  }, "\u2212"), /*#__PURE__*/React.createElement("button", {
+    className: "btn-step arc",
+    type: "button",
+    onClick: function onClick() {
+      return bumpPrice('head', +1);
+    },
+    "aria-label": "increase price per head"
+  }, "+"))), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'grid',
       gridTemplateColumns: '1fr 1fr',
@@ -921,8 +1254,22 @@ function App() {
       padding: '18px 16px'
     },
     disabled: !dValid,
-    onClick: recordPurchase
-  }, editingId ? 'SAVE CHANGES' : 'RECORD PURCHASE')), /*#__PURE__*/React.createElement("section", {
+    onClick: function onClick() {
+      return commitEntry(false);
+    }
+  }, editingId ? 'SAVE CHANGES' : 'RECORD PURCHASE'), !editingId && /*#__PURE__*/React.createElement("button", {
+    className: "btn btn-ghost arc",
+    style: {
+      width: '100%',
+      fontSize: 13,
+      padding: '12px 16px',
+      marginTop: 8
+    },
+    disabled: !dValid,
+    onClick: function onClick() {
+      return commitEntry(true);
+    }
+  }, "LOG AS WATCHED (not bought)")), /*#__PURE__*/React.createElement("section", {
     className: "card",
     style: {
       padding: 18
@@ -943,7 +1290,15 @@ function App() {
       letterSpacing: '0.06em',
       textTransform: 'uppercase'
     }
-  }, "Today\u2019s pens \xB7 ", totals.pens)), purchases.length === 0 ? /*#__PURE__*/React.createElement("div", {
+  }, "Today\u2019s pens \xB7 ", totals.pens, totals.watched > 0 && /*#__PURE__*/React.createElement("span", {
+    className: "arc",
+    style: {
+      fontWeight: 600,
+      fontSize: 12,
+      color: T.textMute,
+      marginLeft: 8
+    }
+  }, "+ ", totals.watched, " watched"))), purchases.length === 0 ? /*#__PURE__*/React.createElement("div", {
     style: {
       padding: 32,
       textAlign: 'center',
@@ -963,13 +1318,15 @@ function App() {
     var line = lines.find(function (l) {
       return l.code === p.lineCode;
     });
+    var dim = p.watched;
     return /*#__PURE__*/React.createElement("div", {
       key: p.id,
       style: {
-        border: "1.5px solid ".concat(T.borderH),
+        border: "1.5px solid ".concat(dim ? T.borderS : T.borderH),
         borderRadius: 10,
         padding: 12,
-        background: editingId === p.id ? T.editBg : T.bgInset
+        background: editingId === p.id ? T.editBg : T.bgInset,
+        opacity: dim ? 0.72 : 1
       }
     }, /*#__PURE__*/React.createElement("div", {
       style: {
@@ -982,17 +1339,33 @@ function App() {
       style: {
         display: 'flex',
         alignItems: 'center',
-        gap: 10
+        gap: 10,
+        flexWrap: 'wrap'
       }
     }, /*#__PURE__*/React.createElement(LinePill, {
-      code: p.lineCode
+      code: p.lineCode,
+      watched: p.watched
     }), /*#__PURE__*/React.createElement("div", {
       className: "arc",
       style: {
         fontWeight: 700,
         fontSize: 14
       }
-    }, line ? line.name : p.lineCode)), /*#__PURE__*/React.createElement("div", {
+    }, line ? line.name : p.lineCode), p.watched && /*#__PURE__*/React.createElement("span", {
+      className: "pill",
+      style: {
+        background: 'transparent',
+        color: T.textMute,
+        border: "1px solid ".concat(T.borderH)
+      }
+    }, "WATCHED"), p.penNumber && /*#__PURE__*/React.createElement("span", {
+      className: "arc",
+      style: {
+        fontSize: 11,
+        color: T.textMute,
+        letterSpacing: '0.06em'
+      }
+    }, "PEN ", p.penNumber)), /*#__PURE__*/React.createElement("div", {
       style: {
         display: 'flex',
         gap: 6
@@ -1085,7 +1458,7 @@ function App() {
       style: {
         marginBottom: 0
       }
-    }, "Pen total"), /*#__PURE__*/React.createElement("div", {
+    }, p.watched ? 'Final pen total' : 'Pen total'), /*#__PURE__*/React.createElement("div", {
       className: "mono",
       style: {
         fontWeight: 800,
@@ -1136,11 +1509,17 @@ function App() {
     accent: true
   }))), toast && /*#__PURE__*/React.createElement("div", {
     className: "toast"
-  }, toast), showSettings && /*#__PURE__*/React.createElement(SettingsModal, {
+  }, /*#__PURE__*/React.createElement("span", null, toast.message), toast.undo && /*#__PURE__*/React.createElement("button", {
+    onClick: toast.undo.run
+  }, toast.undo.label)), showSettings && /*#__PURE__*/React.createElement(SettingsModal, {
     lines: lines,
     budgets: budgets,
+    defaultWeights: defaultWeights,
+    bidSteps: bidSteps,
     buyerEmail: buyerEmail,
     onSetBudget: setBudgetFor,
+    onSetDefaultWeight: setDefaultWeightFor,
+    onSetBidStep: setBidStepFor,
     onSetEmail: setBuyerEmail,
     onAddLine: addLineType,
     onRemoveLine: removeLineType,
@@ -1173,7 +1552,7 @@ function App() {
       margin: '0 0 16px 0',
       color: T.textLbl
     }
-  }, "All ", totals.pens, " recorded pen", totals.pens === 1 ? '' : 's', " will be cleared. Budgets, line types and your email will be kept. Consider emailing the summary first."), /*#__PURE__*/React.createElement("div", {
+  }, "All ", totals.pens, " bought pen", totals.pens === 1 ? '' : 's', totals.watched ? " and ".concat(totals.watched, " watched") : '', " will be cleared. Settings, line types, default weights and steps are kept. Consider emailing the summary first."), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',
       gap: 8,
@@ -1238,28 +1617,32 @@ function Totals(_ref5) {
 function SettingsModal(_ref6) {
   var lines = _ref6.lines,
     budgets = _ref6.budgets,
+    defaultWeights = _ref6.defaultWeights,
+    bidSteps = _ref6.bidSteps,
     buyerEmail = _ref6.buyerEmail,
     onSetBudget = _ref6.onSetBudget,
+    onSetDefaultWeight = _ref6.onSetDefaultWeight,
+    onSetBidStep = _ref6.onSetBidStep,
     onSetEmail = _ref6.onSetEmail,
     onAddLine = _ref6.onAddLine,
     onRemoveLine = _ref6.onRemoveLine,
     onClose = _ref6.onClose;
-  var _useState19 = useState(''),
-    _useState20 = _slicedToArray(_useState19, 2),
-    newCode = _useState20[0],
-    setNewCode = _useState20[1];
-  var _useState21 = useState(''),
-    _useState22 = _slicedToArray(_useState21, 2),
-    newName = _useState22[0],
-    setNewName = _useState22[1];
-  var _useState23 = useState('male'),
+  var _useState23 = useState(''),
     _useState24 = _slicedToArray(_useState23, 2),
-    newCat = _useState24[0],
-    setNewCat = _useState24[1];
-  var _useState25 = useState(buyerEmail || ''),
+    newCode = _useState24[0],
+    setNewCode = _useState24[1];
+  var _useState25 = useState(''),
     _useState26 = _slicedToArray(_useState25, 2),
-    emailInput = _useState26[0],
-    setEmailInput = _useState26[1];
+    newName = _useState26[0],
+    setNewName = _useState26[1];
+  var _useState27 = useState('male'),
+    _useState28 = _slicedToArray(_useState27, 2),
+    newCat = _useState28[0],
+    setNewCat = _useState28[1];
+  var _useState29 = useState(buyerEmail || ''),
+    _useState30 = _slicedToArray(_useState29, 2),
+    emailInput = _useState30[0],
+    setEmailInput = _useState30[1];
   function handleAdd() {
     if (!newCode.trim() || !newName.trim()) return;
     onAddLine(newCode, newName, newCat);
@@ -1339,7 +1722,15 @@ function SettingsModal(_ref6) {
     }
   }, /*#__PURE__*/React.createElement("label", {
     className: "lbl"
-  }, "Lines and budget ceilings ($/kg)"), /*#__PURE__*/React.createElement("div", {
+  }, "Lines \xB7 ceiling $/kg \xB7 default kg \xB7 step $"), /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontSize: 11,
+      color: T.textMute,
+      marginBottom: 8,
+      letterSpacing: '0.04em'
+    }
+  }, "Default kg pre-fills the weight when you tap a line. Step is how much the +/\u2212 buttons bump $/kg by. Default step is $0.05."), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',
       flexDirection: 'column',
@@ -1349,12 +1740,25 @@ function SettingsModal(_ref6) {
     var cat = CAT[l.category];
     return /*#__PURE__*/React.createElement("div", {
       key: l.code,
-      className: "row-line",
       style: {
         border: "1.5px solid ".concat(T.borderH),
         borderRadius: 8,
-        padding: '8px 10px',
+        padding: '10px',
         background: T.bgInset
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: 8,
+        gap: 8
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: 10
       }
     }, /*#__PURE__*/React.createElement("span", {
       className: "pill",
@@ -1372,38 +1776,12 @@ function SettingsModal(_ref6) {
     }, l.name), /*#__PURE__*/React.createElement("div", {
       className: "arc",
       style: {
-        fontSize: 11,
+        fontSize: 10,
         color: T.textMute,
         textTransform: 'uppercase',
         letterSpacing: '0.08em'
       }
-    }, cat.label)), /*#__PURE__*/React.createElement("div", {
-      style: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: 6
-      }
-    }, /*#__PURE__*/React.createElement("span", {
-      className: "mono",
-      style: {
-        fontSize: 13,
-        color: T.textMute
-      }
-    }, "$"), /*#__PURE__*/React.createElement("input", {
-      type: "text",
-      inputMode: "decimal",
-      className: "field",
-      style: {
-        width: 90,
-        padding: '8px 10px',
-        fontSize: 16
-      },
-      value: budgets[l.code] != null ? String(budgets[l.code]) : '',
-      onChange: function onChange(e) {
-        return onSetBudget(l.code, e.target.value.replace(/[^0-9.]/g, ''));
-      },
-      placeholder: "not set"
-    }), /*#__PURE__*/React.createElement("button", {
+    }, cat.label))), /*#__PURE__*/React.createElement("button", {
       className: "btn arc",
       style: {
         padding: '6px 8px',
@@ -1415,7 +1793,37 @@ function SettingsModal(_ref6) {
       onClick: function onClick() {
         return onRemoveLine(l.code);
       }
-    }, "\xD7")));
+    }, "\xD7")), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(3, 1fr)',
+        gap: 8
+      }
+    }, /*#__PURE__*/React.createElement(SmallInput, {
+      label: "Ceiling $/kg",
+      prefix: "$",
+      value: budgets[l.code] != null ? String(budgets[l.code]) : '',
+      onChange: function onChange(v) {
+        return onSetBudget(l.code, v);
+      },
+      placeholder: "not set"
+    }), /*#__PURE__*/React.createElement(SmallInput, {
+      label: "Default kg",
+      suffix: "kg",
+      value: defaultWeights[l.code] != null ? String(defaultWeights[l.code]) : '',
+      onChange: function onChange(v) {
+        return onSetDefaultWeight(l.code, v);
+      },
+      placeholder: "not set"
+    }), /*#__PURE__*/React.createElement(SmallInput, {
+      label: "Step $/kg",
+      prefix: "$",
+      value: bidSteps[l.code] != null ? String(bidSteps[l.code]) : '',
+      onChange: function onChange(v) {
+        return onSetBidStep(l.code, v);
+      },
+      placeholder: "".concat(DEFAULT_KG_STEP.toFixed(2), " default")
+    })));
   }))), /*#__PURE__*/React.createElement("div", {
     style: {
       borderTop: "1.5px dashed ".concat(T.borderS),
@@ -1482,6 +1890,58 @@ function SettingsModal(_ref6) {
     },
     onClick: handleAdd
   }, "ADD LINE"))));
+}
+function SmallInput(_ref7) {
+  var label = _ref7.label,
+    value = _ref7.value,
+    _onChange = _ref7.onChange,
+    prefix = _ref7.prefix,
+    suffix = _ref7.suffix,
+    placeholder = _ref7.placeholder;
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontSize: 9,
+      fontWeight: 700,
+      letterSpacing: '0.10em',
+      textTransform: 'uppercase',
+      color: T.textMute,
+      marginBottom: 3
+    }
+  }, label), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: 4
+    }
+  }, prefix && /*#__PURE__*/React.createElement("span", {
+    className: "mono",
+    style: {
+      fontSize: 12,
+      color: T.textMute
+    }
+  }, prefix), /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    inputMode: "decimal",
+    className: "field",
+    style: {
+      flex: 1,
+      padding: '8px 8px',
+      fontSize: 15,
+      minWidth: 0
+    },
+    value: value,
+    onChange: function onChange(e) {
+      return _onChange(e.target.value.replace(/[^0-9.]/g, ''));
+    },
+    placeholder: placeholder
+  }), suffix && /*#__PURE__*/React.createElement("span", {
+    className: "mono",
+    style: {
+      fontSize: 12,
+      color: T.textMute
+    }
+  }, suffix)));
 }
 
 // Mount

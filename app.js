@@ -13,18 +13,14 @@ function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object
 function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
 function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
-function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
-function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
 function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
 function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
-// Saleyard Buyer Tool
-// Author: Patrick Coole
-// Night-theme, with dashboard.
-
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
 var _React = React,
   useState = _React.useState,
   useEffect = _React.useEffect,
@@ -137,9 +133,231 @@ function emptyDraft() {
     lastEditedPrice: null
   };
 }
+function emptyInspection() {
+  return {
+    penNumber: '',
+    lineCode: '',
+    head: '',
+    wtPerHead: '',
+    maxPph: '',
+    notes: ''
+  };
+}
 
-// ----- Main component -----
+// ----- Photo storage (IndexedDB) -----
+// localStorage caps out around 5 MB on iPad Safari, not enough for ~100 photos.
+// Photos go in IndexedDB as Blobs, keyed by inspection id.
 
+var PHOTO_DB_NAME = 'saleyard-photos';
+var PHOTO_STORE = 'photos';
+function openPhotoDb() {
+  return new Promise(function (resolve, reject) {
+    var req = indexedDB.open(PHOTO_DB_NAME, 1);
+    req.onupgradeneeded = function (e) {
+      var db = e.target.result;
+      if (!db.objectStoreNames.contains(PHOTO_STORE)) {
+        db.createObjectStore(PHOTO_STORE);
+      }
+    };
+    req.onsuccess = function () {
+      return resolve(req.result);
+    };
+    req.onerror = function () {
+      return reject(req.error);
+    };
+  });
+}
+function photoSet(_x, _x2) {
+  return _photoSet.apply(this, arguments);
+}
+function _photoSet() {
+  _photoSet = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee6(key, blob) {
+    var db;
+    return _regenerator().w(function (_context6) {
+      while (1) switch (_context6.n) {
+        case 0:
+          _context6.n = 1;
+          return openPhotoDb();
+        case 1:
+          db = _context6.v;
+          return _context6.a(2, new Promise(function (resolve, reject) {
+            var tx = db.transaction(PHOTO_STORE, 'readwrite');
+            tx.objectStore(PHOTO_STORE).put(blob, key);
+            tx.oncomplete = function () {
+              return resolve();
+            };
+            tx.onerror = function () {
+              return reject(tx.error);
+            };
+          }));
+      }
+    }, _callee6);
+  }));
+  return _photoSet.apply(this, arguments);
+}
+function photoGet(_x3) {
+  return _photoGet.apply(this, arguments);
+}
+function _photoGet() {
+  _photoGet = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee7(key) {
+    var db;
+    return _regenerator().w(function (_context7) {
+      while (1) switch (_context7.n) {
+        case 0:
+          _context7.n = 1;
+          return openPhotoDb();
+        case 1:
+          db = _context7.v;
+          return _context7.a(2, new Promise(function (resolve, reject) {
+            var tx = db.transaction(PHOTO_STORE, 'readonly');
+            var req = tx.objectStore(PHOTO_STORE).get(key);
+            req.onsuccess = function () {
+              return resolve(req.result || null);
+            };
+            req.onerror = function () {
+              return reject(req.error);
+            };
+          }));
+      }
+    }, _callee7);
+  }));
+  return _photoGet.apply(this, arguments);
+}
+function photoDelete(_x4) {
+  return _photoDelete.apply(this, arguments);
+}
+function _photoDelete() {
+  _photoDelete = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee8(key) {
+    var db;
+    return _regenerator().w(function (_context8) {
+      while (1) switch (_context8.n) {
+        case 0:
+          _context8.n = 1;
+          return openPhotoDb();
+        case 1:
+          db = _context8.v;
+          return _context8.a(2, new Promise(function (resolve, reject) {
+            var tx = db.transaction(PHOTO_STORE, 'readwrite');
+            tx.objectStore(PHOTO_STORE)["delete"](key);
+            tx.oncomplete = function () {
+              return resolve();
+            };
+            tx.onerror = function () {
+              return reject(tx.error);
+            };
+          }));
+      }
+    }, _callee8);
+  }));
+  return _photoDelete.apply(this, arguments);
+}
+function photoClearAll() {
+  return _photoClearAll.apply(this, arguments);
+}
+function _photoClearAll() {
+  _photoClearAll = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee9() {
+    var db;
+    return _regenerator().w(function (_context9) {
+      while (1) switch (_context9.n) {
+        case 0:
+          _context9.n = 1;
+          return openPhotoDb();
+        case 1:
+          db = _context9.v;
+          return _context9.a(2, new Promise(function (resolve, reject) {
+            var tx = db.transaction(PHOTO_STORE, 'readwrite');
+            tx.objectStore(PHOTO_STORE).clear();
+            tx.oncomplete = function () {
+              return resolve();
+            };
+            tx.onerror = function () {
+              return reject(tx.error);
+            };
+          }));
+      }
+    }, _callee9);
+  }));
+  return _photoClearAll.apply(this, arguments);
+}
+function blobToDataUrl(blob) {
+  return new Promise(function (resolve, reject) {
+    var r = new FileReader();
+    r.onload = function () {
+      return resolve(r.result);
+    };
+    r.onerror = function () {
+      return reject(r.error);
+    };
+    r.readAsDataURL(blob);
+  });
+}
+
+// Compress an image File from a camera capture down to a sensible size for storage.
+// Returns a JPEG Blob.
+function compressImage(_x5) {
+  return _compressImage.apply(this, arguments);
+} // ----- Main component -----
+function _compressImage() {
+  _compressImage = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee0(file) {
+    var maxDim,
+      quality,
+      dataUrl,
+      img,
+      scale,
+      w,
+      h,
+      canvas,
+      ctx,
+      _args0 = arguments;
+    return _regenerator().w(function (_context0) {
+      while (1) switch (_context0.n) {
+        case 0:
+          maxDim = _args0.length > 1 && _args0[1] !== undefined ? _args0[1] : 1200;
+          quality = _args0.length > 2 && _args0[2] !== undefined ? _args0[2] : 0.7;
+          _context0.n = 1;
+          return new Promise(function (res, rej) {
+            var r = new FileReader();
+            r.onload = function () {
+              return res(r.result);
+            };
+            r.onerror = function () {
+              return rej(r.error);
+            };
+            r.readAsDataURL(file);
+          });
+        case 1:
+          dataUrl = _context0.v;
+          _context0.n = 2;
+          return new Promise(function (res, rej) {
+            var i = new Image();
+            i.onload = function () {
+              return res(i);
+            };
+            i.onerror = function () {
+              return rej(new Error('Image load failed'));
+            };
+            i.src = dataUrl;
+          });
+        case 2:
+          img = _context0.v;
+          scale = Math.min(maxDim / img.width, maxDim / img.height, 1);
+          w = Math.round(img.width * scale);
+          h = Math.round(img.height * scale);
+          canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          return _context0.a(2, new Promise(function (resolve, reject) {
+            canvas.toBlob(function (blob) {
+              return blob ? resolve(blob) : reject(new Error('toBlob failed'));
+            }, 'image/jpeg', quality);
+          }));
+      }
+    }, _callee0);
+  }));
+  return _compressImage.apply(this, arguments);
+}
 function App() {
   var _useState = useState(false),
     _useState2 = _slicedToArray(_useState, 2),
@@ -196,7 +414,19 @@ function App() {
   var _useState25 = useState('buying'),
     _useState26 = _slicedToArray(_useState25, 2),
     view = _useState26[0],
-    setView = _useState26[1]; // 'buying' or 'dashboard' // {message, undo?}
+    setView = _useState26[1]; // 'buying', 'inspection', 'dashboard'
+  var _useState27 = useState([]),
+    _useState28 = _slicedToArray(_useState27, 2),
+    inspections = _useState28[0],
+    setInspections = _useState28[1];
+  var _useState29 = useState(null),
+    _useState30 = _slicedToArray(_useState29, 2),
+    appliedInspectionId = _useState30[0],
+    setAppliedInspectionId = _useState30[1];
+  var _useState31 = useState(null),
+    _useState32 = _slicedToArray(_useState31, 2),
+    editingInspection = _useState32[0],
+    setEditingInspection = _useState32[1]; // null, 'new', or {id} // {message, undo?}
 
   var draftRef = useRef(null);
   var toastTimer = useRef(null);
@@ -221,6 +451,7 @@ function App() {
               if (data.defaultWeights && _typeof(data.defaultWeights) === 'object') setDefaultWeights(data.defaultWeights);
               if (data.bidSteps && _typeof(data.bidSteps) === 'object') setBidSteps(data.bidSteps);
               if (Array.isArray(data.purchases)) setPurchases(data.purchases);
+              if (Array.isArray(data.inspections)) setInspections(data.inspections);
               if (data.draft && _typeof(data.draft) === 'object') setDraft(_objectSpread(_objectSpread({}, emptyDraft()), data.draft));
               if (typeof data.buyerEmail === 'string') setBuyerEmail(data.buyerEmail);
             }
@@ -257,6 +488,7 @@ function App() {
               defaultWeights: defaultWeights,
               bidSteps: bidSteps,
               purchases: purchases,
+              inspections: inspections,
               draft: draft,
               buyerEmail: buyerEmail
             }));
@@ -274,7 +506,7 @@ function App() {
     return function () {
       return clearTimeout(t);
     };
-  }, [lines, budgets, estimatedPpks, defaultWeights, bidSteps, purchases, draft, buyerEmail, loaded]);
+  }, [lines, budgets, estimatedPpks, defaultWeights, bidSteps, purchases, inspections, draft, buyerEmail, loaded]);
 
   // Toast helpers, supports an optional UNDO button
   function showToast(message, undo) {
@@ -416,8 +648,10 @@ function App() {
   var dTotal = Number.isFinite(dHead) && Number.isFinite(dPph) ? dHead * dPph : 0;
   var dValid = !!draft.lineCode && dHead > 0 && dWt > 0 && dPpk > 0 && dPph > 0;
   var lineBudget = draft.lineCode ? budgets[draft.lineCode] : undefined;
-  var overBudget = !!lineBudget && Number.isFinite(dPpk) && dPpk > lineBudget;
-  var headroom = lineBudget && Number.isFinite(dPpk) && dPpk > 0 ? lineBudget - dPpk : null;
+  // When an inspection is applied, the pen-specific max $/head replaces the line's $/kg ceiling
+  var insMaxPph = appliedInspection ? appliedInspection.maxPph : null;
+  var overBudget = insMaxPph != null ? Number.isFinite(dPph) && dPph > insMaxPph : !!lineBudget && Number.isFinite(dPpk) && dPpk > lineBudget;
+  var headroom = insMaxPph != null ? Number.isFinite(dPph) && dPph > 0 ? insMaxPph - dPph : null : lineBudget && Number.isFinite(dPpk) && dPpk > 0 ? lineBudget - dPpk : null;
 
   // Preset prices for the selected line: estimate -10c, -5c, estimate, +5c, +10c
   var lineEstimate = draft.lineCode ? estimatedPpks[draft.lineCode] : undefined;
@@ -556,12 +790,136 @@ function App() {
   }
   function resetDay() {
     setPurchases([]);
+    setInspections([]);
+    setAppliedInspectionId(null);
     setEditingId(null);
+    setEditingInspection(null);
     setDraft(emptyDraft());
     setShowResetConfirm(false);
     setView('buying');
+    photoClearAll()["catch"](function () {});
     showToast('New day started');
   }
+
+  // ----- Inspection handlers -----
+
+  function findInspectionByPenNumber(pn) {
+    if (!pn) return null;
+    var trimmed = String(pn).trim();
+    if (!trimmed) return null;
+    return inspections.find(function (i) {
+      return i.penNumber.trim() === trimmed;
+    }) || null;
+  }
+  function saveInspection(formData, photoBlob) {
+    // formData: {id?, penNumber, lineCode, head, wtPerHead, maxPph, notes, hasPhoto}
+    var isEdit = !!formData.id;
+    var id = formData.id || Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+    var existingEntry = isEdit ? inspections.find(function (i) {
+      return i.id === id;
+    }) : null;
+    // hasPhoto: true if a new photo was supplied OR the form indicates a kept existing one
+    var hasPhoto = !!photoBlob || !!formData.hasPhoto;
+    var entry = {
+      id: id,
+      penNumber: (formData.penNumber || '').trim(),
+      lineCode: formData.lineCode || '',
+      head: formData.head ? parseInt(formData.head, 10) : null,
+      wtPerHead: formData.wtPerHead ? parseFloat(formData.wtPerHead) : null,
+      maxPph: formData.maxPph ? parseFloat(formData.maxPph) : null,
+      notes: (formData.notes || '').trim(),
+      hasPhoto: hasPhoto,
+      timestamp: existingEntry ? existingEntry.timestamp : new Date().toISOString()
+    };
+    if (photoBlob) {
+      photoSet(id, photoBlob)["catch"](function (err) {
+        console.error('Photo save failed', err);
+        alert('Could not save photo: ' + (err && err.message ? err.message : 'unknown error'));
+      });
+    } else if (isEdit && existingEntry && existingEntry.hasPhoto && !hasPhoto) {
+      // User removed the existing photo
+      photoDelete(id)["catch"](function () {});
+    }
+    setInspections(function (prev) {
+      if (isEdit) return prev.map(function (i) {
+        return i.id === id ? entry : i;
+      });
+      return [entry].concat(_toConsumableArray(prev));
+    });
+    setEditingInspection(null);
+    showToast(isEdit ? 'Inspection updated' : 'Inspection saved');
+  }
+  function deleteInspection(id) {
+    if (!window.confirm('Delete this inspection?')) return;
+    setInspections(function (prev) {
+      return prev.filter(function (i) {
+        return i.id !== id;
+      });
+    });
+    if (appliedInspectionId === id) setAppliedInspectionId(null);
+    photoDelete(id)["catch"](function () {});
+    showToast('Inspection deleted');
+  }
+  function removeInspectionPhoto(id) {
+    photoDelete(id)["catch"](function () {});
+    setInspections(function (prev) {
+      return prev.map(function (i) {
+        return i.id === id ? _objectSpread(_objectSpread({}, i), {}, {
+          hasPhoto: false
+        }) : i;
+      });
+    });
+  }
+
+  // Apply an inspection's data to the current bid draft and lock the override
+  function applyInspectionToDraft(inspection) {
+    setDraft(function (prev) {
+      var next = _objectSpread(_objectSpread({}, prev), {}, {
+        penNumber: inspection.penNumber,
+        lineCode: inspection.lineCode || prev.lineCode,
+        head: inspection.head != null ? String(inspection.head) : prev.head,
+        wtPerHead: inspection.wtPerHead != null ? String(inspection.wtPerHead) : prev.wtPerHead
+      });
+      // Recompute the dependent price field if a price was already typed
+      var wt = parseFloat(next.wtPerHead);
+      if (Number.isFinite(wt) && wt > 0) {
+        if (next.lastEditedPrice === 'pricePerKg' && next.pricePerKg !== '') {
+          var pk = parseFloat(next.pricePerKg);
+          if (Number.isFinite(pk)) next.pricePerHead = (pk * wt).toFixed(2);
+        } else if (next.lastEditedPrice === 'pricePerHead' && next.pricePerHead !== '') {
+          var ph = parseFloat(next.pricePerHead);
+          if (Number.isFinite(ph)) next.pricePerKg = (ph / wt).toFixed(2);
+        }
+      }
+      return next;
+    });
+    setAppliedInspectionId(inspection.id);
+  }
+
+  // The inspection currently overriding the ceiling, if any
+  var appliedInspection = useMemo(function () {
+    if (!appliedInspectionId) return null;
+    return inspections.find(function (i) {
+      return i.id === appliedInspectionId;
+    }) || null;
+  }, [appliedInspectionId, inspections]);
+
+  // Inspection match for the current pen number (not yet applied)
+  var penMatch = useMemo(function () {
+    if (!draft.penNumber || !draft.penNumber.trim()) return null;
+    var m = findInspectionByPenNumber(draft.penNumber);
+    if (!m) return null;
+    if (appliedInspectionId === m.id) return null; // already applied, no banner
+    return m;
+  }, [draft.penNumber, inspections, appliedInspectionId]);
+
+  // Clear applied inspection if pen number no longer matches it
+  useEffect(function () {
+    if (!appliedInspection) return;
+    if (draft.penNumber.trim() !== appliedInspection.penNumber.trim()) {
+      setAppliedInspectionId(null);
+    }
+  }, [draft.penNumber, appliedInspection]);
 
   // Day totals (bought only). Watched are tracked but not part of spend.
   var totals = useMemo(function () {
@@ -751,7 +1109,8 @@ function App() {
   }
   function emailSummary() {
     return _emailSummary.apply(this, arguments);
-  } // ----- Render helpers -----
+  } // Generate a print-ready HTML report with all the day's pens (bought + watched + inspected),
+  // open in a new tab. The user prints / saves as PDF from Safari's share sheet.
   function _emailSummary() {
     _emailSummary = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
       var _buildXlsx, blob, filename, today, file, summaryText, url, a, body, subject, _t3;
@@ -812,6 +1171,96 @@ function App() {
       }, _callee3, null, [[2, 4]]);
     }));
     return _emailSummary.apply(this, arguments);
+  }
+  function openReport() {
+    return _openReport.apply(this, arguments);
+  } // ----- Render helpers -----
+  function _openReport() {
+    _openReport = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4() {
+      var photoUrls, _iterator, _step, insp, _blob, html, blob, url, _t4, _t5;
+      return _regenerator().w(function (_context4) {
+        while (1) switch (_context4.p = _context4.n) {
+          case 0:
+            if (!(purchases.length === 0 && inspections.length === 0)) {
+              _context4.n = 1;
+              break;
+            }
+            alert('Nothing to report yet. Record a pen or save an inspection first.');
+            return _context4.a(2);
+          case 1:
+            showToast('Building report…');
+
+            // Load all photos as data URLs for embedding
+            photoUrls = {};
+            _iterator = _createForOfIteratorHelper(inspections);
+            _context4.p = 2;
+            _iterator.s();
+          case 3:
+            if ((_step = _iterator.n()).done) {
+              _context4.n = 10;
+              break;
+            }
+            insp = _step.value;
+            if (insp.hasPhoto) {
+              _context4.n = 4;
+              break;
+            }
+            return _context4.a(3, 9);
+          case 4:
+            _context4.p = 4;
+            _context4.n = 5;
+            return photoGet(insp.id);
+          case 5:
+            _blob = _context4.v;
+            if (!_blob) {
+              _context4.n = 7;
+              break;
+            }
+            _context4.n = 6;
+            return blobToDataUrl(_blob);
+          case 6:
+            photoUrls[insp.id] = _context4.v;
+          case 7:
+            _context4.n = 9;
+            break;
+          case 8:
+            _context4.p = 8;
+            _t4 = _context4.v;
+          case 9:
+            _context4.n = 3;
+            break;
+          case 10:
+            _context4.n = 12;
+            break;
+          case 11:
+            _context4.p = 11;
+            _t5 = _context4.v;
+            _iterator.e(_t5);
+          case 12:
+            _context4.p = 12;
+            _iterator.f();
+            return _context4.f(12);
+          case 13:
+            html = buildReportHtml({
+              purchases: purchases,
+              inspections: inspections,
+              lines: lines,
+              totals: totals,
+              budgets: budgets,
+              estimatedPpks: estimatedPpks,
+              photoUrls: photoUrls
+            });
+            blob = new Blob([html], {
+              type: 'text/html'
+            });
+            url = URL.createObjectURL(blob);
+            window.open(url, '_blank');
+          case 14:
+            return _context4.a(2);
+        }
+      }, _callee4, null, [[4, 8], [2, 11, 12, 13]]);
+    }));
+    return _openReport.apply(this, arguments);
   }
   function LinePill(_ref3) {
     var code = _ref3.code,
@@ -894,7 +1343,28 @@ function App() {
         });
       }
     }
-    if (lineBudget) {
+
+    // When inspection applied, show pen-specific max $/head; else show line ceiling
+    if (insMaxPph != null) {
+      if (Number.isFinite(dPph) && dPph > 0) {
+        if (headroom != null && headroom >= 0) {
+          parts.push({
+            text: "$".concat(fmt2(headroom), "/hd under pen max $").concat(fmt2(insMaxPph)),
+            color: T.okTxt
+          });
+        } else if (headroom != null && headroom < 0) {
+          parts.push({
+            text: "over by $".concat(fmt2(-headroom), "/hd (pen max $").concat(fmt2(insMaxPph), ")"),
+            color: T.warnTxt
+          });
+        }
+      } else {
+        parts.push({
+          text: "pen max $".concat(fmt2(insMaxPph), "/hd"),
+          color: T.textMute
+        });
+      }
+    } else if (lineBudget) {
       if (Number.isFinite(dPpk) && dPpk > 0) {
         if (headroom != null && headroom >= 0) {
           parts.push({
@@ -1009,21 +1479,29 @@ function App() {
   }, todayStr, " \xB7 GST free")), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',
-      gap: 8
+      gap: 8,
+      flexWrap: 'wrap',
+      justifyContent: 'flex-end'
     }
-  }, /*#__PURE__*/React.createElement("button", {
-    className: "btn arc",
+  }, /*#__PURE__*/React.createElement(ViewTab, {
+    label: "INSPECT",
+    active: view === 'inspection',
     onClick: function onClick() {
-      return setView(view === 'buying' ? 'dashboard' : 'buying');
-    },
-    style: {
-      background: view === 'dashboard' ? T.accent : 'transparent',
-      color: view === 'dashboard' ? '#0D0D0F' : T.text,
-      borderColor: view === 'dashboard' ? T.accent : T.borderH,
-      padding: '10px 14px',
-      fontSize: 13
+      return setView('inspection');
     }
-  }, view === 'buying' ? 'STATS' : 'BIDDING'), /*#__PURE__*/React.createElement("button", {
+  }), /*#__PURE__*/React.createElement(ViewTab, {
+    label: "BIDDING",
+    active: view === 'buying',
+    onClick: function onClick() {
+      return setView('buying');
+    }
+  }), /*#__PURE__*/React.createElement(ViewTab, {
+    label: "STATS",
+    active: view === 'dashboard',
+    onClick: function onClick() {
+      return setView('dashboard');
+    }
+  }), /*#__PURE__*/React.createElement("button", {
     className: "btn arc",
     onClick: emailSummary,
     style: {
@@ -1034,6 +1512,13 @@ function App() {
       fontSize: 13
     }
   }, "EMAIL"), /*#__PURE__*/React.createElement("button", {
+    className: "btn arc btn-ghost",
+    onClick: openReport,
+    style: {
+      padding: '10px 14px',
+      fontSize: 13
+    }
+  }, "REPORT"), /*#__PURE__*/React.createElement("button", {
     className: "btn arc btn-ghost",
     onClick: function onClick() {
       return setShowSettings(true);
@@ -1128,7 +1613,84 @@ function App() {
       line: l,
       selected: draft.lineCode === l.code
     });
-  }))), /*#__PURE__*/React.createElement("div", {
+  }))), penMatch && /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 10,
+      padding: '10px 12px',
+      background: 'rgba(255,214,107,0.12)',
+      border: "1.5px solid ".concat(T.accent),
+      borderRadius: 8,
+      color: T.text,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: 10,
+      flexWrap: 'wrap'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      minWidth: 0
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontSize: 11,
+      fontWeight: 800,
+      letterSpacing: '0.10em',
+      color: T.accent,
+      textTransform: 'uppercase'
+    }
+  }, "Inspection match \xB7 pen ", penMatch.penNumber), /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontSize: 12,
+      marginTop: 2,
+      color: T.textLbl
+    }
+  }, penMatch.lineCode ? penMatch.lineCode + ' · ' : '', penMatch.head != null ? "".concat(penMatch.head, " head \xB7 ") : '', penMatch.wtPerHead != null ? "".concat(fmt1(penMatch.wtPerHead), " kg/hd \xB7 ") : '', penMatch.maxPph != null ? "max $".concat(fmt2(penMatch.maxPph), "/hd") : 'no max set')), /*#__PURE__*/React.createElement("button", {
+    className: "btn arc",
+    style: {
+      background: T.accent,
+      color: '#0D0D0F',
+      borderColor: T.accent,
+      padding: '8px 14px',
+      fontSize: 12
+    },
+    onClick: function onClick() {
+      return applyInspectionToDraft(penMatch);
+    }
+  }, "APPLY")), appliedInspection && /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 10,
+      padding: '6px 10px',
+      background: 'transparent',
+      border: "1px dashed ".concat(T.accent),
+      borderRadius: 6,
+      color: T.accent,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: 10
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "arc",
+    style: {
+      fontSize: 11,
+      fontWeight: 700,
+      letterSpacing: '0.06em'
+    }
+  }, "INSPECTION APPLIED \xB7 pen max $", fmt2(appliedInspection.maxPph || 0), "/hd"), /*#__PURE__*/React.createElement("button", {
+    className: "btn arc btn-ghost",
+    style: {
+      padding: '4px 8px',
+      fontSize: 10,
+      borderColor: T.accent,
+      color: T.accent
+    },
+    onClick: function onClick() {
+      return setAppliedInspectionId(null);
+    }
+  }, "CLEAR")), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'grid',
       gridTemplateColumns: '1fr 1fr 1.2fr',
@@ -1324,7 +1886,7 @@ function App() {
       fontWeight: 800,
       letterSpacing: '0.04em'
     }
-  }, "OVER BUDGET, your ceiling for ", draft.lineCode, " is $", fmt2(lineBudget), "/kg")), /*#__PURE__*/React.createElement("button", {
+  }, insMaxPph != null ? "OVER PEN MAX of $".concat(fmt2(insMaxPph), "/hd (inspection)") : "OVER BUDGET, your ceiling for ".concat(draft.lineCode, " is $").concat(fmt2(lineBudget), "/kg"))), /*#__PURE__*/React.createElement("button", {
     className: "btn btn-primary arc",
     style: {
       width: '100%',
@@ -1549,6 +2111,22 @@ function App() {
     totals: totals,
     budgets: budgets,
     estimatedPpks: estimatedPpks
+  }), view === 'inspection' && /*#__PURE__*/React.createElement(InspectionView, {
+    inspections: inspections,
+    lines: lines,
+    onAdd: function onAdd() {
+      return setEditingInspection('new');
+    },
+    onEdit: function onEdit(id) {
+      return setEditingInspection({
+        id: id
+      });
+    },
+    onDelete: deleteInspection,
+    onJumpToBidding: function onJumpToBidding(insp) {
+      setView('buying');
+      applyInspectionToDraft(insp);
+    }
   })), /*#__PURE__*/React.createElement("div", {
     style: {
       position: 'fixed',
@@ -1595,7 +2173,17 @@ function App() {
     className: "toast"
   }, /*#__PURE__*/React.createElement("span", null, toast.message), toast.undo && /*#__PURE__*/React.createElement("button", {
     onClick: toast.undo.run
-  }, toast.undo.label)), showSettings && /*#__PURE__*/React.createElement(SettingsModal, {
+  }, toast.undo.label)), editingInspection && /*#__PURE__*/React.createElement(InspectionModal, {
+    mode: editingInspection === 'new' ? 'new' : 'edit',
+    existing: editingInspection !== 'new' ? inspections.find(function (i) {
+      return i.id === editingInspection.id;
+    }) : null,
+    lines: lines,
+    onSave: saveInspection,
+    onClose: function onClose() {
+      return setEditingInspection(null);
+    }
+  }), showSettings && /*#__PURE__*/React.createElement(SettingsModal, {
     lines: lines,
     budgets: budgets,
     estimatedPpks: estimatedPpks,
@@ -1635,14 +2223,31 @@ function App() {
     }
   }, "Start a new day?"), /*#__PURE__*/React.createElement("p", {
     style: {
-      margin: '0 0 16px 0',
+      margin: '0 0 12px 0',
       color: T.textLbl
     }
-  }, "All ", totals.pens, " bought pen", totals.pens === 1 ? '' : 's', totals.watched ? " and ".concat(totals.watched, " watched") : '', " will be cleared. Settings, line types, default weights and steps are kept. Consider emailing the summary first."), /*#__PURE__*/React.createElement("div", {
+  }, "All ", totals.pens, " bought pen", totals.pens === 1 ? '' : 's', totals.watched ? ", ".concat(totals.watched, " watched") : '', " and ", inspections.length, " inspection", inspections.length === 1 ? '' : 's', " will be cleared. Photos will be deleted from this device. Settings, line types, default weights and steps are kept."), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: 10,
+      background: 'rgba(255,214,107,0.10)',
+      border: "1px solid ".concat(T.accent),
+      borderRadius: 8,
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "arc",
+    style: {
+      fontSize: 12,
+      color: T.accent,
+      fontWeight: 700,
+      letterSpacing: '0.04em'
+    }
+  }, "Email the spreadsheet AND save the visual report (PDF) before clearing. Photos cannot be recovered after this.")), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',
       gap: 8,
-      justifyContent: 'flex-end'
+      justifyContent: 'flex-end',
+      flexWrap: 'wrap'
     }
   }, /*#__PURE__*/React.createElement("button", {
     className: "btn arc btn-ghost",
@@ -1650,6 +2255,28 @@ function App() {
       return setShowResetConfirm(false);
     }
   }, "CANCEL"), /*#__PURE__*/React.createElement("button", {
+    className: "btn arc",
+    style: {
+      background: T.text,
+      color: '#0D0D0F',
+      borderColor: T.text
+    },
+    onClick: function onClick() {
+      setShowResetConfirm(false);
+      emailSummary();
+    }
+  }, "EMAIL FIRST"), /*#__PURE__*/React.createElement("button", {
+    className: "btn arc",
+    style: {
+      background: 'transparent',
+      color: T.accent,
+      borderColor: T.accent
+    },
+    onClick: function onClick() {
+      setShowResetConfirm(false);
+      openReport();
+    }
+  }, "REPORT FIRST"), /*#__PURE__*/React.createElement("button", {
     className: "btn arc btn-warn",
     onClick: resetDay
   }, "CLEAR DAY")))), /*#__PURE__*/React.createElement("div", {
@@ -1715,22 +2342,22 @@ function SettingsModal(_ref6) {
     onAddLine = _ref6.onAddLine,
     onRemoveLine = _ref6.onRemoveLine,
     onClose = _ref6.onClose;
-  var _useState27 = useState(''),
-    _useState28 = _slicedToArray(_useState27, 2),
-    newCode = _useState28[0],
-    setNewCode = _useState28[1];
-  var _useState29 = useState(''),
-    _useState30 = _slicedToArray(_useState29, 2),
-    newName = _useState30[0],
-    setNewName = _useState30[1];
-  var _useState31 = useState('male'),
-    _useState32 = _slicedToArray(_useState31, 2),
-    newCat = _useState32[0],
-    setNewCat = _useState32[1];
-  var _useState33 = useState(buyerEmail || ''),
+  var _useState33 = useState(''),
     _useState34 = _slicedToArray(_useState33, 2),
-    emailInput = _useState34[0],
-    setEmailInput = _useState34[1];
+    newCode = _useState34[0],
+    setNewCode = _useState34[1];
+  var _useState35 = useState(''),
+    _useState36 = _slicedToArray(_useState35, 2),
+    newName = _useState36[0],
+    setNewName = _useState36[1];
+  var _useState37 = useState('male'),
+    _useState38 = _slicedToArray(_useState37, 2),
+    newCat = _useState38[0],
+    setNewCat = _useState38[1];
+  var _useState39 = useState(buyerEmail || ''),
+    _useState40 = _slicedToArray(_useState39, 2),
+    emailInput = _useState40[0],
+    setEmailInput = _useState40[1];
   function handleAdd() {
     if (!newCode.trim() || !newName.trim()) return;
     onAddLine(newCode, newName, newCat);
@@ -1890,6 +2517,7 @@ function SettingsModal(_ref6) {
     }, /*#__PURE__*/React.createElement(SmallInput, {
       label: "Estimated $/kg",
       prefix: "$",
+      decimal2: true,
       value: estimatedPpks[l.code] != null ? String(estimatedPpks[l.code]) : '',
       onChange: function onChange(v) {
         return onSetEstimatedPpk(l.code, v);
@@ -1898,6 +2526,7 @@ function SettingsModal(_ref6) {
     }), /*#__PURE__*/React.createElement(SmallInput, {
       label: "Ceiling $/kg",
       prefix: "$",
+      decimal2: true,
       value: budgets[l.code] != null ? String(budgets[l.code]) : '',
       onChange: function onChange(v) {
         return onSetBudget(l.code, v);
@@ -1993,7 +2622,16 @@ function SmallInput(_ref7) {
     _onChange = _ref7.onChange,
     prefix = _ref7.prefix,
     suffix = _ref7.suffix,
-    placeholder = _ref7.placeholder;
+    placeholder = _ref7.placeholder,
+    decimal2 = _ref7.decimal2;
+  var _useState41 = useState(false),
+    _useState42 = _slicedToArray(_useState41, 2),
+    focused = _useState42[0],
+    setFocused = _useState42[1];
+  // When decimal2 and not focused, format the displayed value to 2 decimal places
+  // so 5.5 shows as "5.50". Free-text editing while focused.
+  var numericValue = parseFloat(value);
+  var display = decimal2 && !focused && value !== '' && Number.isFinite(numericValue) ? numericValue.toFixed(2) : value;
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
     className: "arc",
     style: {
@@ -2026,9 +2664,15 @@ function SmallInput(_ref7) {
       fontSize: 15,
       minWidth: 0
     },
-    value: value,
+    value: display,
     onChange: function onChange(e) {
       return _onChange(e.target.value.replace(/[^0-9.]/g, ''));
+    },
+    onFocus: function onFocus() {
+      return setFocused(true);
+    },
+    onBlur: function onBlur() {
+      return setFocused(false);
     },
     placeholder: placeholder
   }), suffix && /*#__PURE__*/React.createElement("span", {
@@ -2066,11 +2710,11 @@ function Dashboard(_ref8) {
   // Per-line aggregates, sorted by total spend descending
   var byLine = useMemo(function () {
     var map = {};
-    var _iterator = _createForOfIteratorHelper(bought),
-      _step;
+    var _iterator2 = _createForOfIteratorHelper(bought),
+      _step2;
     try {
       var _loop = function _loop() {
-        var p = _step.value;
+        var p = _step2.value;
         if (!map[p.lineCode]) {
           var line = lines.find(function (l) {
             return l.code === p.lineCode;
@@ -2090,13 +2734,13 @@ function Dashboard(_ref8) {
         map[p.lineCode].total += p.total;
         map[p.lineCode].pens += 1;
       };
-      for (_iterator.s(); !(_step = _iterator.n()).done;) {
+      for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
         _loop();
       }
     } catch (err) {
-      _iterator.e(err);
+      _iterator2.e(err);
     } finally {
-      _iterator.f();
+      _iterator2.f();
     }
     return Object.values(map).map(function (l) {
       return _objectSpread(_objectSpread({}, l), {}, {
@@ -2563,6 +3207,800 @@ function DashCumulative(_ref10) {
       strokeWidth: "2"
     });
   })));
+}
+
+// ----- View tab pill -----
+
+function ViewTab(_ref11) {
+  var label = _ref11.label,
+    active = _ref11.active,
+    onClick = _ref11.onClick;
+  return /*#__PURE__*/React.createElement("button", {
+    onClick: onClick,
+    className: "btn arc",
+    style: {
+      background: active ? T.accent : 'transparent',
+      color: active ? '#0D0D0F' : T.text,
+      borderColor: active ? T.accent : T.borderH,
+      padding: '10px 14px',
+      fontSize: 13
+    }
+  }, label);
+}
+
+// ----- Inspection: list view -----
+
+function InspectionView(_ref12) {
+  var inspections = _ref12.inspections,
+    lines = _ref12.lines,
+    onAdd = _ref12.onAdd,
+    _onEdit = _ref12.onEdit,
+    _onDelete = _ref12.onDelete,
+    _onJumpToBidding = _ref12.onJumpToBidding;
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 16
+    }
+  }, /*#__PURE__*/React.createElement("section", {
+    className: "card",
+    style: {
+      padding: 14,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: 12,
+      flexWrap: 'wrap'
+    }
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontWeight: 900,
+      fontSize: 16,
+      letterSpacing: '0.06em',
+      textTransform: 'uppercase'
+    }
+  }, "Pre-sale inspection"), /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontWeight: 600,
+      fontSize: 11,
+      letterSpacing: '0.06em',
+      color: T.textMute,
+      marginTop: 2
+    }
+  }, inspections.length, " pen", inspections.length === 1 ? '' : 's', " inspected")), /*#__PURE__*/React.createElement("button", {
+    className: "btn arc",
+    style: {
+      background: T.accent,
+      color: '#0D0D0F',
+      borderColor: T.accent,
+      padding: '12px 18px',
+      fontSize: 14
+    },
+    onClick: onAdd
+  }, "+ ADD INSPECTION")), inspections.length === 0 ? /*#__PURE__*/React.createElement("section", {
+    className: "card",
+    style: {
+      padding: 32,
+      textAlign: 'center'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontWeight: 800,
+      fontSize: 13,
+      letterSpacing: '0.10em',
+      textTransform: 'uppercase',
+      color: T.textMute
+    }
+  }, "No pens inspected yet"), /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      marginTop: 8,
+      fontSize: 12,
+      color: T.textMute
+    }
+  }, "Walk the pens, photograph each one, set what you'd pay per head. They'll show up here.")) : /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+      gap: 12
+    }
+  }, inspections.map(function (insp) {
+    return /*#__PURE__*/React.createElement(InspectionCard, {
+      key: insp.id,
+      inspection: insp,
+      lines: lines,
+      onEdit: function onEdit() {
+        return _onEdit(insp.id);
+      },
+      onDelete: function onDelete() {
+        return _onDelete(insp.id);
+      },
+      onJumpToBidding: function onJumpToBidding() {
+        return _onJumpToBidding(insp);
+      }
+    });
+  })));
+}
+function InspectionCard(_ref13) {
+  var inspection = _ref13.inspection,
+    lines = _ref13.lines,
+    onEdit = _ref13.onEdit,
+    onDelete = _ref13.onDelete,
+    onJumpToBidding = _ref13.onJumpToBidding;
+  var line = lines.find(function (l) {
+    return l.code === inspection.lineCode;
+  });
+  var cat = line ? CAT[line.category] : CAT.mixed;
+  return /*#__PURE__*/React.createElement("div", {
+    className: "card",
+    style: {
+      overflow: 'hidden',
+      display: 'flex',
+      flexDirection: 'column'
+    }
+  }, inspection.hasPhoto ? /*#__PURE__*/React.createElement(InspectionPhoto, {
+    inspectionId: inspection.id,
+    style: {
+      width: '100%',
+      aspectRatio: '4/3',
+      objectFit: 'cover',
+      display: 'block',
+      background: T.bgInset
+    }
+  }) : /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: '100%',
+      aspectRatio: '4/3',
+      background: T.bgInset,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      color: T.textMute,
+      fontSize: 11,
+      fontFamily: "'Archivo', sans-serif",
+      letterSpacing: '0.10em',
+      textTransform: 'uppercase'
+    }
+  }, "No photo"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: 12,
+      flex: 1,
+      display: 'flex',
+      flexDirection: 'column'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: 8,
+      marginBottom: 6,
+      flexWrap: 'wrap'
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "arc",
+    style: {
+      fontWeight: 900,
+      fontSize: 14,
+      letterSpacing: '0.04em'
+    }
+  }, "PEN ", inspection.penNumber || '—'), line && /*#__PURE__*/React.createElement("span", {
+    className: "pill",
+    style: {
+      background: cat.solid,
+      color: cat.ink
+    }
+  }, line.code)), /*#__PURE__*/React.createElement("div", {
+    className: "mono",
+    style: {
+      fontSize: 13,
+      color: T.textLbl,
+      marginBottom: 6
+    }
+  }, inspection.head != null ? "".concat(inspection.head, " head") : '—', inspection.wtPerHead != null ? " \xB7 ".concat(fmt1(inspection.wtPerHead), " kg/hd") : ''), /*#__PURE__*/React.createElement("div", {
+    className: "mono",
+    style: {
+      fontSize: 16,
+      fontWeight: 700,
+      color: T.accent,
+      marginBottom: 8
+    }
+  }, inspection.maxPph != null ? "max $".concat(fmt2(inspection.maxPph), "/hd") : 'no max set'), inspection.notes && /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontSize: 12,
+      color: T.textLbl,
+      marginBottom: 10,
+      fontStyle: 'italic',
+      flex: 1
+    }
+  }, "\u201C", inspection.notes, "\u201D"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 6,
+      marginTop: 'auto'
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "btn arc btn-ghost",
+    style: {
+      padding: '8px 10px',
+      fontSize: 11,
+      flex: 1
+    },
+    onClick: onEdit
+  }, "EDIT"), /*#__PURE__*/React.createElement("button", {
+    className: "btn arc",
+    style: {
+      padding: '8px 10px',
+      fontSize: 11,
+      background: 'transparent',
+      color: T.warnBdr,
+      borderColor: T.warnBdr,
+      flex: 1
+    },
+    onClick: onDelete
+  }, "DEL"))));
+}
+
+// Loads a photo Blob from IndexedDB and renders it as an <img>
+function InspectionPhoto(_ref14) {
+  var inspectionId = _ref14.inspectionId,
+    style = _ref14.style;
+  var _useState43 = useState(null),
+    _useState44 = _slicedToArray(_useState43, 2),
+    url = _useState44[0],
+    setUrl = _useState44[1];
+  useEffect(function () {
+    var active = true;
+    var createdUrl = null;
+    photoGet(inspectionId).then(function (blob) {
+      if (!active || !blob) return;
+      createdUrl = URL.createObjectURL(blob);
+      setUrl(createdUrl);
+    })["catch"](function () {});
+    return function () {
+      active = false;
+      if (createdUrl) URL.revokeObjectURL(createdUrl);
+    };
+  }, [inspectionId]);
+  if (!url) {
+    return /*#__PURE__*/React.createElement("div", {
+      style: _objectSpread(_objectSpread({}, style), {}, {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: T.textMute,
+        fontSize: 11
+      })
+    }, "loading\u2026");
+  }
+  return /*#__PURE__*/React.createElement("img", {
+    src: url,
+    alt: "",
+    style: style
+  });
+}
+
+// ----- Inspection: add/edit modal -----
+
+function InspectionModal(_ref15) {
+  var mode = _ref15.mode,
+    existing = _ref15.existing,
+    lines = _ref15.lines,
+    onSave = _ref15.onSave,
+    onClose = _ref15.onClose;
+  var _useState45 = useState(function () {
+      return existing ? {
+        id: existing.id,
+        penNumber: existing.penNumber || '',
+        lineCode: existing.lineCode || '',
+        head: existing.head != null ? String(existing.head) : '',
+        wtPerHead: existing.wtPerHead != null ? String(existing.wtPerHead) : '',
+        maxPph: existing.maxPph != null ? String(existing.maxPph) : '',
+        notes: existing.notes || ''
+      } : emptyInspection();
+    }),
+    _useState46 = _slicedToArray(_useState45, 2),
+    form = _useState46[0],
+    setForm = _useState46[1];
+  var _useState47 = useState(null),
+    _useState48 = _slicedToArray(_useState47, 2),
+    photoBlob = _useState48[0],
+    setPhotoBlob = _useState48[1];
+  var _useState49 = useState(null),
+    _useState50 = _slicedToArray(_useState49, 2),
+    photoUrl = _useState50[0],
+    setPhotoUrl = _useState50[1];
+  var _useState51 = useState(existing ? !!existing.hasPhoto : false),
+    _useState52 = _slicedToArray(_useState51, 2),
+    hasExistingPhoto = _useState52[0],
+    setHasExistingPhoto = _useState52[1];
+  var _useState53 = useState(false),
+    _useState54 = _slicedToArray(_useState53, 2),
+    busy = _useState54[0],
+    setBusy = _useState54[1];
+  var fileRef = useRef(null);
+
+  // Load existing photo if there is one (for the preview)
+  useEffect(function () {
+    if (!existing || !existing.hasPhoto) return;
+    var active = true;
+    var createdUrl = null;
+    photoGet(existing.id).then(function (blob) {
+      if (!active || !blob) return;
+      createdUrl = URL.createObjectURL(blob);
+      setPhotoUrl(createdUrl);
+    })["catch"](function () {});
+    return function () {
+      active = false;
+      if (createdUrl) URL.revokeObjectURL(createdUrl);
+    };
+  }, [existing]);
+
+  // Revoke preview URL for newly-captured photos when the component unmounts
+  useEffect(function () {
+    return function () {
+      if (photoUrl && photoBlob) URL.revokeObjectURL(photoUrl);
+    };
+  }, [photoUrl, photoBlob]);
+  function update(field, value) {
+    setForm(function (prev) {
+      return _objectSpread(_objectSpread({}, prev), {}, _defineProperty({}, field, value));
+    });
+  }
+  function handlePhoto(_x6) {
+    return _handlePhoto.apply(this, arguments);
+  }
+  function _handlePhoto() {
+    _handlePhoto = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5(e) {
+      var file, blob, _t6;
+      return _regenerator().w(function (_context5) {
+        while (1) switch (_context5.p = _context5.n) {
+          case 0:
+            file = e.target.files && e.target.files[0];
+            if (file) {
+              _context5.n = 1;
+              break;
+            }
+            return _context5.a(2);
+          case 1:
+            setBusy(true);
+            _context5.p = 2;
+            _context5.n = 3;
+            return compressImage(file, 1200, 0.7);
+          case 3:
+            blob = _context5.v;
+            if (photoUrl && photoBlob) URL.revokeObjectURL(photoUrl);
+            setPhotoBlob(blob);
+            setPhotoUrl(URL.createObjectURL(blob));
+            setHasExistingPhoto(true);
+            _context5.n = 5;
+            break;
+          case 4:
+            _context5.p = 4;
+            _t6 = _context5.v;
+            alert('Could not process photo: ' + (_t6 && _t6.message ? _t6.message : 'unknown error'));
+          case 5:
+            _context5.p = 5;
+            setBusy(false);
+            if (fileRef.current) fileRef.current.value = '';
+            return _context5.f(5);
+          case 6:
+            return _context5.a(2);
+        }
+      }, _callee5, null, [[2, 4, 5, 6]]);
+    }));
+    return _handlePhoto.apply(this, arguments);
+  }
+  function removePhoto() {
+    if (photoUrl && photoBlob) URL.revokeObjectURL(photoUrl);
+    setPhotoBlob(null);
+    setPhotoUrl(null);
+    setHasExistingPhoto(false);
+    // The actual deletion from IndexedDB happens on save (we record hasPhoto: false)
+  }
+  function handleSave() {
+    if (!form.penNumber || !form.penNumber.trim()) {
+      alert('Pen number is required.');
+      return;
+    }
+    onSave(_objectSpread(_objectSpread({}, form), {}, {
+      hasPhoto: hasExistingPhoto
+    }), photoBlob);
+  }
+  return /*#__PURE__*/React.createElement("div", {
+    className: "modal-bg",
+    onClick: onClose
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "modal",
+    style: {
+      padding: 20
+    },
+    onClick: function onClick(e) {
+      return e.stopPropagation();
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: 14
+    }
+  }, /*#__PURE__*/React.createElement("h3", {
+    className: "arc",
+    style: {
+      margin: 0,
+      fontWeight: 900,
+      letterSpacing: '0.06em',
+      textTransform: 'uppercase'
+    }
+  }, mode === 'edit' ? 'Edit inspection' : 'New inspection'), /*#__PURE__*/React.createElement("button", {
+    className: "btn arc btn-ghost",
+    style: {
+      padding: '8px 12px',
+      fontSize: 12
+    },
+    onClick: onClose
+  }, "CLOSE")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 14
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    className: "lbl"
+  }, "Photo"), photoUrl ? /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: 'relative'
+    }
+  }, /*#__PURE__*/React.createElement("img", {
+    src: photoUrl,
+    alt: "pen",
+    style: {
+      width: '100%',
+      maxHeight: 280,
+      objectFit: 'cover',
+      borderRadius: 8,
+      border: "1.5px solid ".concat(T.borderH),
+      display: 'block'
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: 8,
+      display: 'flex',
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "btn arc btn-ghost",
+    style: {
+      padding: '8px 12px',
+      fontSize: 12,
+      flex: 1
+    },
+    onClick: function onClick() {
+      return fileRef.current && fileRef.current.click();
+    },
+    disabled: busy
+  }, "RETAKE"), /*#__PURE__*/React.createElement("button", {
+    className: "btn arc",
+    style: {
+      padding: '8px 12px',
+      fontSize: 12,
+      flex: 1,
+      background: 'transparent',
+      color: T.warnBdr,
+      borderColor: T.warnBdr
+    },
+    onClick: removePhoto,
+    disabled: busy
+  }, "REMOVE"))) : /*#__PURE__*/React.createElement("button", {
+    className: "btn arc btn-ghost",
+    style: {
+      width: '100%',
+      padding: '20px 16px',
+      fontSize: 14
+    },
+    onClick: function onClick() {
+      return fileRef.current && fileRef.current.click();
+    },
+    disabled: busy
+  }, busy ? 'PROCESSING…' : '📷  TAKE / CHOOSE PHOTO'), /*#__PURE__*/React.createElement("input", {
+    ref: fileRef,
+    type: "file",
+    accept: "image/*",
+    capture: "environment",
+    style: {
+      display: 'none'
+    },
+    onChange: handlePhoto
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    className: "lbl"
+  }, "Pen number (required)"), /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    inputMode: "text",
+    className: "field",
+    value: form.penNumber,
+    onChange: function onChange(e) {
+      return update('penNumber', e.target.value.slice(0, 8));
+    },
+    placeholder: "e.g. 12",
+    style: {
+      fontSize: 22
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    className: "lbl"
+  }, "Line type"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fill, minmax(80px, 1fr))',
+      gap: 6
+    }
+  }, lines.map(function (l) {
+    var cat = CAT[l.category];
+    var sel = form.lineCode === l.code;
+    return /*#__PURE__*/React.createElement("button", {
+      key: l.code,
+      type: "button",
+      className: "arc",
+      onClick: function onClick() {
+        return update('lineCode', sel ? '' : l.code);
+      },
+      style: {
+        padding: '10px 6px',
+        border: "2px solid ".concat(cat.solid),
+        borderRadius: 8,
+        background: sel ? cat.solid : cat.soft,
+        color: sel ? cat.ink : cat.solid,
+        fontWeight: 800,
+        fontSize: 13,
+        letterSpacing: '0.04em',
+        textTransform: 'uppercase',
+        cursor: 'pointer',
+        minHeight: 44,
+        touchAction: 'manipulation',
+        WebkitTapHighlightColor: 'transparent'
+      }
+    }, l.code);
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'grid',
+      gridTemplateColumns: '1fr 1fr',
+      gap: 10,
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    className: "lbl"
+  }, "Head (estimated)"), /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    inputMode: "numeric",
+    pattern: "[0-9]*",
+    className: "field",
+    value: form.head,
+    onChange: function onChange(e) {
+      return update('head', e.target.value.replace(/[^0-9]/g, ''));
+    },
+    placeholder: "0"
+  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    className: "lbl"
+  }, "Est. kg per head"), /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    inputMode: "decimal",
+    className: "field",
+    value: form.wtPerHead,
+    onChange: function onChange(e) {
+      return update('wtPerHead', e.target.value.replace(/[^0-9.]/g, ''));
+    },
+    placeholder: "0.0"
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    className: "lbl"
+  }, "Max $/head you'd pay"), /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    inputMode: "decimal",
+    className: "field",
+    value: form.maxPph,
+    onChange: function onChange(e) {
+      return update('maxPph', e.target.value.replace(/[^0-9.]/g, ''));
+    },
+    placeholder: "0.00"
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    className: "lbl"
+  }, "Notes"), /*#__PURE__*/React.createElement("textarea", {
+    value: form.notes,
+    onChange: function onChange(e) {
+      return update('notes', e.target.value);
+    },
+    placeholder: "condition, breed type, observations\u2026",
+    rows: 3,
+    style: {
+      width: '100%',
+      boxSizing: 'border-box',
+      padding: 12,
+      border: "1.5px solid ".concat(T.borderH),
+      borderRadius: 8,
+      background: T.bgField,
+      color: T.text,
+      fontFamily: 'system-ui, sans-serif',
+      fontSize: 14,
+      outline: 'none',
+      resize: 'vertical'
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 8,
+      justifyContent: 'flex-end'
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "btn arc btn-ghost",
+    onClick: onClose
+  }, "CANCEL"), /*#__PURE__*/React.createElement("button", {
+    className: "btn arc btn-primary",
+    onClick: handleSave
+  }, "SAVE"))));
+}
+
+// ----- HTML report generator -----
+
+function buildReportHtml(_ref16) {
+  var purchases = _ref16.purchases,
+    inspections = _ref16.inspections,
+    lines = _ref16.lines,
+    totals = _ref16.totals,
+    budgets = _ref16.budgets,
+    estimatedPpks = _ref16.estimatedPpks,
+    photoUrls = _ref16.photoUrls;
+  var today = new Date().toLocaleDateString('en-AU', {
+    weekday: 'long',
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric'
+  });
+  var dateShort = new Date().toISOString().split('T')[0];
+
+  // Combine inspections and purchases keyed by pen number where possible
+  // so each pen card shows both pre-sale view and the result.
+  var cards = [];
+  var usedPurchaseIds = new Set();
+  var _iterator3 = _createForOfIteratorHelper(inspections),
+    _step3;
+  try {
+    var _loop2 = function _loop2() {
+      var insp = _step3.value;
+      var matchingPurchase = purchases.find(function (p) {
+        return p.penNumber && insp.penNumber && p.penNumber.trim() === insp.penNumber.trim();
+      });
+      cards.push({
+        inspection: insp,
+        purchase: matchingPurchase
+      });
+      if (matchingPurchase) usedPurchaseIds.add(matchingPurchase.id);
+    };
+    for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+      _loop2();
+    }
+    // Purchases with no matching inspection
+  } catch (err) {
+    _iterator3.e(err);
+  } finally {
+    _iterator3.f();
+  }
+  var _iterator4 = _createForOfIteratorHelper(purchases),
+    _step4;
+  try {
+    for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+      var p = _step4.value;
+      if (!usedPurchaseIds.has(p.id)) {
+        cards.push({
+          inspection: null,
+          purchase: p
+        });
+      }
+    }
+
+    // Sort: bought first by line/time, then watched, then inspections-only
+  } catch (err) {
+    _iterator4.e(err);
+  } finally {
+    _iterator4.f();
+  }
+  cards.sort(function (a, b) {
+    var score = function score(c) {
+      if (c.purchase && !c.purchase.watched) return 0;
+      if (c.purchase && c.purchase.watched) return 1;
+      return 2;
+    };
+    return score(a) - score(b);
+  });
+  var lineNameOf = function lineNameOf(code) {
+    var l = lines.find(function (x) {
+      return x.code === code;
+    });
+    return l ? l.name : code;
+  };
+  function escapeHtml(s) {
+    return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+  function formatTime(iso) {
+    if (!iso) return '';
+    return new Date(iso).toLocaleTimeString('en-AU', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    });
+  }
+  var bought = purchases.filter(function (p) {
+    return !p.watched;
+  });
+  var watched = purchases.filter(function (p) {
+    return p.watched;
+  });
+
+  // Summary table rows
+  var summaryRows = [['Pens bought', String(bought.length)], ['Pens watched', String(watched.length)], ['Pens inspected (total)', String(inspections.length)], ['Total head', String(totals.head)], ['Total weight', fmt1(totals.kg) + ' kg'], ['Total spent', '$' + fmt2(totals.dollars) + ' (GST free)'], ['Average $/kg', '$' + fmt2(totals.avgPpk)], ['Average $/hd', '$' + fmt2(totals.avgPph)]];
+  var css = "\n    @page { size: A4; margin: 12mm; }\n    * { box-sizing: border-box; }\n    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; color: #0d0d0d; background: #f7f3ea; }\n    h1, h2, h3, h4 { margin: 0; font-weight: 800; letter-spacing: -0.01em; }\n    .container { max-width: 900px; margin: 0 auto; padding: 24px 16px 80px; }\n    .header { padding-bottom: 12px; border-bottom: 2px solid #0d0d0d; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; }\n    .header h1 { font-size: 24px; letter-spacing: 0.04em; text-transform: uppercase; }\n    .header .date { font-size: 14px; color: #555; }\n    .summary { background: #fff; border: 1px solid #1a1a1a; border-radius: 8px; padding: 14px 16px; margin-bottom: 20px; }\n    .summary h2 { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #555; margin-bottom: 10px; }\n    .summary table { width: 100%; border-collapse: collapse; font-size: 14px; }\n    .summary td { padding: 4px 0; }\n    .summary td:first-child { color: #555; width: 40%; }\n    .summary td:last-child  { font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }\n    .controls { background: #0d0d0d; color: #fafafa; padding: 12px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }\n    .controls button { background: #fafafa; color: #0d0d0d; border: none; padding: 10px 18px; border-radius: 6px; font-weight: 800; cursor: pointer; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; }\n    .pen-card { background: #fff; border: 1px solid #1a1a1a; border-radius: 8px; padding: 14px; margin-bottom: 14px; page-break-inside: avoid; }\n    .pen-card .top { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 10px; flex-wrap: wrap; }\n    .pen-card img { width: 240px; height: 180px; object-fit: cover; border-radius: 6px; flex-shrink: 0; background: #eee; }\n    .pen-card .info { flex: 1; min-width: 240px; }\n    .pen-card .pen-no { font-size: 22px; font-weight: 900; letter-spacing: 0.04em; }\n    .pen-card .line-name { font-size: 13px; color: #555; margin-bottom: 6px; }\n    .pen-card .badge { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; vertical-align: middle; margin-left: 6px; }\n    .badge-bought   { background: #14532d; color: #fff; }\n    .badge-watched  { background: #555;    color: #fff; }\n    .badge-no-result{ background: #d4d4d4; color: #333; }\n    .pen-card .data-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; font-variant-numeric: tabular-nums; }\n    .pen-card .data-table td { padding: 4px 8px; border: 1px solid #ddd; }\n    .pen-card .data-table td:first-child { color: #555; width: 35%; background: #f9f7f0; }\n    .pen-card .notes { margin-top: 8px; font-style: italic; color: #444; font-size: 13px; padding: 8px 10px; background: #f9f7f0; border-left: 3px solid #1a1a1a; }\n    .section-title { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #555; margin: 24px 0 8px; }\n    @media print {\n      body { background: #fff; }\n      .controls { display: none; }\n      .pen-card { box-shadow: none; }\n    }\n  ";
+  function renderCard(_ref17) {
+    var inspection = _ref17.inspection,
+      purchase = _ref17.purchase;
+    var penNo = inspection ? inspection.penNumber : purchase ? purchase.penNumber : '';
+    var code = inspection ? inspection.lineCode : purchase ? purchase.lineCode : '';
+    var name = lineNameOf(code);
+    var photoUrl = inspection && photoUrls[inspection.id] ? photoUrls[inspection.id] : null;
+    var badge = '<span class="badge badge-no-result">Inspected only</span>';
+    if (purchase && !purchase.watched) badge = '<span class="badge badge-bought">Bought</span>';else if (purchase && purchase.watched) badge = '<span class="badge badge-watched">Watched</span>';
+    var rows = [];
+    if (inspection) {
+      rows.push(['Inspection time', formatTime(inspection.timestamp)]);
+      if (inspection.head != null) rows.push(['Inspected head', String(inspection.head)]);
+      if (inspection.wtPerHead != null) rows.push(['Inspected kg/hd', fmt1(inspection.wtPerHead)]);
+      if (inspection.maxPph != null) rows.push(['Max $/head you set', '$' + fmt2(inspection.maxPph)]);
+    }
+    if (purchase) {
+      rows.push(['Sale time', formatTime(purchase.timestamp)]);
+      rows.push(['Head', String(purchase.head)]);
+      rows.push(['Est. kg/hd', fmt1(purchase.wtPerHead)]);
+      rows.push(['Total weight', fmt1(purchase.totalKg) + ' kg']);
+      rows.push(['$ per kg', '$' + fmt2(purchase.pricePerKg)]);
+      rows.push(['$ per head', '$' + fmt2(purchase.pricePerHead)]);
+      rows.push([purchase.watched ? 'Sold for (pen total)' : 'Pen total', '$' + fmt2(purchase.total)]);
+      if (inspection && inspection.maxPph != null) {
+        var diff = purchase.pricePerHead - inspection.maxPph;
+        rows.push(['vs your max', (diff > 0 ? '+' : '') + '$' + fmt2(diff) + '/hd  ' + (diff > 0 ? '(over your max)' : diff < 0 ? '(under your max)' : '(on your max)')]);
+      }
+    }
+    var rowsHtml = rows.map(function (_ref18) {
+      var _ref19 = _slicedToArray(_ref18, 2),
+        k = _ref19[0],
+        v = _ref19[1];
+      return "<tr><td>".concat(escapeHtml(k), "</td><td>").concat(escapeHtml(v), "</td></tr>");
+    }).join('');
+    var notesHtml = inspection && inspection.notes ? "<div class=\"notes\">".concat(escapeHtml(inspection.notes), "</div>") : '';
+    return "\n      <div class=\"pen-card\">\n        <div class=\"top\">\n          ".concat(photoUrl ? "<img src=\"".concat(photoUrl, "\" alt=\"pen ").concat(escapeHtml(penNo), "\" />") : '', "\n          <div class=\"info\">\n            <div class=\"pen-no\">PEN ").concat(escapeHtml(penNo || '—')).concat(badge, "</div>\n            <div class=\"line-name\">").concat(escapeHtml(name || ''), "</div>\n            <table class=\"data-table\"><tbody>").concat(rowsHtml, "</tbody></table>\n          </div>\n        </div>\n        ").concat(notesHtml, "\n      </div>\n    ");
+  }
+  var cardsHtml = cards.map(renderCard).join('');
+  var summaryRowsHtml = summaryRows.map(function (_ref20) {
+    var _ref21 = _slicedToArray(_ref20, 2),
+      k = _ref21[0],
+      v = _ref21[1];
+    return "<tr><td>".concat(escapeHtml(k), "</td><td>").concat(escapeHtml(v), "</td></tr>");
+  }).join('');
+  return "<!DOCTYPE html>\n<html lang=\"en-AU\">\n<head>\n  <meta charset=\"utf-8\" />\n  <title>Saleyard report ".concat(dateShort, "</title>\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n  <style>").concat(css, "</style>\n</head>\n<body>\n  <div class=\"container\">\n    <div class=\"controls\">\n      <span style=\"font-weight:700;letter-spacing:0.06em;text-transform:uppercase;font-size:12px;\">\n        Tap PRINT to save this report as a PDF (use Safari's share sheet \u2192 Save to Files)\n      </span>\n      <button onclick=\"window.print()\">PRINT</button>\n    </div>\n    <div class=\"header\">\n      <h1>Saleyard report</h1>\n      <div class=\"date\">").concat(escapeHtml(today), " \xB7 prepared by Patrick Coole</div>\n    </div>\n    <div class=\"summary\">\n      <h2>Day at a glance</h2>\n      <table><tbody>").concat(summaryRowsHtml, "</tbody></table>\n    </div>\n    <div class=\"section-title\">Pens (").concat(cards.length, ")</div>\n    ").concat(cardsHtml || '<p style="color:#555;">No pens to display.</p>', "\n  </div>\n</body>\n</html>");
 }
 
 // Mount

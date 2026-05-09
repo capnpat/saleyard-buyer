@@ -880,15 +880,14 @@ function App() {
         head: inspection.head != null ? String(inspection.head) : prev.head,
         wtPerHead: inspection.wtPerHead != null ? String(inspection.wtPerHead) : prev.wtPerHead
       });
-      // Recompute the dependent price field if a price was already typed
-      var wt = parseFloat(next.wtPerHead);
-      if (Number.isFinite(wt) && wt > 0) {
-        if (next.lastEditedPrice === 'pricePerKg' && next.pricePerKg !== '') {
-          var pk = parseFloat(next.pricePerKg);
-          if (Number.isFinite(pk)) next.pricePerHead = (pk * wt).toFixed(2);
-        } else if (next.lastEditedPrice === 'pricePerHead' && next.pricePerHead !== '') {
-          var ph = parseFloat(next.pricePerHead);
-          if (Number.isFinite(ph)) next.pricePerKg = (ph / wt).toFixed(2);
+      // Populate prices from the inspection's max so the user has a starting price
+      // they can step up or down from with the +/- buttons during the actual auction.
+      if (inspection.maxPph != null) {
+        next.pricePerHead = inspection.maxPph.toFixed(2);
+        next.lastEditedPrice = 'pricePerHead';
+        var wt = parseFloat(next.wtPerHead);
+        if (Number.isFinite(wt) && wt > 0) {
+          next.pricePerKg = (inspection.maxPph / wt).toFixed(2);
         }
       }
       return next;
@@ -3493,7 +3492,7 @@ function InspectionModal(_ref15) {
     onSave = _ref15.onSave,
     onClose = _ref15.onClose;
   var _useState45 = useState(function () {
-      return existing ? {
+      var base = existing ? {
         id: existing.id,
         penNumber: existing.penNumber || '',
         lineCode: existing.lineCode || '',
@@ -3502,6 +3501,14 @@ function InspectionModal(_ref15) {
         maxPph: existing.maxPph != null ? String(existing.maxPph) : '',
         notes: existing.notes || ''
       } : emptyInspection();
+      // Derive maxPpk for display if we can
+      var wt = parseFloat(base.wtPerHead);
+      var ph = parseFloat(base.maxPph);
+      var maxPpk = Number.isFinite(wt) && wt > 0 && Number.isFinite(ph) ? (ph / wt).toFixed(2) : '';
+      return _objectSpread(_objectSpread({}, base), {}, {
+        maxPpk: maxPpk,
+        lastEditedPrice: Number.isFinite(ph) ? 'maxPph' : null
+      });
     }),
     _useState46 = _slicedToArray(_useState45, 2),
     form = _useState46[0],
@@ -3546,9 +3553,38 @@ function InspectionModal(_ref15) {
       if (photoUrl && photoBlob) URL.revokeObjectURL(photoUrl);
     };
   }, [photoUrl, photoBlob]);
+
+  // Bidirectional linker between maxPph, maxPpk, and wtPerHead.
   function update(field, value) {
     setForm(function (prev) {
-      return _objectSpread(_objectSpread({}, prev), {}, _defineProperty({}, field, value));
+      var next = _objectSpread(_objectSpread({}, prev), {}, _defineProperty({}, field, value));
+      var wt = parseFloat(next.wtPerHead);
+      var wtValid = Number.isFinite(wt) && wt > 0;
+      if (field === 'maxPph') {
+        next.lastEditedPrice = 'maxPph';
+        if (value === '') next.maxPpk = '';else if (wtValid) {
+          var v = parseFloat(value);
+          if (Number.isFinite(v)) next.maxPpk = (v / wt).toFixed(2);
+        }
+      } else if (field === 'maxPpk') {
+        next.lastEditedPrice = 'maxPpk';
+        if (value === '') next.maxPph = '';else if (wtValid) {
+          var _v2 = parseFloat(value);
+          if (Number.isFinite(_v2)) next.maxPph = (_v2 * wt).toFixed(2);
+        }
+      } else if (field === 'wtPerHead') {
+        var newWt = parseFloat(value);
+        if (Number.isFinite(newWt) && newWt > 0) {
+          if (next.lastEditedPrice === 'maxPph' && next.maxPph !== '') {
+            var ph = parseFloat(next.maxPph);
+            if (Number.isFinite(ph)) next.maxPpk = (ph / newWt).toFixed(2);
+          } else if (next.lastEditedPrice === 'maxPpk' && next.maxPpk !== '') {
+            var pk = parseFloat(next.maxPpk);
+            if (Number.isFinite(pk)) next.maxPph = (pk * newWt).toFixed(2);
+          }
+        }
+      }
+      return next;
     });
   }
   function handlePhoto(_x6) {
@@ -3600,7 +3636,6 @@ function InspectionModal(_ref15) {
     setPhotoBlob(null);
     setPhotoUrl(null);
     setHasExistingPhoto(false);
-    // The actual deletion from IndexedDB happens on save (we record hasPhoto: false)
   }
   function handleSave() {
     if (!form.penNumber || !form.penNumber.trim()) {
@@ -3802,9 +3837,12 @@ function InspectionModal(_ref15) {
     placeholder: "0.0"
   }))), /*#__PURE__*/React.createElement("div", {
     style: {
+      display: 'grid',
+      gridTemplateColumns: '1fr 1fr',
+      gap: 10,
       marginBottom: 12
     }
-  }, /*#__PURE__*/React.createElement("label", {
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
     className: "lbl"
   }, "Max $/head you'd pay"), /*#__PURE__*/React.createElement("input", {
     type: "text",
@@ -3815,7 +3853,25 @@ function InspectionModal(_ref15) {
       return update('maxPph', e.target.value.replace(/[^0-9.]/g, ''));
     },
     placeholder: "0.00"
-  })), /*#__PURE__*/React.createElement("div", {
+  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    className: "lbl"
+  }, "Max $/kg ", /*#__PURE__*/React.createElement("span", {
+    style: {
+      textTransform: 'none',
+      letterSpacing: 0,
+      color: T.textMute,
+      fontSize: 10
+    }
+  }, "(auto)")), /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    inputMode: "decimal",
+    className: "field",
+    value: form.maxPpk,
+    onChange: function onChange(e) {
+      return update('maxPpk', e.target.value.replace(/[^0-9.]/g, ''));
+    },
+    placeholder: "0.00"
+  }))), /*#__PURE__*/React.createElement("div", {
     style: {
       marginBottom: 16
     }

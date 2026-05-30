@@ -29,53 +29,101 @@ var _React = React,
 
 // ----- Defaults & constants -----
 
-var DEFAULT_LINES = [{
-  code: 'MW',
-  name: 'Merino Wethers',
+var DEFAULT_LINES = [
+// Merino (M)
+{
+  code: 'MR',
+  name: 'Merino Rams',
   category: 'male'
 }, {
-  code: 'RL',
-  name: 'Ram Lambs',
-  category: 'male'
-}, {
-  code: 'RAM',
-  name: 'Rams',
-  category: 'male'
-}, {
-  code: 'EWE',
-  name: 'Ewes',
+  code: 'ME',
+  name: 'Merino Ewes',
   category: 'female'
 }, {
-  code: 'SL',
-  name: 'Store Lambs',
-  category: 'mixed'
+  code: 'MW',
+  name: 'Merino Wethers',
+  category: 'wether'
+},
+// Merino Cross (X)
+{
+  code: 'XR',
+  name: 'Merino X Rams',
+  category: 'male'
 }, {
-  code: 'DOE',
-  name: 'Does',
-  category: 'goat'
+  code: 'XE',
+  name: 'Merino X Ewes',
+  category: 'female'
 }, {
-  code: 'BUK',
-  name: 'Bucks',
-  category: 'goat'
+  code: 'XW',
+  name: 'Merino X Wethers',
+  category: 'wether'
+},
+// Dorper (D)
+{
+  code: 'DR',
+  name: 'Dorper Rams',
+  category: 'male'
+}, {
+  code: 'DE',
+  name: 'Dorper Ewes',
+  category: 'female'
+}, {
+  code: 'DW',
+  name: 'Dorper Wethers',
+  category: 'wether'
+},
+// Damara (DM)
+{
+  code: 'DMR',
+  name: 'Damara Rams',
+  category: 'male'
+}, {
+  code: 'DME',
+  name: 'Damara Ewes',
+  category: 'female'
+}, {
+  code: 'DMW',
+  name: 'Damara Wethers',
+  category: 'wether'
+},
+// Goat (G) — bucks, does, wethers
+{
+  code: 'GB',
+  name: 'Goat Bucks',
+  category: 'male'
+}, {
+  code: 'GD',
+  name: 'Goat Does',
+  category: 'female'
+}, {
+  code: 'GW',
+  name: 'Goat Wethers',
+  category: 'wether'
 }];
 var CAT = {
   male: {
     solid: '#5B82CC',
     soft: '#1B2540',
     ink: '#FFFFFF',
-    label: 'Male sheep'
+    label: 'Male (ram/buck)'
   },
   female: {
     solid: '#E04A8F',
     soft: '#3A1626',
     ink: '#FFFFFF',
-    label: 'Female sheep'
+    label: 'Female (ewe/doe)'
+  },
+  wether: {
+    solid: '#7DAA6F',
+    soft: '#1F2818',
+    ink: '#FFFFFF',
+    label: 'Wether'
   },
   goat: {
     solid: '#C97849',
     soft: '#2D1A0E',
     ink: '#FFFFFF',
-    label: 'Goat'
+    label: 'Goat (any sex)'
   },
   mixed: {
     solid: '#9CA0AB',
@@ -84,6 +132,43 @@ var CAT = {
     label: 'Mixed sex'
   }
 };
+
+// WA tag colour scheme: tag colour = year of birth
+var TAGS = [{
+  code: 'black',
+  year: 2024,
+  label: 'Black',
+  fill: '#0F0F0F',
+  softFill: '#1F1F1F',
+  inkSel: '#FFFFFF',
+  inkUnsel: '#9A9A9A',
+  edge: '#5A5A5A',
+  edgeSel: '#B8B8B8'
+}, {
+  code: 'white',
+  year: 2025,
+  label: 'White',
+  fill: '#EEEEEE',
+  softFill: '#1F1F1F',
+  inkSel: '#0D0D0D',
+  inkUnsel: '#EEEEEE',
+  edge: '#888888',
+  edgeSel: '#FFFFFF'
+}, {
+  code: 'orange',
+  year: 2026,
+  label: 'Orange',
+  fill: '#FF7A1A',
+  softFill: '#3A2010',
+  inkSel: '#FFFFFF',
+  inkUnsel: '#FF8A33',
+  edge: '#FF7A1A',
+  edgeSel: '#FFB070'
+}];
+var TAG_BY_CODE = TAGS.reduce(function (m, t) {
+  m[t.code] = t;
+  return m;
+}, {});
 var T = {
   bgBody: '#0F0F10',
   bgHeader: '#050507',
@@ -130,7 +215,8 @@ function emptyDraft() {
     wtPerHead: '',
     pricePerKg: '',
     pricePerHead: '',
-    lastEditedPrice: null
+    lastEditedPrice: null,
+    tagColour: ''
   };
 }
 function emptyInspection() {
@@ -140,7 +226,8 @@ function emptyInspection() {
     head: '',
     wtPerHead: '',
     maxPph: '',
-    notes: ''
+    notes: '',
+    tagColour: ''
   };
 }
 
@@ -171,91 +258,7 @@ function photoSet(_x, _x2) {
   return _photoSet.apply(this, arguments);
 }
 function _photoSet() {
-  _photoSet = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee6(key, blob) {
-    var db;
-    return _regenerator().w(function (_context6) {
-      while (1) switch (_context6.n) {
-        case 0:
-          _context6.n = 1;
-          return openPhotoDb();
-        case 1:
-          db = _context6.v;
-          return _context6.a(2, new Promise(function (resolve, reject) {
-            var tx = db.transaction(PHOTO_STORE, 'readwrite');
-            tx.objectStore(PHOTO_STORE).put(blob, key);
-            tx.oncomplete = function () {
-              return resolve();
-            };
-            tx.onerror = function () {
-              return reject(tx.error);
-            };
-          }));
-      }
-    }, _callee6);
-  }));
-  return _photoSet.apply(this, arguments);
-}
-function photoGet(_x3) {
-  return _photoGet.apply(this, arguments);
-}
-function _photoGet() {
-  _photoGet = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee7(key) {
-    var db;
-    return _regenerator().w(function (_context7) {
-      while (1) switch (_context7.n) {
-        case 0:
-          _context7.n = 1;
-          return openPhotoDb();
-        case 1:
-          db = _context7.v;
-          return _context7.a(2, new Promise(function (resolve, reject) {
-            var tx = db.transaction(PHOTO_STORE, 'readonly');
-            var req = tx.objectStore(PHOTO_STORE).get(key);
-            req.onsuccess = function () {
-              return resolve(req.result || null);
-            };
-            req.onerror = function () {
-              return reject(req.error);
-            };
-          }));
-      }
-    }, _callee7);
-  }));
-  return _photoGet.apply(this, arguments);
-}
-function photoDelete(_x4) {
-  return _photoDelete.apply(this, arguments);
-}
-function _photoDelete() {
-  _photoDelete = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee8(key) {
-    var db;
-    return _regenerator().w(function (_context8) {
-      while (1) switch (_context8.n) {
-        case 0:
-          _context8.n = 1;
-          return openPhotoDb();
-        case 1:
-          db = _context8.v;
-          return _context8.a(2, new Promise(function (resolve, reject) {
-            var tx = db.transaction(PHOTO_STORE, 'readwrite');
-            tx.objectStore(PHOTO_STORE)["delete"](key);
-            tx.oncomplete = function () {
-              return resolve();
-            };
-            tx.onerror = function () {
-              return reject(tx.error);
-            };
-          }));
-      }
-    }, _callee8);
-  }));
-  return _photoDelete.apply(this, arguments);
-}
-function photoClearAll() {
-  return _photoClearAll.apply(this, arguments);
-}
-function _photoClearAll() {
-  _photoClearAll = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee9() {
+  _photoSet = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee9(key, blob) {
     var db;
     return _regenerator().w(function (_context9) {
       while (1) switch (_context9.n) {
@@ -266,7 +269,7 @@ function _photoClearAll() {
           db = _context9.v;
           return _context9.a(2, new Promise(function (resolve, reject) {
             var tx = db.transaction(PHOTO_STORE, 'readwrite');
-            tx.objectStore(PHOTO_STORE).clear();
+            tx.objectStore(PHOTO_STORE).put(blob, key);
             tx.oncomplete = function () {
               return resolve();
             };
@@ -276,6 +279,90 @@ function _photoClearAll() {
           }));
       }
     }, _callee9);
+  }));
+  return _photoSet.apply(this, arguments);
+}
+function photoGet(_x3) {
+  return _photoGet.apply(this, arguments);
+}
+function _photoGet() {
+  _photoGet = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee0(key) {
+    var db;
+    return _regenerator().w(function (_context0) {
+      while (1) switch (_context0.n) {
+        case 0:
+          _context0.n = 1;
+          return openPhotoDb();
+        case 1:
+          db = _context0.v;
+          return _context0.a(2, new Promise(function (resolve, reject) {
+            var tx = db.transaction(PHOTO_STORE, 'readonly');
+            var req = tx.objectStore(PHOTO_STORE).get(key);
+            req.onsuccess = function () {
+              return resolve(req.result || null);
+            };
+            req.onerror = function () {
+              return reject(req.error);
+            };
+          }));
+      }
+    }, _callee0);
+  }));
+  return _photoGet.apply(this, arguments);
+}
+function photoDelete(_x4) {
+  return _photoDelete.apply(this, arguments);
+}
+function _photoDelete() {
+  _photoDelete = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee1(key) {
+    var db;
+    return _regenerator().w(function (_context1) {
+      while (1) switch (_context1.n) {
+        case 0:
+          _context1.n = 1;
+          return openPhotoDb();
+        case 1:
+          db = _context1.v;
+          return _context1.a(2, new Promise(function (resolve, reject) {
+            var tx = db.transaction(PHOTO_STORE, 'readwrite');
+            tx.objectStore(PHOTO_STORE)["delete"](key);
+            tx.oncomplete = function () {
+              return resolve();
+            };
+            tx.onerror = function () {
+              return reject(tx.error);
+            };
+          }));
+      }
+    }, _callee1);
+  }));
+  return _photoDelete.apply(this, arguments);
+}
+function photoClearAll() {
+  return _photoClearAll.apply(this, arguments);
+}
+function _photoClearAll() {
+  _photoClearAll = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee10() {
+    var db;
+    return _regenerator().w(function (_context10) {
+      while (1) switch (_context10.n) {
+        case 0:
+          _context10.n = 1;
+          return openPhotoDb();
+        case 1:
+          db = _context10.v;
+          return _context10.a(2, new Promise(function (resolve, reject) {
+            var tx = db.transaction(PHOTO_STORE, 'readwrite');
+            tx.objectStore(PHOTO_STORE).clear();
+            tx.oncomplete = function () {
+              return resolve();
+            };
+            tx.onerror = function () {
+              return reject(tx.error);
+            };
+          }));
+      }
+    }, _callee10);
   }));
   return _photoClearAll.apply(this, arguments);
 }
@@ -298,7 +385,7 @@ function compressImage(_x5) {
   return _compressImage.apply(this, arguments);
 } // ----- Main component -----
 function _compressImage() {
-  _compressImage = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee0(file) {
+  _compressImage = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee11(file) {
     var maxDim,
       quality,
       dataUrl,
@@ -308,13 +395,13 @@ function _compressImage() {
       h,
       canvas,
       ctx,
-      _args0 = arguments;
-    return _regenerator().w(function (_context0) {
-      while (1) switch (_context0.n) {
+      _args11 = arguments;
+    return _regenerator().w(function (_context11) {
+      while (1) switch (_context11.n) {
         case 0:
-          maxDim = _args0.length > 1 && _args0[1] !== undefined ? _args0[1] : 1200;
-          quality = _args0.length > 2 && _args0[2] !== undefined ? _args0[2] : 0.7;
-          _context0.n = 1;
+          maxDim = _args11.length > 1 && _args11[1] !== undefined ? _args11[1] : 1200;
+          quality = _args11.length > 2 && _args11[2] !== undefined ? _args11[2] : 0.7;
+          _context11.n = 1;
           return new Promise(function (res, rej) {
             var r = new FileReader();
             r.onload = function () {
@@ -326,8 +413,8 @@ function _compressImage() {
             r.readAsDataURL(file);
           });
         case 1:
-          dataUrl = _context0.v;
-          _context0.n = 2;
+          dataUrl = _context11.v;
+          _context11.n = 2;
           return new Promise(function (res, rej) {
             var i = new Image();
             i.onload = function () {
@@ -339,7 +426,7 @@ function _compressImage() {
             i.src = dataUrl;
           });
         case 2:
-          img = _context0.v;
+          img = _context11.v;
           scale = Math.min(maxDim / img.width, maxDim / img.height, 1);
           w = Math.round(img.width * scale);
           h = Math.round(img.height * scale);
@@ -348,13 +435,13 @@ function _compressImage() {
           canvas.height = h;
           ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, w, h);
-          return _context0.a(2, new Promise(function (resolve, reject) {
+          return _context11.a(2, new Promise(function (resolve, reject) {
             canvas.toBlob(function (blob) {
               return blob ? resolve(blob) : reject(new Error('toBlob failed'));
             }, 'image/jpeg', quality);
           }));
       }
-    }, _callee0);
+    }, _callee11);
   }));
   return _compressImage.apply(this, arguments);
 }
@@ -426,7 +513,24 @@ function App() {
   var _useState31 = useState(null),
     _useState32 = _slicedToArray(_useState31, 2),
     editingInspection = _useState32[0],
-    setEditingInspection = _useState32[1]; // null, 'new', or {id} // {message, undo?}
+    setEditingInspection = _useState32[1]; // null, 'new', or {id}
+  // Draft photo state for the bid card (independent of any inspection photo).
+  // status: 'none' (no photo), 'existing' (loaded from IDB during edit),
+  //         'new' (newly captured, not yet persisted),
+  //         'removed' (existing photo marked for deletion on save).
+  var _useState33 = useState(null),
+    _useState34 = _slicedToArray(_useState33, 2),
+    draftPhotoBlob = _useState34[0],
+    setDraftPhotoBlob = _useState34[1];
+  var _useState35 = useState(null),
+    _useState36 = _slicedToArray(_useState35, 2),
+    draftPhotoUrl = _useState36[0],
+    setDraftPhotoUrl = _useState36[1];
+  var _useState37 = useState('none'),
+    _useState38 = _slicedToArray(_useState37, 2),
+    draftPhotoStatus = _useState38[0],
+    setDraftPhotoStatus = _useState38[1];
+  var draftPhotoFileRef = useRef(null); // {message, undo?}
 
   var draftRef = useRef(null);
   var toastTimer = useRef(null);
@@ -620,8 +724,83 @@ function App() {
         lineCode: last.lineCode,
         penNumber: '',
         head: String(last.head),
-        wtPerHead: String(last.wtPerHead)
+        wtPerHead: String(last.wtPerHead),
+        tagColour: last.tagColour || ''
       });
+    });
+    clearDraftPhoto();
+  }
+
+  // Draft photo handlers (for attaching a photo to the pen being bid on)
+
+  function clearDraftPhoto() {
+    if (draftPhotoUrl) {
+      try {
+        URL.revokeObjectURL(draftPhotoUrl);
+      } catch (e) {}
+    }
+    setDraftPhotoBlob(null);
+    setDraftPhotoUrl(null);
+    setDraftPhotoStatus('none');
+  }
+  function handleDraftPhotoFile(_x6) {
+    return _handleDraftPhotoFile.apply(this, arguments);
+  }
+  function _handleDraftPhotoFile() {
+    _handleDraftPhotoFile = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3(e) {
+      var file, blob, _t3;
+      return _regenerator().w(function (_context3) {
+        while (1) switch (_context3.p = _context3.n) {
+          case 0:
+            file = e.target.files && e.target.files[0];
+            if (file) {
+              _context3.n = 1;
+              break;
+            }
+            return _context3.a(2);
+          case 1:
+            _context3.p = 1;
+            _context3.n = 2;
+            return compressImage(file, 1200, 0.7);
+          case 2:
+            blob = _context3.v;
+            if (draftPhotoUrl) {
+              try {
+                URL.revokeObjectURL(draftPhotoUrl);
+              } catch (err) {}
+            }
+            setDraftPhotoBlob(blob);
+            setDraftPhotoUrl(URL.createObjectURL(blob));
+            setDraftPhotoStatus('new');
+            _context3.n = 4;
+            break;
+          case 3:
+            _context3.p = 3;
+            _t3 = _context3.v;
+            alert('Could not process photo: ' + (_t3 && _t3.message ? _t3.message : 'unknown error'));
+          case 4:
+            _context3.p = 4;
+            if (draftPhotoFileRef.current) draftPhotoFileRef.current.value = '';
+            return _context3.f(4);
+          case 5:
+            return _context3.a(2);
+        }
+      }, _callee3, null, [[1, 3, 4, 5]]);
+    }));
+    return _handleDraftPhotoFile.apply(this, arguments);
+  }
+  function removeDraftPhoto() {
+    if (draftPhotoUrl) {
+      try {
+        URL.revokeObjectURL(draftPhotoUrl);
+      } catch (e) {}
+    }
+    setDraftPhotoBlob(null);
+    setDraftPhotoUrl(null);
+    // If the photo was loaded from IDB on an edit, mark it for deletion on save.
+    // Otherwise just drop it.
+    setDraftPhotoStatus(function (prev) {
+      return prev === 'existing' ? 'removed' : 'none';
     });
   }
 
@@ -677,90 +856,184 @@ function App() {
     }, 0);
     return kg > 0 ? dol / kg : null;
   }, [purchases, draft.lineCode]);
-  function commitEntry(asWatched) {
-    var _purchases$find;
-    if (!dValid) return;
-    var isNew = !editingId;
-    var entry = {
-      id: editingId || Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
-      lineCode: draft.lineCode,
-      penNumber: draft.penNumber.trim(),
-      head: dHead,
-      wtPerHead: dWt,
-      pricePerKg: dPpk,
-      pricePerHead: dPph,
-      totalKg: dTotalKg,
-      total: dTotal,
-      watched: !!asWatched,
-      timestamp: editingId ? ((_purchases$find = purchases.find(function (p) {
-        return p.id === editingId;
-      })) === null || _purchases$find === void 0 ? void 0 : _purchases$find.timestamp) || new Date().toISOString() : new Date().toISOString()
-    };
-    if (editingId) {
-      var previous = purchases.find(function (p) {
-        return p.id === editingId;
-      });
-      setPurchases(function (prev) {
-        return prev.map(function (p) {
-          return p.id === editingId ? entry : p;
-        });
-      });
-      setEditingId(null);
-      setDraft(emptyDraft());
-      showToast('Pen updated', {
-        label: 'UNDO',
-        run: function run() {
-          if (previous) setPurchases(function (prev) {
-            return prev.map(function (p) {
-              return p.id === editingId ? previous : p;
-            });
-          });
-          clearToast();
-        }
-      });
-    } else {
-      setPurchases(function (prev) {
-        return [entry].concat(_toConsumableArray(prev));
-      });
-      setDraft(emptyDraft());
-      showToast(asWatched ? 'Watched pen logged' : 'Pen recorded', {
-        label: 'UNDO',
-        run: function run() {
-          setPurchases(function (prev) {
-            return prev.filter(function (p) {
-              return p.id !== entry.id;
-            });
-          });
-          clearToast();
-        }
-      });
-    }
+  function commitEntry(_x7) {
+    return _commitEntry.apply(this, arguments);
   }
-  function startEdit(id) {
-    var p = purchases.find(function (x) {
-      return x.id === id;
-    });
-    if (!p) return;
-    setDraft({
-      lineCode: p.lineCode,
-      penNumber: p.penNumber || '',
-      head: String(p.head),
-      wtPerHead: String(p.wtPerHead),
-      pricePerKg: p.pricePerKg.toFixed(2),
-      pricePerHead: p.pricePerHead.toFixed(2),
-      lastEditedPrice: 'pricePerKg'
-    });
-    setEditingId(id);
-    if (draftRef.current) {
-      draftRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
-    }
+  function _commitEntry() {
+    _commitEntry = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4(asWatched) {
+      var _purchases$find;
+      var id, hasPhoto, entry, previous, _t4;
+      return _regenerator().w(function (_context4) {
+        while (1) switch (_context4.p = _context4.n) {
+          case 0:
+            if (dValid) {
+              _context4.n = 1;
+              break;
+            }
+            return _context4.a(2);
+          case 1:
+            id = editingId || Date.now().toString(36) + Math.random().toString(36).slice(2, 6); // Resolve the photo for this entry
+            hasPhoto = false;
+            if (!(draftPhotoStatus === 'new' && draftPhotoBlob)) {
+              _context4.n = 6;
+              break;
+            }
+            _context4.p = 2;
+            _context4.n = 3;
+            return photoSet(id, draftPhotoBlob);
+          case 3:
+            hasPhoto = true;
+            _context4.n = 5;
+            break;
+          case 4:
+            _context4.p = 4;
+            _t4 = _context4.v;
+            alert('Could not save photo: ' + (_t4 && _t4.message ? _t4.message : 'unknown error'));
+            return _context4.a(2);
+          case 5:
+            _context4.n = 7;
+            break;
+          case 6:
+            if (draftPhotoStatus === 'existing') {
+              hasPhoto = true; // already in IDB from edit load
+            } else if (draftPhotoStatus === 'removed') {
+              photoDelete(id)["catch"](function () {});
+              hasPhoto = false;
+            }
+          case 7:
+            entry = {
+              id: id,
+              lineCode: draft.lineCode,
+              penNumber: draft.penNumber.trim(),
+              head: dHead,
+              wtPerHead: dWt,
+              pricePerKg: dPpk,
+              pricePerHead: dPph,
+              totalKg: dTotalKg,
+              total: dTotal,
+              watched: !!asWatched,
+              hasPhoto: hasPhoto,
+              tagColour: draft.tagColour || '',
+              timestamp: editingId ? ((_purchases$find = purchases.find(function (p) {
+                return p.id === editingId;
+              })) === null || _purchases$find === void 0 ? void 0 : _purchases$find.timestamp) || new Date().toISOString() : new Date().toISOString()
+            };
+            if (editingId) {
+              previous = purchases.find(function (p) {
+                return p.id === editingId;
+              });
+              setPurchases(function (prev) {
+                return prev.map(function (p) {
+                  return p.id === editingId ? entry : p;
+                });
+              });
+              setEditingId(null);
+              setDraft(emptyDraft());
+              clearDraftPhoto();
+              showToast('Pen updated', {
+                label: 'UNDO',
+                run: function run() {
+                  if (previous) setPurchases(function (prev) {
+                    return prev.map(function (p) {
+                      return p.id === editingId ? previous : p;
+                    });
+                  });
+                  clearToast();
+                }
+              });
+            } else {
+              setPurchases(function (prev) {
+                return [entry].concat(_toConsumableArray(prev));
+              });
+              setDraft(emptyDraft());
+              clearDraftPhoto();
+              showToast(asWatched ? 'Watched pen logged' : 'Pen recorded', {
+                label: 'UNDO',
+                run: function run() {
+                  setPurchases(function (prev) {
+                    return prev.filter(function (p) {
+                      return p.id !== entry.id;
+                    });
+                  });
+                  if (entry.hasPhoto) photoDelete(entry.id)["catch"](function () {});
+                  clearToast();
+                }
+              });
+            }
+          case 8:
+            return _context4.a(2);
+        }
+      }, _callee4, null, [[2, 4]]);
+    }));
+    return _commitEntry.apply(this, arguments);
+  }
+  function startEdit(_x8) {
+    return _startEdit.apply(this, arguments);
+  }
+  function _startEdit() {
+    _startEdit = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5(id) {
+      var p, blob, _t5;
+      return _regenerator().w(function (_context5) {
+        while (1) switch (_context5.p = _context5.n) {
+          case 0:
+            p = purchases.find(function (x) {
+              return x.id === id;
+            });
+            if (p) {
+              _context5.n = 1;
+              break;
+            }
+            return _context5.a(2);
+          case 1:
+            setDraft({
+              lineCode: p.lineCode,
+              penNumber: p.penNumber || '',
+              head: String(p.head),
+              wtPerHead: String(p.wtPerHead),
+              pricePerKg: p.pricePerKg.toFixed(2),
+              pricePerHead: p.pricePerHead.toFixed(2),
+              lastEditedPrice: 'pricePerKg',
+              tagColour: p.tagColour || ''
+            });
+            setEditingId(id);
+            // Load existing photo from IDB if there is one
+            clearDraftPhoto();
+            if (!p.hasPhoto) {
+              _context5.n = 5;
+              break;
+            }
+            _context5.p = 2;
+            _context5.n = 3;
+            return photoGet(id);
+          case 3:
+            blob = _context5.v;
+            if (blob) {
+              setDraftPhotoUrl(URL.createObjectURL(blob));
+              setDraftPhotoStatus('existing');
+            }
+            _context5.n = 5;
+            break;
+          case 4:
+            _context5.p = 4;
+            _t5 = _context5.v;
+          case 5:
+            if (draftRef.current) {
+              draftRef.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+              });
+            }
+          case 6:
+            return _context5.a(2);
+        }
+      }, _callee5, null, [[2, 4]]);
+    }));
+    return _startEdit.apply(this, arguments);
   }
   function cancelEdit() {
     setEditingId(null);
     setDraft(emptyDraft());
+    clearDraftPhoto();
   }
   function deletePurchase(id) {
     var removed = purchases.find(function (p) {
@@ -773,6 +1046,8 @@ function App() {
       });
     });
     if (editingId === id) cancelEdit();
+    // Delete the photo from IDB
+    if (removed.hasPhoto) photoDelete(id)["catch"](function () {});
     showToast('Pen deleted', {
       label: 'UNDO',
       run: function run() {
@@ -784,6 +1059,7 @@ function App() {
           });
           return next;
         });
+        // Note: photo can't be restored once deleted from IDB; this is a known limitation
         clearToast();
       }
     });
@@ -795,6 +1071,7 @@ function App() {
     setEditingId(null);
     setEditingInspection(null);
     setDraft(emptyDraft());
+    clearDraftPhoto();
     setShowResetConfirm(false);
     setView('buying');
     photoClearAll()["catch"](function () {});
@@ -828,6 +1105,7 @@ function App() {
       wtPerHead: formData.wtPerHead ? parseFloat(formData.wtPerHead) : null,
       maxPph: formData.maxPph ? parseFloat(formData.maxPph) : null,
       notes: (formData.notes || '').trim(),
+      tagColour: formData.tagColour || '',
       hasPhoto: hasPhoto,
       timestamp: existingEntry ? existingEntry.timestamp : new Date().toISOString()
     };
@@ -878,7 +1156,8 @@ function App() {
         penNumber: inspection.penNumber,
         lineCode: inspection.lineCode || prev.lineCode,
         head: inspection.head != null ? String(inspection.head) : prev.head,
-        wtPerHead: inspection.wtPerHead != null ? String(inspection.wtPerHead) : prev.wtPerHead
+        wtPerHead: inspection.wtPerHead != null ? String(inspection.wtPerHead) : prev.wtPerHead,
+        tagColour: inspection.tagColour || prev.tagColour || ''
       });
       // Populate prices from the inspection's max so the user has a starting price
       // they can step up or down from with the +/- buttons during the actual auction.
@@ -1033,6 +1312,10 @@ function App() {
       return n;
     });
   }
+  function resetLines() {
+    if (!window.confirm('Replace your line list with the current default set?\n\n' + 'Per-line ceilings, estimates, default weights and steps for any line codes ' + 'that exist in both lists are kept. Existing purchases and inspections are not affected.')) return;
+    setLines(DEFAULT_LINES);
+  }
 
   // ----- Email / export -----
 
@@ -1042,6 +1325,7 @@ function App() {
       var line = lines.find(function (l) {
         return l.code === p.lineCode;
       });
+      var tag = p.tagColour ? TAG_BY_CODE[p.tagColour] : null;
       return {
         '#': i + 1,
         Time: new Date(p.timestamp).toLocaleTimeString('en-AU', {
@@ -1052,6 +1336,8 @@ function App() {
         Pen: p.penNumber || '',
         Line: line ? line.name : p.lineCode,
         Code: p.lineCode,
+        'Tag Colour': tag ? tag.label : '',
+        'Birth Year': tag ? tag.year : '',
         Head: p.head,
         'Est. Weight per Head (kg)': Number(p.wtPerHead.toFixed(1)),
         'Total Pen Weight (kg)': Number(p.totalKg.toFixed(1)),
@@ -1111,17 +1397,17 @@ function App() {
   } // Generate a print-ready HTML report with all the day's pens (bought + watched + inspected),
   // open in a new tab. The user prints / saves as PDF from Safari's share sheet.
   function _emailSummary() {
-    _emailSummary = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
-      var _buildXlsx, blob, filename, today, file, summaryText, url, a, body, subject, _t3;
-      return _regenerator().w(function (_context3) {
-        while (1) switch (_context3.p = _context3.n) {
+    _emailSummary = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee6() {
+      var _buildXlsx, blob, filename, today, file, summaryText, url, a, body, subject, _t6;
+      return _regenerator().w(function (_context6) {
+        while (1) switch (_context6.p = _context6.n) {
           case 0:
             if (!(purchases.length === 0)) {
-              _context3.n = 1;
+              _context6.n = 1;
               break;
             }
             alert('No pens recorded yet.');
-            return _context3.a(2);
+            return _context6.a(2);
           case 1:
             _buildXlsx = buildXlsx(), blob = _buildXlsx.blob, filename = _buildXlsx.filename, today = _buildXlsx.today;
             file = new File([blob], filename, {
@@ -1131,21 +1417,21 @@ function App() {
             if (!(navigator.canShare && navigator.canShare({
               files: [file]
             }))) {
-              _context3.n = 5;
+              _context6.n = 5;
               break;
             }
-            _context3.p = 2;
-            _context3.n = 3;
+            _context6.p = 2;
+            _context6.n = 3;
             return navigator.share({
               files: [file],
               title: "Saleyard ".concat(today),
               text: summaryText
             });
           case 3:
-            return _context3.a(2);
+            return _context6.a(2);
           case 4:
-            _context3.p = 4;
-            _t3 = _context3.v;
+            _context6.p = 4;
+            _t6 = _context6.v;
           case 5:
             url = URL.createObjectURL(blob);
             a = document.createElement('a');
@@ -1165,9 +1451,9 @@ function App() {
               showToast('Spreadsheet downloaded. Set your email in Settings to also pre-fill an email.');
             }
           case 6:
-            return _context3.a(2);
+            return _context6.a(2);
         }
-      }, _callee3, null, [[2, 4]]);
+      }, _callee6, null, [[2, 4]]);
     }));
     return _emailSummary.apply(this, arguments);
   }
@@ -1175,71 +1461,120 @@ function App() {
     return _openReport.apply(this, arguments);
   } // ----- Render helpers -----
   function _openReport() {
-    _openReport = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4() {
-      var photoUrls, _iterator, _step, insp, _blob, html, blob, url, _t4, _t5;
-      return _regenerator().w(function (_context4) {
-        while (1) switch (_context4.p = _context4.n) {
+    _openReport = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee7() {
+      var photoUrls, _iterator, _step, insp, _blob, _iterator2, _step2, p, _blob2, html, blob, url, _t7, _t8, _t9, _t0;
+      return _regenerator().w(function (_context7) {
+        while (1) switch (_context7.p = _context7.n) {
           case 0:
             if (!(purchases.length === 0 && inspections.length === 0)) {
-              _context4.n = 1;
+              _context7.n = 1;
               break;
             }
             alert('Nothing to report yet. Record a pen or save an inspection first.');
-            return _context4.a(2);
+            return _context7.a(2);
           case 1:
             showToast('Building report…');
 
-            // Load all photos as data URLs for embedding
+            // Load all photos as data URLs for embedding (both inspection and purchase photos)
             photoUrls = {};
             _iterator = _createForOfIteratorHelper(inspections);
-            _context4.p = 2;
+            _context7.p = 2;
             _iterator.s();
           case 3:
             if ((_step = _iterator.n()).done) {
-              _context4.n = 10;
+              _context7.n = 10;
               break;
             }
             insp = _step.value;
             if (insp.hasPhoto) {
-              _context4.n = 4;
+              _context7.n = 4;
               break;
             }
-            return _context4.a(3, 9);
+            return _context7.a(3, 9);
           case 4:
-            _context4.p = 4;
-            _context4.n = 5;
+            _context7.p = 4;
+            _context7.n = 5;
             return photoGet(insp.id);
           case 5:
-            _blob = _context4.v;
+            _blob = _context7.v;
             if (!_blob) {
-              _context4.n = 7;
+              _context7.n = 7;
               break;
             }
-            _context4.n = 6;
+            _context7.n = 6;
             return blobToDataUrl(_blob);
           case 6:
-            photoUrls[insp.id] = _context4.v;
+            photoUrls[insp.id] = _context7.v;
           case 7:
-            _context4.n = 9;
+            _context7.n = 9;
             break;
           case 8:
-            _context4.p = 8;
-            _t4 = _context4.v;
+            _context7.p = 8;
+            _t7 = _context7.v;
           case 9:
-            _context4.n = 3;
+            _context7.n = 3;
             break;
           case 10:
-            _context4.n = 12;
+            _context7.n = 12;
             break;
           case 11:
-            _context4.p = 11;
-            _t5 = _context4.v;
-            _iterator.e(_t5);
+            _context7.p = 11;
+            _t8 = _context7.v;
+            _iterator.e(_t8);
           case 12:
-            _context4.p = 12;
+            _context7.p = 12;
             _iterator.f();
-            return _context4.f(12);
+            return _context7.f(12);
           case 13:
+            _iterator2 = _createForOfIteratorHelper(purchases);
+            _context7.p = 14;
+            _iterator2.s();
+          case 15:
+            if ((_step2 = _iterator2.n()).done) {
+              _context7.n = 22;
+              break;
+            }
+            p = _step2.value;
+            if (p.hasPhoto) {
+              _context7.n = 16;
+              break;
+            }
+            return _context7.a(3, 21);
+          case 16:
+            _context7.p = 16;
+            _context7.n = 17;
+            return photoGet(p.id);
+          case 17:
+            _blob2 = _context7.v;
+            if (!_blob2) {
+              _context7.n = 19;
+              break;
+            }
+            _context7.n = 18;
+            return blobToDataUrl(_blob2);
+          case 18:
+            photoUrls[p.id] = _context7.v;
+          case 19:
+            _context7.n = 21;
+            break;
+          case 20:
+            _context7.p = 20;
+            _t9 = _context7.v;
+          case 21:
+            _context7.n = 15;
+            break;
+          case 22:
+            _context7.n = 24;
+            break;
+          case 23:
+            _context7.p = 23;
+            _t0 = _context7.v;
+            _iterator2.e(_t0);
+          case 24:
+            _context7.p = 24;
+            _iterator2.f();
+            return _context7.f(24);
+          case 25:
             html = buildReportHtml({
               purchases: purchases,
               inspections: inspections,
@@ -1254,10 +1589,10 @@ function App() {
             });
             url = URL.createObjectURL(blob);
             window.open(url, '_blank');
-          case 14:
-            return _context4.a(2);
+          case 26:
+            return _context7.a(2);
         }
-      }, _callee4, null, [[4, 8], [2, 11, 12, 13]]);
+      }, _callee7, null, [[16, 20], [14, 23, 24, 25], [4, 8], [2, 11, 12, 13]]);
     }));
     return _openReport.apply(this, arguments);
   }
@@ -1596,6 +1931,91 @@ function App() {
     onClick: cancelEdit
   }, "CANCEL EDIT"))), /*#__PURE__*/React.createElement("div", {
     style: {
+      marginBottom: 12
+    }
+  }, draftPhotoUrl ? /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 10,
+      alignItems: 'center',
+      padding: 8,
+      border: "1.5px solid ".concat(T.accent),
+      borderRadius: 8,
+      background: 'rgba(255,214,107,0.06)'
+    }
+  }, /*#__PURE__*/React.createElement("img", {
+    src: draftPhotoUrl,
+    alt: "pen",
+    style: {
+      width: 56,
+      height: 56,
+      objectFit: 'cover',
+      borderRadius: 6,
+      border: "1px solid ".concat(T.borderH),
+      flexShrink: 0
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1,
+      minWidth: 0
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontSize: 10,
+      fontWeight: 800,
+      letterSpacing: '0.10em',
+      color: T.accent,
+      textTransform: 'uppercase'
+    }
+  }, "Photo attached"), /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontSize: 11,
+      color: T.textMute,
+      marginTop: 1
+    }
+  }, "saved when you record or watch this pen")), /*#__PURE__*/React.createElement("button", {
+    className: "btn arc btn-ghost",
+    style: {
+      padding: '6px 10px',
+      fontSize: 11
+    },
+    onClick: function onClick() {
+      return draftPhotoFileRef.current && draftPhotoFileRef.current.click();
+    }
+  }, "RETAKE"), /*#__PURE__*/React.createElement("button", {
+    className: "btn arc",
+    style: {
+      padding: '6px 10px',
+      fontSize: 11,
+      background: 'transparent',
+      color: T.warnBdr,
+      borderColor: T.warnBdr
+    },
+    onClick: removeDraftPhoto
+  }, "REMOVE")) : /*#__PURE__*/React.createElement("button", {
+    className: "btn arc btn-ghost",
+    style: {
+      width: '100%',
+      padding: '12px 14px',
+      fontSize: 13,
+      letterSpacing: '0.04em'
+    },
+    onClick: function onClick() {
+      return draftPhotoFileRef.current && draftPhotoFileRef.current.click();
+    }
+  }, "\uD83D\uDCF7  ADD PHOTO OF THIS PEN"), /*#__PURE__*/React.createElement("input", {
+    ref: draftPhotoFileRef,
+    type: "file",
+    accept: "image/*",
+    capture: "environment",
+    style: {
+      display: 'none'
+    },
+    onChange: handleDraftPhotoFile
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
       marginBottom: 14
     }
   }, /*#__PURE__*/React.createElement("label", {
@@ -1612,6 +2032,57 @@ function App() {
       line: l,
       selected: draft.lineCode === l.code
     });
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 14
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    className: "lbl"
+  }, "Tag colour \xB7 birth year"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(3, 1fr)',
+      gap: 8
+    }
+  }, TAGS.map(function (t) {
+    var sel = draft.tagColour === t.code;
+    return /*#__PURE__*/React.createElement("button", {
+      key: t.code,
+      type: "button",
+      className: "arc",
+      onClick: function onClick() {
+        return updateField('tagColour', sel ? '' : t.code);
+      },
+      style: {
+        padding: '12px 6px',
+        background: sel ? t.fill : t.softFill,
+        color: sel ? t.inkSel : t.inkUnsel,
+        border: "2px solid ".concat(sel ? t.edgeSel : t.edge),
+        borderRadius: 8,
+        fontWeight: 800,
+        letterSpacing: '0.04em',
+        cursor: 'pointer',
+        minHeight: 56,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 2,
+        touchAction: 'manipulation',
+        WebkitTapHighlightColor: 'transparent'
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 18,
+        fontWeight: 900
+      }
+    }, t.year), /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 10,
+        opacity: 0.85,
+        textTransform: 'uppercase'
+      }
+    }, t.label));
   }))), penMatch && /*#__PURE__*/React.createElement("div", {
     style: {
       marginBottom: 10,
@@ -2004,7 +2475,28 @@ function App() {
         color: T.textMute,
         letterSpacing: '0.06em'
       }
-    }, "PEN ", p.penNumber)), /*#__PURE__*/React.createElement("div", {
+    }, "PEN ", p.penNumber), p.tagColour && TAG_BY_CODE[p.tagColour] && /*#__PURE__*/React.createElement("span", {
+      className: "arc",
+      title: "".concat(TAG_BY_CODE[p.tagColour].label, " tag \xB7 ").concat(TAG_BY_CODE[p.tagColour].year),
+      style: {
+        fontSize: 10,
+        letterSpacing: '0.06em',
+        padding: '2px 8px',
+        borderRadius: 999,
+        background: TAG_BY_CODE[p.tagColour].fill,
+        color: TAG_BY_CODE[p.tagColour].inkSel,
+        border: "1px solid ".concat(TAG_BY_CODE[p.tagColour].edge),
+        fontWeight: 800
+      }
+    }, TAG_BY_CODE[p.tagColour].year), p.hasPhoto && /*#__PURE__*/React.createElement("span", {
+      className: "arc",
+      title: "Photo attached",
+      style: {
+        fontSize: 11,
+        color: T.accent,
+        letterSpacing: '0.06em'
+      }
+    }, "\uD83D\uDCF7")), /*#__PURE__*/React.createElement("div", {
       style: {
         display: 'flex',
         gap: 6
@@ -2196,6 +2688,7 @@ function App() {
     onSetEmail: setBuyerEmail,
     onAddLine: addLineType,
     onRemoveLine: removeLineType,
+    onResetLines: resetLines,
     onClose: function onClose() {
       return setShowSettings(false);
     }
@@ -2340,23 +2833,24 @@ function SettingsModal(_ref6) {
     onSetEmail = _ref6.onSetEmail,
     onAddLine = _ref6.onAddLine,
     onRemoveLine = _ref6.onRemoveLine,
+    onResetLines = _ref6.onResetLines,
     onClose = _ref6.onClose;
-  var _useState33 = useState(''),
-    _useState34 = _slicedToArray(_useState33, 2),
-    newCode = _useState34[0],
-    setNewCode = _useState34[1];
-  var _useState35 = useState(''),
-    _useState36 = _slicedToArray(_useState35, 2),
-    newName = _useState36[0],
-    setNewName = _useState36[1];
-  var _useState37 = useState('male'),
-    _useState38 = _slicedToArray(_useState37, 2),
-    newCat = _useState38[0],
-    setNewCat = _useState38[1];
-  var _useState39 = useState(buyerEmail || ''),
+  var _useState39 = useState(''),
     _useState40 = _slicedToArray(_useState39, 2),
-    emailInput = _useState40[0],
-    setEmailInput = _useState40[1];
+    newCode = _useState40[0],
+    setNewCode = _useState40[1];
+  var _useState41 = useState(''),
+    _useState42 = _slicedToArray(_useState41, 2),
+    newName = _useState42[0],
+    setNewName = _useState42[1];
+  var _useState43 = useState('male'),
+    _useState44 = _slicedToArray(_useState43, 2),
+    newCat = _useState44[0],
+    setNewCat = _useState44[1];
+  var _useState45 = useState(buyerEmail || ''),
+    _useState46 = _slicedToArray(_useState45, 2),
+    emailInput = _useState46[0],
+    setEmailInput = _useState46[1];
   function handleAdd() {
     if (!newCode.trim() || !newName.trim()) return;
     onAddLine(newCode, newName, newCat);
@@ -2600,11 +3094,13 @@ function SettingsModal(_ref6) {
     }
   }, /*#__PURE__*/React.createElement("option", {
     value: "male"
-  }, "Male sheep"), /*#__PURE__*/React.createElement("option", {
+  }, "Male (ram/buck)"), /*#__PURE__*/React.createElement("option", {
     value: "female"
-  }, "Female sheep"), /*#__PURE__*/React.createElement("option", {
+  }, "Female (ewe/doe)"), /*#__PURE__*/React.createElement("option", {
+    value: "wether"
+  }, "Wether"), /*#__PURE__*/React.createElement("option", {
     value: "goat"
-  }, "Goat"), /*#__PURE__*/React.createElement("option", {
+  }, "Goat (any sex)"), /*#__PURE__*/React.createElement("option", {
     value: "mixed"
   }, "Mixed sex"))), /*#__PURE__*/React.createElement("button", {
     className: "btn btn-primary arc",
@@ -2613,7 +3109,33 @@ function SettingsModal(_ref6) {
       fontSize: 13
     },
     onClick: handleAdd
-  }, "ADD LINE"))));
+  }, "ADD LINE")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: 18,
+      paddingTop: 14,
+      borderTop: "1px solid ".concat(T.borderS)
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    className: "lbl"
+  }, "Reset line list"), /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontSize: 11,
+      color: T.textMute,
+      marginBottom: 8,
+      letterSpacing: '0.04em'
+    }
+  }, "Replaces all lines with the current default set (Merino, Merino X, Dorper, Damara, Goat \xD7 ram/ewe/wether). Per-line ceilings, estimates, default weights and steps are kept where the code matches; old codes that no longer exist are hidden but their data is retained in case you re-add them later."), /*#__PURE__*/React.createElement("button", {
+    className: "btn arc",
+    style: {
+      padding: '10px 14px',
+      fontSize: 12,
+      background: 'transparent',
+      color: T.accent,
+      borderColor: T.accent
+    },
+    onClick: onResetLines
+  }, "RESET TO DEFAULTS"))));
 }
 function SmallInput(_ref7) {
   var label = _ref7.label,
@@ -2623,10 +3145,10 @@ function SmallInput(_ref7) {
     suffix = _ref7.suffix,
     placeholder = _ref7.placeholder,
     decimal2 = _ref7.decimal2;
-  var _useState41 = useState(false),
-    _useState42 = _slicedToArray(_useState41, 2),
-    focused = _useState42[0],
-    setFocused = _useState42[1];
+  var _useState47 = useState(false),
+    _useState48 = _slicedToArray(_useState47, 2),
+    focused = _useState48[0],
+    setFocused = _useState48[1];
   // When decimal2 and not focused, format the displayed value to 2 decimal places
   // so 5.5 shows as "5.50". Free-text editing while focused.
   var numericValue = parseFloat(value);
@@ -2709,11 +3231,11 @@ function Dashboard(_ref8) {
   // Per-line aggregates, sorted by total spend descending
   var byLine = useMemo(function () {
     var map = {};
-    var _iterator2 = _createForOfIteratorHelper(bought),
-      _step2;
+    var _iterator3 = _createForOfIteratorHelper(bought),
+      _step3;
     try {
       var _loop = function _loop() {
-        var p = _step2.value;
+        var p = _step3.value;
         if (!map[p.lineCode]) {
           var line = lines.find(function (l) {
             return l.code === p.lineCode;
@@ -2733,13 +3255,13 @@ function Dashboard(_ref8) {
         map[p.lineCode].total += p.total;
         map[p.lineCode].pens += 1;
       };
-      for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+      for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
         _loop();
       }
     } catch (err) {
-      _iterator2.e(err);
+      _iterator3.e(err);
     } finally {
-      _iterator2.f();
+      _iterator3.f();
     }
     return Object.values(map).map(function (l) {
       return _objectSpread(_objectSpread({}, l), {}, {
@@ -3392,7 +3914,15 @@ function InspectionCard(_ref13) {
       background: cat.solid,
       color: cat.ink
     }
-  }, line.code)), /*#__PURE__*/React.createElement("div", {
+  }, line.code), inspection.tagColour && TAG_BY_CODE[inspection.tagColour] && /*#__PURE__*/React.createElement("span", {
+    className: "pill",
+    title: "".concat(TAG_BY_CODE[inspection.tagColour].label, " tag \xB7 ").concat(TAG_BY_CODE[inspection.tagColour].year),
+    style: {
+      background: TAG_BY_CODE[inspection.tagColour].fill,
+      color: TAG_BY_CODE[inspection.tagColour].inkSel,
+      border: "1px solid ".concat(TAG_BY_CODE[inspection.tagColour].edge)
+    }
+  }, TAG_BY_CODE[inspection.tagColour].year)), /*#__PURE__*/React.createElement("div", {
     className: "mono",
     style: {
       fontSize: 13,
@@ -3448,10 +3978,10 @@ function InspectionCard(_ref13) {
 function InspectionPhoto(_ref14) {
   var inspectionId = _ref14.inspectionId,
     style = _ref14.style;
-  var _useState43 = useState(null),
-    _useState44 = _slicedToArray(_useState43, 2),
-    url = _useState44[0],
-    setUrl = _useState44[1];
+  var _useState49 = useState(null),
+    _useState50 = _slicedToArray(_useState49, 2),
+    url = _useState50[0],
+    setUrl = _useState50[1];
   useEffect(function () {
     var active = true;
     var createdUrl = null;
@@ -3491,7 +4021,7 @@ function InspectionModal(_ref15) {
     lines = _ref15.lines,
     onSave = _ref15.onSave,
     onClose = _ref15.onClose;
-  var _useState45 = useState(function () {
+  var _useState51 = useState(function () {
       var base = existing ? {
         id: existing.id,
         penNumber: existing.penNumber || '',
@@ -3499,7 +4029,8 @@ function InspectionModal(_ref15) {
         head: existing.head != null ? String(existing.head) : '',
         wtPerHead: existing.wtPerHead != null ? String(existing.wtPerHead) : '',
         maxPph: existing.maxPph != null ? String(existing.maxPph) : '',
-        notes: existing.notes || ''
+        notes: existing.notes || '',
+        tagColour: existing.tagColour || ''
       } : emptyInspection();
       // Derive maxPpk for display if we can
       var wt = parseFloat(base.wtPerHead);
@@ -3510,25 +4041,25 @@ function InspectionModal(_ref15) {
         lastEditedPrice: Number.isFinite(ph) ? 'maxPph' : null
       });
     }),
-    _useState46 = _slicedToArray(_useState45, 2),
-    form = _useState46[0],
-    setForm = _useState46[1];
-  var _useState47 = useState(null),
-    _useState48 = _slicedToArray(_useState47, 2),
-    photoBlob = _useState48[0],
-    setPhotoBlob = _useState48[1];
-  var _useState49 = useState(null),
-    _useState50 = _slicedToArray(_useState49, 2),
-    photoUrl = _useState50[0],
-    setPhotoUrl = _useState50[1];
-  var _useState51 = useState(existing ? !!existing.hasPhoto : false),
     _useState52 = _slicedToArray(_useState51, 2),
-    hasExistingPhoto = _useState52[0],
-    setHasExistingPhoto = _useState52[1];
-  var _useState53 = useState(false),
+    form = _useState52[0],
+    setForm = _useState52[1];
+  var _useState53 = useState(null),
     _useState54 = _slicedToArray(_useState53, 2),
-    busy = _useState54[0],
-    setBusy = _useState54[1];
+    photoBlob = _useState54[0],
+    setPhotoBlob = _useState54[1];
+  var _useState55 = useState(null),
+    _useState56 = _slicedToArray(_useState55, 2),
+    photoUrl = _useState56[0],
+    setPhotoUrl = _useState56[1];
+  var _useState57 = useState(existing ? !!existing.hasPhoto : false),
+    _useState58 = _slicedToArray(_useState57, 2),
+    hasExistingPhoto = _useState58[0],
+    setHasExistingPhoto = _useState58[1];
+  var _useState59 = useState(false),
+    _useState60 = _slicedToArray(_useState59, 2),
+    busy = _useState60[0],
+    setBusy = _useState60[1];
   var fileRef = useRef(null);
 
   // Load existing photo if there is one (for the preview)
@@ -3587,47 +4118,47 @@ function InspectionModal(_ref15) {
       return next;
     });
   }
-  function handlePhoto(_x6) {
+  function handlePhoto(_x9) {
     return _handlePhoto.apply(this, arguments);
   }
   function _handlePhoto() {
-    _handlePhoto = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5(e) {
-      var file, blob, _t6;
-      return _regenerator().w(function (_context5) {
-        while (1) switch (_context5.p = _context5.n) {
+    _handlePhoto = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee8(e) {
+      var file, blob, _t1;
+      return _regenerator().w(function (_context8) {
+        while (1) switch (_context8.p = _context8.n) {
           case 0:
             file = e.target.files && e.target.files[0];
             if (file) {
-              _context5.n = 1;
+              _context8.n = 1;
               break;
             }
-            return _context5.a(2);
+            return _context8.a(2);
           case 1:
             setBusy(true);
-            _context5.p = 2;
-            _context5.n = 3;
+            _context8.p = 2;
+            _context8.n = 3;
             return compressImage(file, 1200, 0.7);
           case 3:
-            blob = _context5.v;
+            blob = _context8.v;
             if (photoUrl && photoBlob) URL.revokeObjectURL(photoUrl);
             setPhotoBlob(blob);
             setPhotoUrl(URL.createObjectURL(blob));
             setHasExistingPhoto(true);
-            _context5.n = 5;
+            _context8.n = 5;
             break;
           case 4:
-            _context5.p = 4;
-            _t6 = _context5.v;
-            alert('Could not process photo: ' + (_t6 && _t6.message ? _t6.message : 'unknown error'));
+            _context8.p = 4;
+            _t1 = _context8.v;
+            alert('Could not process photo: ' + (_t1 && _t1.message ? _t1.message : 'unknown error'));
           case 5:
-            _context5.p = 5;
+            _context8.p = 5;
             setBusy(false);
             if (fileRef.current) fileRef.current.value = '';
-            return _context5.f(5);
+            return _context8.f(5);
           case 6:
-            return _context5.a(2);
+            return _context8.a(2);
         }
-      }, _callee5, null, [[2, 4, 5, 6]]);
+      }, _callee8, null, [[2, 4, 5, 6]]);
     }));
     return _handlePhoto.apply(this, arguments);
   }
@@ -3807,6 +4338,57 @@ function InspectionModal(_ref15) {
     }, l.code);
   }))), /*#__PURE__*/React.createElement("div", {
     style: {
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    className: "lbl"
+  }, "Tag colour \xB7 birth year"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(3, 1fr)',
+      gap: 6
+    }
+  }, TAGS.map(function (t) {
+    var sel = form.tagColour === t.code;
+    return /*#__PURE__*/React.createElement("button", {
+      key: t.code,
+      type: "button",
+      className: "arc",
+      onClick: function onClick() {
+        return update('tagColour', sel ? '' : t.code);
+      },
+      style: {
+        padding: '10px 6px',
+        background: sel ? t.fill : t.softFill,
+        color: sel ? t.inkSel : t.inkUnsel,
+        border: "2px solid ".concat(sel ? t.edgeSel : t.edge),
+        borderRadius: 8,
+        fontWeight: 800,
+        letterSpacing: '0.04em',
+        cursor: 'pointer',
+        minHeight: 50,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 2,
+        touchAction: 'manipulation',
+        WebkitTapHighlightColor: 'transparent'
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 16,
+        fontWeight: 900
+      }
+    }, t.year), /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 10,
+        opacity: 0.85,
+        textTransform: 'uppercase'
+      }
+    }, t.label));
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
       display: 'grid',
       gridTemplateColumns: '1fr 1fr',
       gap: 10,
@@ -3934,11 +4516,11 @@ function buildReportHtml(_ref16) {
   // so each pen card shows both pre-sale view and the result.
   var cards = [];
   var usedPurchaseIds = new Set();
-  var _iterator3 = _createForOfIteratorHelper(inspections),
-    _step3;
+  var _iterator4 = _createForOfIteratorHelper(inspections),
+    _step4;
   try {
     var _loop2 = function _loop2() {
-      var insp = _step3.value;
+      var insp = _step4.value;
       var matchingPurchase = purchases.find(function (p) {
         return p.penNumber && insp.penNumber && p.penNumber.trim() === insp.penNumber.trim();
       });
@@ -3948,20 +4530,20 @@ function buildReportHtml(_ref16) {
       });
       if (matchingPurchase) usedPurchaseIds.add(matchingPurchase.id);
     };
-    for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+    for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
       _loop2();
     }
     // Purchases with no matching inspection
   } catch (err) {
-    _iterator3.e(err);
+    _iterator4.e(err);
   } finally {
-    _iterator3.f();
+    _iterator4.f();
   }
-  var _iterator4 = _createForOfIteratorHelper(purchases),
-    _step4;
+  var _iterator5 = _createForOfIteratorHelper(purchases),
+    _step5;
   try {
-    for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
-      var p = _step4.value;
+    for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
+      var p = _step5.value;
       if (!usedPurchaseIds.has(p.id)) {
         cards.push({
           inspection: null,
@@ -3972,9 +4554,9 @@ function buildReportHtml(_ref16) {
 
     // Sort: bought first by line/time, then watched, then inspections-only
   } catch (err) {
-    _iterator4.e(err);
+    _iterator5.e(err);
   } finally {
-    _iterator4.f();
+    _iterator5.f();
   }
   cards.sort(function (a, b) {
     var score = function score(c) {
@@ -4010,17 +4592,25 @@ function buildReportHtml(_ref16) {
 
   // Summary table rows
   var summaryRows = [['Pens bought', String(bought.length)], ['Pens watched', String(watched.length)], ['Pens inspected (total)', String(inspections.length)], ['Total head', String(totals.head)], ['Total weight', fmt1(totals.kg) + ' kg'], ['Total spent', '$' + fmt2(totals.dollars) + ' (GST free)'], ['Average $/kg', '$' + fmt2(totals.avgPpk)], ['Average $/hd', '$' + fmt2(totals.avgPph)]];
-  var css = "\n    @page { size: A4; margin: 12mm; }\n    * { box-sizing: border-box; }\n    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; color: #0d0d0d; background: #f7f3ea; }\n    h1, h2, h3, h4 { margin: 0; font-weight: 800; letter-spacing: -0.01em; }\n    .container { max-width: 900px; margin: 0 auto; padding: 24px 16px 80px; }\n    .header { padding-bottom: 12px; border-bottom: 2px solid #0d0d0d; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; }\n    .header h1 { font-size: 24px; letter-spacing: 0.04em; text-transform: uppercase; }\n    .header .date { font-size: 14px; color: #555; }\n    .summary { background: #fff; border: 1px solid #1a1a1a; border-radius: 8px; padding: 14px 16px; margin-bottom: 20px; }\n    .summary h2 { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #555; margin-bottom: 10px; }\n    .summary table { width: 100%; border-collapse: collapse; font-size: 14px; }\n    .summary td { padding: 4px 0; }\n    .summary td:first-child { color: #555; width: 40%; }\n    .summary td:last-child  { font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }\n    .controls { background: #0d0d0d; color: #fafafa; padding: 12px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }\n    .controls button { background: #fafafa; color: #0d0d0d; border: none; padding: 10px 18px; border-radius: 6px; font-weight: 800; cursor: pointer; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; }\n    .pen-card { background: #fff; border: 1px solid #1a1a1a; border-radius: 8px; padding: 14px; margin-bottom: 14px; page-break-inside: avoid; }\n    .pen-card .top { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 10px; flex-wrap: wrap; }\n    .pen-card img { width: 240px; height: 180px; object-fit: cover; border-radius: 6px; flex-shrink: 0; background: #eee; }\n    .pen-card .info { flex: 1; min-width: 240px; }\n    .pen-card .pen-no { font-size: 22px; font-weight: 900; letter-spacing: 0.04em; }\n    .pen-card .line-name { font-size: 13px; color: #555; margin-bottom: 6px; }\n    .pen-card .badge { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; vertical-align: middle; margin-left: 6px; }\n    .badge-bought   { background: #14532d; color: #fff; }\n    .badge-watched  { background: #555;    color: #fff; }\n    .badge-no-result{ background: #d4d4d4; color: #333; }\n    .pen-card .data-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; font-variant-numeric: tabular-nums; }\n    .pen-card .data-table td { padding: 4px 8px; border: 1px solid #ddd; }\n    .pen-card .data-table td:first-child { color: #555; width: 35%; background: #f9f7f0; }\n    .pen-card .notes { margin-top: 8px; font-style: italic; color: #444; font-size: 13px; padding: 8px 10px; background: #f9f7f0; border-left: 3px solid #1a1a1a; }\n    .section-title { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #555; margin: 24px 0 8px; }\n    @media print {\n      body { background: #fff; }\n      .controls { display: none; }\n      .pen-card { box-shadow: none; }\n    }\n  ";
+  var css = "\n    @page { size: A4; margin: 12mm; }\n    * { box-sizing: border-box; }\n    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; color: #0d0d0d; background: #f7f3ea; }\n    h1, h2, h3, h4 { margin: 0; font-weight: 800; letter-spacing: -0.01em; }\n    .container { max-width: 900px; margin: 0 auto; padding: 24px 16px 80px; }\n    .header { padding-bottom: 12px; border-bottom: 2px solid #0d0d0d; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; }\n    .header h1 { font-size: 24px; letter-spacing: 0.04em; text-transform: uppercase; }\n    .header .date { font-size: 14px; color: #555; }\n    .summary { background: #fff; border: 1px solid #1a1a1a; border-radius: 8px; padding: 14px 16px; margin-bottom: 20px; }\n    .summary h2 { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #555; margin-bottom: 10px; }\n    .summary table { width: 100%; border-collapse: collapse; font-size: 14px; }\n    .summary td { padding: 4px 0; }\n    .summary td:first-child { color: #555; width: 40%; }\n    .summary td:last-child  { font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }\n    .controls { background: #0d0d0d; color: #fafafa; padding: 12px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }\n    .controls button { background: #fafafa; color: #0d0d0d; border: none; padding: 10px 18px; border-radius: 6px; font-weight: 800; cursor: pointer; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; }\n    .pen-card { background: #fff; border: 1px solid #1a1a1a; border-radius: 8px; padding: 14px; margin-bottom: 14px; page-break-inside: avoid; }\n    .pen-card .top { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 10px; flex-wrap: wrap; }\n    .pen-card img { width: 240px; height: 180px; object-fit: cover; border-radius: 6px; flex-shrink: 0; background: #eee; }\n    .pen-card .info { flex: 1; min-width: 240px; }\n    .pen-card .pen-no { font-size: 22px; font-weight: 900; letter-spacing: 0.04em; }\n    .pen-card .line-name { font-size: 13px; color: #555; margin-bottom: 6px; }\n    .pen-card .badge { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; vertical-align: middle; margin-left: 6px; }\n    .badge-bought   { background: #14532d; color: #fff; }\n    .badge-watched  { background: #555;    color: #fff; }\n    .badge-no-result{ background: #d4d4d4; color: #333; }\n    .tag-badge { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; vertical-align: middle; margin-left: 6px; }\n    .pen-card .data-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; font-variant-numeric: tabular-nums; }\n    .pen-card .data-table td { padding: 4px 8px; border: 1px solid #ddd; }\n    .pen-card .data-table td:first-child { color: #555; width: 35%; background: #f9f7f0; }\n    .pen-card .notes { margin-top: 8px; font-style: italic; color: #444; font-size: 13px; padding: 8px 10px; background: #f9f7f0; border-left: 3px solid #1a1a1a; }\n    .section-title { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #555; margin: 24px 0 8px; }\n    @media print {\n      body { background: #fff; }\n      .controls { display: none; }\n      .pen-card { box-shadow: none; }\n    }\n  ";
   function renderCard(_ref17) {
     var inspection = _ref17.inspection,
       purchase = _ref17.purchase;
     var penNo = inspection ? inspection.penNumber : purchase ? purchase.penNumber : '';
     var code = inspection ? inspection.lineCode : purchase ? purchase.lineCode : '';
     var name = lineNameOf(code);
-    var photoUrl = inspection && photoUrls[inspection.id] ? photoUrls[inspection.id] : null;
+    // Prefer the purchase's own photo (taken at the rail) over the inspection photo (pre-sale)
+    var photoUrl = null;
+    if (purchase && photoUrls[purchase.id]) photoUrl = photoUrls[purchase.id];else if (inspection && photoUrls[inspection.id]) photoUrl = photoUrls[inspection.id];
     var badge = '<span class="badge badge-no-result">Inspected only</span>';
     if (purchase && !purchase.watched) badge = '<span class="badge badge-bought">Bought</span>';else if (purchase && purchase.watched) badge = '<span class="badge badge-watched">Watched</span>';
+
+    // Use purchase tag if recorded, else inspection tag
+    var tagCode = purchase && purchase.tagColour || inspection && inspection.tagColour || '';
+    var tag = tagCode ? TAG_BY_CODE[tagCode] : null;
+    var tagBadge = tag ? "<span class=\"tag-badge\" style=\"background:".concat(tag.fill, ";color:").concat(tag.inkSel, ";border:1px solid ").concat(tag.edge, ";\">").concat(tag.label, " ").concat(tag.year, "</span>") : '';
     var rows = [];
+    if (tag) rows.push(['Tag colour', "".concat(tag.label, " (born ").concat(tag.year, ")")]);
     if (inspection) {
       rows.push(['Inspection time', formatTime(inspection.timestamp)]);
       if (inspection.head != null) rows.push(['Inspected head', String(inspection.head)]);
@@ -4047,7 +4637,7 @@ function buildReportHtml(_ref16) {
       return "<tr><td>".concat(escapeHtml(k), "</td><td>").concat(escapeHtml(v), "</td></tr>");
     }).join('');
     var notesHtml = inspection && inspection.notes ? "<div class=\"notes\">".concat(escapeHtml(inspection.notes), "</div>") : '';
-    return "\n      <div class=\"pen-card\">\n        <div class=\"top\">\n          ".concat(photoUrl ? "<img src=\"".concat(photoUrl, "\" alt=\"pen ").concat(escapeHtml(penNo), "\" />") : '', "\n          <div class=\"info\">\n            <div class=\"pen-no\">PEN ").concat(escapeHtml(penNo || '—')).concat(badge, "</div>\n            <div class=\"line-name\">").concat(escapeHtml(name || ''), "</div>\n            <table class=\"data-table\"><tbody>").concat(rowsHtml, "</tbody></table>\n          </div>\n        </div>\n        ").concat(notesHtml, "\n      </div>\n    ");
+    return "\n      <div class=\"pen-card\">\n        <div class=\"top\">\n          ".concat(photoUrl ? "<img src=\"".concat(photoUrl, "\" alt=\"pen ").concat(escapeHtml(penNo), "\" />") : '', "\n          <div class=\"info\">\n            <div class=\"pen-no\">PEN ").concat(escapeHtml(penNo || '—')).concat(badge).concat(tagBadge, "</div>\n            <div class=\"line-name\">").concat(escapeHtml(name || ''), "</div>\n            <table class=\"data-table\"><tbody>").concat(rowsHtml, "</tbody></table>\n          </div>\n        </div>\n        ").concat(notesHtml, "\n      </div>\n    ");
   }
   var cardsHtml = cards.map(renderCard).join('');
   var summaryRowsHtml = summaryRows.map(function (_ref20) {

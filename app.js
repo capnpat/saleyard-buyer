@@ -530,7 +530,13 @@ function App() {
     _useState38 = _slicedToArray(_useState37, 2),
     draftPhotoStatus = _useState38[0],
     setDraftPhotoStatus = _useState38[1];
-  var draftPhotoFileRef = useRef(null); // {message, undo?}
+  var draftPhotoFileRef = useRef(null);
+  // Inline-rendered report (replaces window.open which iOS PWA blocks)
+  var _useState39 = useState(null),
+    _useState40 = _slicedToArray(_useState39, 2),
+    reportHtml = _useState40[0],
+    setReportHtml = _useState40[1];
+  var reportIframeRef = useRef(null); // {message, undo?}
 
   var draftRef = useRef(null);
   var toastTimer = useRef(null);
@@ -1459,10 +1465,10 @@ function App() {
   }
   function openReport() {
     return _openReport.apply(this, arguments);
-  } // ----- Render helpers -----
+  }
   function _openReport() {
     _openReport = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee7() {
-      var photoUrls, _iterator, _step, insp, _blob, _iterator2, _step2, p, _blob2, html, blob, url, _t7, _t8, _t9, _t0;
+      var photoUrls, _iterator, _step, insp, blob, _iterator2, _step2, p, _blob, html, _t7, _t8, _t9, _t0;
       return _regenerator().w(function (_context7) {
         while (1) switch (_context7.p = _context7.n) {
           case 0:
@@ -1496,13 +1502,13 @@ function App() {
             _context7.n = 5;
             return photoGet(insp.id);
           case 5:
-            _blob = _context7.v;
-            if (!_blob) {
+            blob = _context7.v;
+            if (!blob) {
               _context7.n = 7;
               break;
             }
             _context7.n = 6;
-            return blobToDataUrl(_blob);
+            return blobToDataUrl(blob);
           case 6:
             photoUrls[insp.id] = _context7.v;
           case 7:
@@ -1545,13 +1551,13 @@ function App() {
             _context7.n = 17;
             return photoGet(p.id);
           case 17:
-            _blob2 = _context7.v;
-            if (!_blob2) {
+            _blob = _context7.v;
+            if (!_blob) {
               _context7.n = 19;
               break;
             }
             _context7.n = 18;
-            return blobToDataUrl(_blob2);
+            return blobToDataUrl(_blob);
           case 18:
             photoUrls[p.id] = _context7.v;
           case 19:
@@ -1583,12 +1589,9 @@ function App() {
               budgets: budgets,
               estimatedPpks: estimatedPpks,
               photoUrls: photoUrls
-            });
-            blob = new Blob([html], {
-              type: 'text/html'
-            });
-            url = URL.createObjectURL(blob);
-            window.open(url, '_blank');
+            }); // Render inline in an iframe rather than window.open, which iOS Safari blocks
+            // in standalone PWA mode.
+            setReportHtml(html);
           case 26:
             return _context7.a(2);
         }
@@ -1596,6 +1599,19 @@ function App() {
     }));
     return _openReport.apply(this, arguments);
   }
+  function printReport() {
+    if (!reportIframeRef.current) return;
+    try {
+      reportIframeRef.current.contentWindow.focus();
+      reportIframeRef.current.contentWindow.print();
+    } catch (e) {
+      // Fallback: print the entire page
+      window.print();
+    }
+  }
+
+  // ----- Render helpers -----
+
   function LinePill(_ref3) {
     var code = _ref3.code,
       watched = _ref3.watched;
@@ -2674,7 +2690,83 @@ function App() {
     onClose: function onClose() {
       return setEditingInspection(null);
     }
-  }), showSettings && /*#__PURE__*/React.createElement(SettingsModal, {
+  }), reportHtml && /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: 'fixed',
+      inset: 0,
+      zIndex: 1000,
+      background: '#fafafa',
+      display: 'flex',
+      flexDirection: 'column'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: '10px 12px',
+      background: '#0d0d0d',
+      color: '#fafafa',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: 10,
+      flexWrap: 'wrap',
+      boxShadow: '0 2px 8px rgba(0,0,0,0.3)'
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "arc",
+    style: {
+      fontSize: 11,
+      letterSpacing: '0.06em',
+      textTransform: 'uppercase',
+      fontWeight: 700
+    }
+  }, "Report ready. Tap Print to save as PDF, or share via the iPad share sheet."), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: printReport,
+    className: "arc",
+    style: {
+      background: T.accent,
+      color: '#0D0D0F',
+      border: "2px solid ".concat(T.accent),
+      padding: '8px 16px',
+      borderRadius: 6,
+      fontSize: 12,
+      fontWeight: 800,
+      letterSpacing: '0.06em',
+      textTransform: 'uppercase',
+      cursor: 'pointer'
+    }
+  }, "Print / Save PDF"), /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return setReportHtml(null);
+    },
+    className: "arc",
+    style: {
+      background: 'transparent',
+      color: '#fafafa',
+      border: "2px solid #fafafa",
+      padding: '8px 16px',
+      borderRadius: 6,
+      fontSize: 12,
+      fontWeight: 800,
+      letterSpacing: '0.06em',
+      textTransform: 'uppercase',
+      cursor: 'pointer'
+    }
+  }, "Close"))), /*#__PURE__*/React.createElement("iframe", {
+    ref: reportIframeRef,
+    srcDoc: reportHtml,
+    title: "Sale report",
+    style: {
+      flex: 1,
+      border: 'none',
+      width: '100%',
+      background: '#fafafa'
+    }
+  })), showSettings && /*#__PURE__*/React.createElement(SettingsModal, {
     lines: lines,
     budgets: budgets,
     estimatedPpks: estimatedPpks,
@@ -2835,22 +2927,22 @@ function SettingsModal(_ref6) {
     onRemoveLine = _ref6.onRemoveLine,
     onResetLines = _ref6.onResetLines,
     onClose = _ref6.onClose;
-  var _useState39 = useState(''),
-    _useState40 = _slicedToArray(_useState39, 2),
-    newCode = _useState40[0],
-    setNewCode = _useState40[1];
   var _useState41 = useState(''),
     _useState42 = _slicedToArray(_useState41, 2),
-    newName = _useState42[0],
-    setNewName = _useState42[1];
-  var _useState43 = useState('male'),
+    newCode = _useState42[0],
+    setNewCode = _useState42[1];
+  var _useState43 = useState(''),
     _useState44 = _slicedToArray(_useState43, 2),
-    newCat = _useState44[0],
-    setNewCat = _useState44[1];
-  var _useState45 = useState(buyerEmail || ''),
+    newName = _useState44[0],
+    setNewName = _useState44[1];
+  var _useState45 = useState('male'),
     _useState46 = _slicedToArray(_useState45, 2),
-    emailInput = _useState46[0],
-    setEmailInput = _useState46[1];
+    newCat = _useState46[0],
+    setNewCat = _useState46[1];
+  var _useState47 = useState(buyerEmail || ''),
+    _useState48 = _slicedToArray(_useState47, 2),
+    emailInput = _useState48[0],
+    setEmailInput = _useState48[1];
   function handleAdd() {
     if (!newCode.trim() || !newName.trim()) return;
     onAddLine(newCode, newName, newCat);
@@ -3145,10 +3237,10 @@ function SmallInput(_ref7) {
     suffix = _ref7.suffix,
     placeholder = _ref7.placeholder,
     decimal2 = _ref7.decimal2;
-  var _useState47 = useState(false),
-    _useState48 = _slicedToArray(_useState47, 2),
-    focused = _useState48[0],
-    setFocused = _useState48[1];
+  var _useState49 = useState(false),
+    _useState50 = _slicedToArray(_useState49, 2),
+    focused = _useState50[0],
+    setFocused = _useState50[1];
   // When decimal2 and not focused, format the displayed value to 2 decimal places
   // so 5.5 shows as "5.50". Free-text editing while focused.
   var numericValue = parseFloat(value);
@@ -3978,10 +4070,10 @@ function InspectionCard(_ref13) {
 function InspectionPhoto(_ref14) {
   var inspectionId = _ref14.inspectionId,
     style = _ref14.style;
-  var _useState49 = useState(null),
-    _useState50 = _slicedToArray(_useState49, 2),
-    url = _useState50[0],
-    setUrl = _useState50[1];
+  var _useState51 = useState(null),
+    _useState52 = _slicedToArray(_useState51, 2),
+    url = _useState52[0],
+    setUrl = _useState52[1];
   useEffect(function () {
     var active = true;
     var createdUrl = null;
@@ -4021,7 +4113,7 @@ function InspectionModal(_ref15) {
     lines = _ref15.lines,
     onSave = _ref15.onSave,
     onClose = _ref15.onClose;
-  var _useState51 = useState(function () {
+  var _useState53 = useState(function () {
       var base = existing ? {
         id: existing.id,
         penNumber: existing.penNumber || '',
@@ -4041,25 +4133,25 @@ function InspectionModal(_ref15) {
         lastEditedPrice: Number.isFinite(ph) ? 'maxPph' : null
       });
     }),
-    _useState52 = _slicedToArray(_useState51, 2),
-    form = _useState52[0],
-    setForm = _useState52[1];
-  var _useState53 = useState(null),
     _useState54 = _slicedToArray(_useState53, 2),
-    photoBlob = _useState54[0],
-    setPhotoBlob = _useState54[1];
+    form = _useState54[0],
+    setForm = _useState54[1];
   var _useState55 = useState(null),
     _useState56 = _slicedToArray(_useState55, 2),
-    photoUrl = _useState56[0],
-    setPhotoUrl = _useState56[1];
-  var _useState57 = useState(existing ? !!existing.hasPhoto : false),
+    photoBlob = _useState56[0],
+    setPhotoBlob = _useState56[1];
+  var _useState57 = useState(null),
     _useState58 = _slicedToArray(_useState57, 2),
-    hasExistingPhoto = _useState58[0],
-    setHasExistingPhoto = _useState58[1];
-  var _useState59 = useState(false),
+    photoUrl = _useState58[0],
+    setPhotoUrl = _useState58[1];
+  var _useState59 = useState(existing ? !!existing.hasPhoto : false),
     _useState60 = _slicedToArray(_useState59, 2),
-    busy = _useState60[0],
-    setBusy = _useState60[1];
+    hasExistingPhoto = _useState60[0],
+    setHasExistingPhoto = _useState60[1];
+  var _useState61 = useState(false),
+    _useState62 = _slicedToArray(_useState61, 2),
+    busy = _useState62[0],
+    setBusy = _useState62[1];
   var fileRef = useRef(null);
 
   // Load existing photo if there is one (for the preview)

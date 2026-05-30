@@ -4,7 +4,7 @@
 // Strategy: precache the full app shell on install so subsequent loads work
 // fully offline. Use stale-while-revalidate for cross-origin fetches (fonts).
 
-const CACHE_NAME = 'saleyard-v10';
+const CACHE_NAME = 'saleyard-v11';
 
 const APP_SHELL = [
   './',

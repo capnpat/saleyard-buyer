@@ -1609,6 +1609,10 @@ function App() {
             active: view === 'buying',
             onClick: () => setView('buying')
           }, void 0, false), /*#__PURE__*/_jsxDEV(ViewTab, {
+            label: "RESULTS",
+            active: view === 'results',
+            onClick: () => setView('results')
+          }, void 0, false), /*#__PURE__*/_jsxDEV(ViewTab, {
             label: "STATS",
             active: view === 'dashboard',
             onClick: () => setView('dashboard')
@@ -2512,6 +2516,12 @@ function App() {
           setView('buying');
           applyInspectionToDraft(insp);
         }
+      }, void 0, false), view === 'results' && /*#__PURE__*/_jsxDEV(ResultsView, {
+        purchases: purchases,
+        inspections: inspections,
+        lines: lines,
+        totals: totals,
+        location: location
       }, void 0, false), view === 'sessions' && /*#__PURE__*/_jsxDEV(SessionsView, {
         sessions: sessions,
         onView: viewSession,
@@ -5043,6 +5053,388 @@ function SessionCard({
       }, void 0, true)]
     }, void 0, true)
   }, void 0, false);
+}
+
+// ----- Results: today's purchases, tile view with photos and actual sale data -----
+
+function ResultsView({
+  purchases,
+  inspections,
+  lines,
+  totals,
+  location
+}) {
+  // Separate bought from watched. Both are shown but bought first.
+  const sorted = useMemo(() => {
+    const bought = purchases.filter(p => !p.watched);
+    const watched = purchases.filter(p => p.watched);
+    return [...bought, ...watched];
+  }, [purchases]);
+
+  // Build a lookup from pen number to inspection, so each purchase can
+  // pull description/photo fallback from its matching pre-sale inspection.
+  const insByPen = useMemo(() => {
+    const m = {};
+    for (const i of inspections) {
+      const k = (i.penNumber || '').trim();
+      if (k) m[k] = i;
+    }
+    return m;
+  }, [inspections]);
+  const headerDate = new Date().toLocaleDateString('en-AU', {
+    weekday: 'long',
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric'
+  });
+  return /*#__PURE__*/_jsxDEV("div", {
+    style: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 16
+    },
+    children: [/*#__PURE__*/_jsxDEV("section", {
+      className: "card",
+      style: {
+        padding: 14
+      },
+      children: [/*#__PURE__*/_jsxDEV("div", {
+        className: "arc",
+        style: {
+          fontWeight: 900,
+          fontSize: 16,
+          letterSpacing: '0.06em',
+          textTransform: 'uppercase'
+        },
+        children: "Today's results"
+      }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
+        className: "arc",
+        style: {
+          fontWeight: 600,
+          fontSize: 11,
+          letterSpacing: '0.06em',
+          color: T.textMute,
+          marginTop: 2
+        },
+        children: [location ? location + ' · ' : '', headerDate]
+      }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
+        className: "mono",
+        style: {
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(110px, 1fr))',
+          gap: 8,
+          fontSize: 13,
+          marginTop: 12
+        },
+        children: [/*#__PURE__*/_jsxDEV("div", {
+          children: [/*#__PURE__*/_jsxDEV("div", {
+            className: "lbl",
+            style: {
+              marginBottom: 2
+            },
+            children: "Bought"
+          }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
+            style: {
+              fontWeight: 700
+            },
+            children: totals.pens
+          }, void 0, false)]
+        }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
+          children: [/*#__PURE__*/_jsxDEV("div", {
+            className: "lbl",
+            style: {
+              marginBottom: 2
+            },
+            children: "Watched"
+          }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
+            style: {
+              fontWeight: 700
+            },
+            children: totals.watched
+          }, void 0, false)]
+        }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
+          children: [/*#__PURE__*/_jsxDEV("div", {
+            className: "lbl",
+            style: {
+              marginBottom: 2
+            },
+            children: "Head"
+          }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
+            style: {
+              fontWeight: 700
+            },
+            children: totals.head
+          }, void 0, false)]
+        }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
+          children: [/*#__PURE__*/_jsxDEV("div", {
+            className: "lbl",
+            style: {
+              marginBottom: 2
+            },
+            children: "Weight"
+          }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
+            style: {
+              fontWeight: 700
+            },
+            children: [fmt1(totals.kg), " kg"]
+          }, void 0, true)]
+        }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
+          children: [/*#__PURE__*/_jsxDEV("div", {
+            className: "lbl",
+            style: {
+              marginBottom: 2
+            },
+            children: "Spent"
+          }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
+            style: {
+              fontWeight: 700,
+              color: T.accent
+            },
+            children: ["$", fmt2(totals.dollars)]
+          }, void 0, true)]
+        }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
+          children: [/*#__PURE__*/_jsxDEV("div", {
+            className: "lbl",
+            style: {
+              marginBottom: 2
+            },
+            children: "Avg $/kg"
+          }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
+            style: {
+              fontWeight: 700
+            },
+            children: ["$", fmt2(totals.avgPpk)]
+          }, void 0, true)]
+        }, void 0, true)]
+      }, void 0, true)]
+    }, void 0, true), sorted.length === 0 ? /*#__PURE__*/_jsxDEV("section", {
+      className: "card",
+      style: {
+        padding: 32,
+        textAlign: 'center'
+      },
+      children: [/*#__PURE__*/_jsxDEV("div", {
+        className: "arc",
+        style: {
+          fontWeight: 800,
+          fontSize: 13,
+          letterSpacing: '0.10em',
+          textTransform: 'uppercase',
+          color: T.textMute
+        },
+        children: "No pens recorded yet"
+      }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
+        className: "arc",
+        style: {
+          marginTop: 8,
+          fontSize: 12,
+          color: T.textMute
+        },
+        children: "Record or watch a pen from the BIDDING tab and it will appear here."
+      }, void 0, false)]
+    }, void 0, true) : /*#__PURE__*/_jsxDEV("div", {
+      style: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+        gap: 12
+      },
+      children: sorted.map(p => /*#__PURE__*/_jsxDEV(ResultCard, {
+        purchase: p,
+        inspection: p.penNumber ? insByPen[p.penNumber.trim()] : null,
+        lines: lines
+      }, p.id, false))
+    }, void 0, false)]
+  }, void 0, true);
+}
+function ResultCard({
+  purchase,
+  inspection,
+  lines
+}) {
+  const line = lines.find(l => l.code === purchase.lineCode);
+  const cat = line ? CAT[line.category] : CAT.mixed;
+  // Tag colour: prefer the one captured on the purchase, else fall back to the inspection
+  const tagCode = purchase.tagColour || inspection && inspection.tagColour || '';
+  const tag = tagCode ? TAG_BY_CODE[tagCode] : null;
+  // Photo id: purchase photo first (actual rail photo), inspection photo second (pre-sale)
+  const photoId = purchase.hasPhoto ? purchase.id : inspection && inspection.hasPhoto ? inspection.id : null;
+  const isWatched = !!purchase.watched;
+  // Variance from the inspection's max, if any
+  const vsMax = inspection && Number.isFinite(inspection.maxPph) && Number.isFinite(purchase.pricePerHead) ? purchase.pricePerHead - inspection.maxPph : null;
+  return /*#__PURE__*/_jsxDEV("div", {
+    className: "card",
+    style: {
+      overflow: 'hidden',
+      display: 'flex',
+      flexDirection: 'column'
+    },
+    children: [photoId ? /*#__PURE__*/_jsxDEV(InspectionPhoto, {
+      inspectionId: photoId,
+      style: {
+        width: '100%',
+        aspectRatio: '4/3',
+        objectFit: 'cover',
+        display: 'block',
+        background: T.bgInset
+      }
+    }, void 0, false) : /*#__PURE__*/_jsxDEV("div", {
+      style: {
+        width: '100%',
+        aspectRatio: '4/3',
+        background: T.bgInset,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: T.textMute,
+        fontSize: 11,
+        fontFamily: "'Archivo', sans-serif",
+        letterSpacing: '0.10em',
+        textTransform: 'uppercase'
+      },
+      children: "No photo"
+    }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
+      style: {
+        padding: 12,
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column'
+      },
+      children: [/*#__PURE__*/_jsxDEV("div", {
+        style: {
+          display: 'flex',
+          alignItems: 'center',
+          gap: 8,
+          marginBottom: 8,
+          flexWrap: 'wrap'
+        },
+        children: [/*#__PURE__*/_jsxDEV("span", {
+          className: "arc",
+          style: {
+            fontWeight: 900,
+            fontSize: 14,
+            letterSpacing: '0.04em'
+          },
+          children: ["PEN ", purchase.penNumber || '—']
+        }, void 0, true), line && /*#__PURE__*/_jsxDEV("span", {
+          className: "pill",
+          style: {
+            background: cat.solid,
+            color: cat.ink
+          },
+          children: line.code
+        }, void 0, false), tag && /*#__PURE__*/_jsxDEV("span", {
+          className: "pill",
+          title: `${tag.label} tag · ${tag.year}`,
+          style: {
+            background: tag.fill,
+            color: tag.inkSel,
+            border: `1px solid ${tag.edge}`
+          },
+          children: tag.year
+        }, void 0, false), /*#__PURE__*/_jsxDEV("span", {
+          className: "pill",
+          style: {
+            background: isWatched ? 'transparent' : T.okTxt,
+            color: isWatched ? T.textMute : '#0D0D0F',
+            border: isWatched ? `1px solid ${T.borderH}` : 'none'
+          },
+          children: isWatched ? 'WATCHED' : 'BOUGHT'
+        }, void 0, false)]
+      }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
+        className: "mono",
+        style: {
+          fontSize: 13,
+          color: T.textLbl,
+          marginBottom: 10
+        },
+        children: [purchase.head, " head · ", fmt1(purchase.wtPerHead), " kg/hd · ", fmt1(purchase.totalKg), " kg total"]
+      }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
+        style: {
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: 8,
+          marginBottom: 10,
+          padding: 10,
+          background: T.bgInset,
+          border: `1px solid ${T.borderS}`,
+          borderRadius: 8
+        },
+        children: [/*#__PURE__*/_jsxDEV("div", {
+          children: [/*#__PURE__*/_jsxDEV("div", {
+            className: "lbl",
+            style: {
+              marginBottom: 2
+            },
+            children: "Sale $/head"
+          }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
+            className: "mono",
+            style: {
+              fontSize: 18,
+              fontWeight: 800,
+              color: T.accent
+            },
+            children: ["$", fmt2(purchase.pricePerHead)]
+          }, void 0, true)]
+        }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
+          children: [/*#__PURE__*/_jsxDEV("div", {
+            className: "lbl",
+            style: {
+              marginBottom: 2
+            },
+            children: "Sale $/kg"
+          }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
+            className: "mono",
+            style: {
+              fontSize: 18,
+              fontWeight: 800
+            },
+            children: ["$", fmt2(purchase.pricePerKg)]
+          }, void 0, true)]
+        }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
+          style: {
+            gridColumn: '1 / -1',
+            borderTop: `1px solid ${T.borderS}`,
+            paddingTop: 8,
+            marginTop: 2
+          },
+          children: [/*#__PURE__*/_jsxDEV("div", {
+            className: "lbl",
+            style: {
+              marginBottom: 2
+            },
+            children: isWatched ? 'Sold for (pen total)' : 'Pen total'
+          }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
+            className: "mono",
+            style: {
+              fontSize: 20,
+              fontWeight: 900
+            },
+            children: ["$", fmt2(purchase.total)]
+          }, void 0, true)]
+        }, void 0, true)]
+      }, void 0, true), vsMax != null && /*#__PURE__*/_jsxDEV("div", {
+        className: "arc",
+        style: {
+          fontSize: 11,
+          letterSpacing: '0.04em',
+          color: vsMax > 0 ? T.warnTxt : vsMax < 0 ? T.okTxt : T.textMute,
+          marginBottom: 8,
+          fontWeight: 700
+        },
+        children: vsMax > 0 ? `$${fmt2(vsMax)}/hd over your inspection max ($${fmt2(inspection.maxPph)})` : vsMax < 0 ? `$${fmt2(-vsMax)}/hd under your inspection max ($${fmt2(inspection.maxPph)})` : `on your inspection max ($${fmt2(inspection.maxPph)})`
+      }, void 0, false), inspection && inspection.notes && /*#__PURE__*/_jsxDEV("div", {
+        className: "arc",
+        style: {
+          fontSize: 12,
+          color: T.textLbl,
+          fontStyle: 'italic',
+          paddingTop: 8,
+          borderTop: `1px solid ${T.borderS}`
+        },
+        children: ["“", inspection.notes, "”"]
+      }, void 0, true)]
+    }, void 0, true)]
+  }, void 0, true);
 }
 
 // Mount

@@ -136,6 +136,72 @@ const CAT = {
   }
 };
 
+// Breed-specific colours so the line picker can be scanned by breed at a glance
+const BREED = {
+  'Merino': {
+    solid: '#D9C58A',
+    soft: '#2E291A',
+    ink: '#141414'
+  },
+  // wool cream
+  'Merino X': {
+    solid: '#8FB0D8',
+    soft: '#1A2430',
+    ink: '#0D1A28'
+  },
+  // dusty blue
+  'Dorper': {
+    solid: '#D18A5A',
+    soft: '#2E1D12',
+    ink: '#1A0F08'
+  },
+  // dorper tan
+  'Damara': {
+    solid: '#D96644',
+    soft: '#2E150E',
+    ink: '#FFFFFF'
+  },
+  // damara rust
+  'Goat': {
+    solid: '#A8C77A',
+    soft: '#1E2918',
+    ink: '#0F1908'
+  } // olive green
+};
+function breedStyle(breedName) {
+  return BREED[breedName] || {
+    solid: '#9CA0AB',
+    soft: '#25272C',
+    ink: '#0D0D0F'
+  };
+}
+
+// ----- Crate load planning (ASEL sheep air-freight table) -----
+// Standard main-deck SBS crate (CMTP DG02-A): double-pen, both pens 6.293 m² floor.
+// Pen allocation uses ASEL 3.3 Table 36 minimum pen area for sheep.
+const CRATE_PEN_AREA_M2 = 6.293; // area per pen (one deck)
+const CRATE_PENS_PER_CRATE = 2; // top + bottom
+const CRATE_COUNT = 8; // how many crates to visualise
+
+// ASEL 3.3 Table 36: minimum aircraft crate pen area for sheep (m² per head)
+// Index is weight in kg, value is m²/head. Interpolated for intermediate weights.
+const ASEL_SHEEP = [[20, 0.150], [25, 0.170], [30, 0.190], [35, 0.210], [40, 0.230], [45, 0.250], [50, 0.270], [55, 0.293], [60, 0.315], [65, 0.338], [70, 0.360], [75, 0.383], [80, 0.405], [85, 0.428], [90, 0.450], [95, 0.473], [100, 0.495]];
+const ASEL_GOAT = [[15, 0.093], [20, 0.117], [25, 0.141], [30, 0.165], [35, 0.189], [40, 0.213], [45, 0.237], [50, 0.261], [55, 0.285], [60, 0.309], [65, 0.333], [70, 0.357], [75, 0.381], [80, 0.405], [85, 0.429], [90, 0.453], [95, 0.477], [100, 0.501]];
+function aselAreaPerHead(weightKg, table) {
+  if (!Number.isFinite(weightKg) || weightKg <= 0) return null;
+  if (weightKg <= table[0][0]) return table[0][1];
+  if (weightKg >= table[table.length - 1][0]) return table[table.length - 1][1];
+  for (let i = 0; i < table.length - 1; i++) {
+    const [w1, a1] = table[i];
+    const [w2, a2] = table[i + 1];
+    if (weightKg >= w1 && weightKg <= w2) {
+      const t = (weightKg - w1) / (w2 - w1);
+      return a1 + (a2 - a1) * t;
+    }
+  }
+  return null;
+}
+
 // WA tag colour scheme: tag colour = year of birth
 const TAGS = [{
   code: 'black',
@@ -1394,35 +1460,59 @@ function App() {
     line,
     selected
   }) {
-    const cat = CAT[line.category];
+    // Breed drives the main colour; sex shows as a corner dot
+    const b = breedStyle(line.breed);
+    const sex = CAT[line.category] || CAT.mixed;
     return /*#__PURE__*/React.createElement("button", {
       type: "button",
       onClick: () => pickLine(line.code),
       className: "arc",
       style: {
-        padding: '14px 8px',
-        border: `2px solid ${cat.solid}`,
-        borderRadius: 8,
-        background: selected ? cat.solid : cat.soft,
-        color: selected ? cat.ink : cat.solid,
+        position: 'relative',
+        padding: '10px 6px',
+        border: `2px solid ${b.solid}`,
+        borderRadius: 7,
+        background: selected ? b.solid : b.soft,
+        color: selected ? b.ink : b.solid,
         fontWeight: 800,
-        fontSize: 15,
+        fontSize: 13,
         letterSpacing: '0.04em',
         textTransform: 'uppercase',
         cursor: 'pointer',
-        minHeight: 56,
+        minHeight: 44,
         touchAction: 'manipulation',
-        WebkitTapHighlightColor: 'transparent'
+        WebkitTapHighlightColor: 'transparent',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 1
       },
       title: line.name
-    }, /*#__PURE__*/React.createElement("div", null, line.code), /*#__PURE__*/React.createElement("div", {
+    }, /*#__PURE__*/React.createElement("span", {
+      "aria-hidden": "true",
       style: {
-        fontSize: 9,
+        position: 'absolute',
+        top: 4,
+        right: 4,
+        width: 8,
+        height: 8,
+        borderRadius: 999,
+        background: sex.solid,
+        boxShadow: selected ? '0 0 0 1.5px rgba(0,0,0,0.25)' : '0 0 0 1.5px rgba(255,255,255,0.08)'
+      }
+    }), /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 14
+      }
+    }, line.code), /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 8,
         fontWeight: 600,
         opacity: 0.85,
-        marginTop: 2
+        letterSpacing: '0.04em'
       }
-    }, line.name));
+    }, line.breed || line.name));
   }
 
   // The contextual line of text under the $/kg input. Combines:
@@ -1657,17 +1747,91 @@ function App() {
             .grid-2 { grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); }
           }
         `), view === 'buying' && /*#__PURE__*/React.createElement("div", {
-    className: "grid-2",
     style: {
-      display: 'grid',
-      gridTemplateColumns: 'minmax(0, 1fr)',
-      gap: 16
+      display: 'flex',
+      gap: 10,
+      alignItems: 'flex-start'
+    }
+  }, /*#__PURE__*/React.createElement("aside", {
+    style: {
+      flex: '0 0 auto',
+      width: 68,
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 6,
+      maxHeight: '75vh',
+      overflowY: 'auto',
+      padding: 6,
+      background: T.bgCard,
+      border: `1px solid ${T.borderS}`,
+      borderRadius: 8
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontSize: 8,
+      fontWeight: 800,
+      letterSpacing: '0.10em',
+      color: T.textMute,
+      textTransform: 'uppercase',
+      textAlign: 'center',
+      marginBottom: 2,
+      lineHeight: 1.2
+    }
+  }, "Insp.", /*#__PURE__*/React.createElement("br", null), "Pens"), inspections.length === 0 ? /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontSize: 9,
+      color: T.textMute,
+      textAlign: 'center',
+      padding: '8px 2px',
+      lineHeight: 1.3
+    }
+  }, "No inspections yet") : [...inspections].sort((a, b) => {
+    // Sort numerically where possible
+    const na = parseInt(a.penNumber, 10);
+    const nb = parseInt(b.penNumber, 10);
+    if (!isNaN(na) && !isNaN(nb)) return na - nb;
+    return String(a.penNumber).localeCompare(String(b.penNumber));
+  }).map(insp => {
+    const line = lines.find(l => l.code === insp.lineCode);
+    const b = line ? breedStyle(line.breed) : breedStyle(null);
+    const active = appliedInspectionId === insp.id;
+    return /*#__PURE__*/React.createElement("button", {
+      key: insp.id,
+      type: "button",
+      onClick: () => applyInspectionToDraft(insp),
+      className: "arc",
+      style: {
+        padding: '8px 2px',
+        borderRadius: 6,
+        background: active ? T.accent : b.soft,
+        color: active ? '#0D0D0F' : b.solid,
+        border: `2px solid ${active ? T.accent : b.solid}`,
+        fontWeight: 900,
+        fontSize: 13,
+        letterSpacing: '0.02em',
+        cursor: 'pointer',
+        minHeight: 40,
+        lineHeight: 1,
+        touchAction: 'manipulation',
+        WebkitTapHighlightColor: 'transparent'
+      },
+      title: `${insp.penNumber} · ${line ? line.code : ''} · max $${insp.maxPph != null ? insp.maxPph.toFixed(0) : '—'}/hd`
+    }, insp.penNumber || '—');
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1,
+      minWidth: 0,
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 12
     }
   }, /*#__PURE__*/React.createElement("section", {
     ref: draftRef,
     className: "card",
     style: {
-      padding: 18
+      padding: 14
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
@@ -1789,15 +1953,19 @@ function App() {
     onChange: handleDraftPhotoFile
   })), /*#__PURE__*/React.createElement("div", {
     style: {
-      marginBottom: 14
+      marginBottom: 10
     }
   }, /*#__PURE__*/React.createElement("label", {
-    className: "lbl"
+    className: "lbl",
+    style: {
+      marginBottom: 4,
+      fontSize: 10
+    }
   }, "Line type"), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fill, minmax(96px, 1fr))',
-      gap: 8
+      gridTemplateColumns: 'repeat(auto-fill, minmax(78px, 1fr))',
+      gap: 6
     }
   }, lines.map(l => /*#__PURE__*/React.createElement(LineButton, {
     key: l.code,
@@ -1805,15 +1973,19 @@ function App() {
     selected: draft.lineCode === l.code
   })))), /*#__PURE__*/React.createElement("div", {
     style: {
-      marginBottom: 14
+      marginBottom: 10
     }
   }, /*#__PURE__*/React.createElement("label", {
-    className: "lbl"
+    className: "lbl",
+    style: {
+      marginBottom: 4,
+      fontSize: 10
+    }
   }, "Tag colour · birth year"), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'grid',
       gridTemplateColumns: 'repeat(3, 1fr)',
-      gap: 8
+      gap: 6
     }
   }, TAGS.map(t => {
     const sel = draft.tagColour === t.code;
@@ -1823,31 +1995,31 @@ function App() {
       className: "arc",
       onClick: () => updateField('tagColour', sel ? '' : t.code),
       style: {
-        padding: '12px 6px',
+        padding: '8px 6px',
         background: sel ? t.fill : t.softFill,
         color: sel ? t.inkSel : t.inkUnsel,
         border: `2px solid ${sel ? t.edgeSel : t.edge}`,
-        borderRadius: 8,
+        borderRadius: 7,
         fontWeight: 800,
         letterSpacing: '0.04em',
         cursor: 'pointer',
-        minHeight: 56,
+        minHeight: 44,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: 2,
+        gap: 1,
         touchAction: 'manipulation',
         WebkitTapHighlightColor: 'transparent'
       }
     }, /*#__PURE__*/React.createElement("span", {
       style: {
-        fontSize: 18,
+        fontSize: 15,
         fontWeight: 900
       }
     }, t.year), /*#__PURE__*/React.createElement("span", {
       style: {
-        fontSize: 10,
+        fontSize: 9,
         opacity: 0.85,
         textTransform: 'uppercase'
       }
@@ -2138,8 +2310,8 @@ function App() {
     className: "btn btn-primary arc",
     style: {
       width: '100%',
-      fontSize: 18,
-      padding: '18px 16px'
+      fontSize: 15,
+      padding: '14px 14px'
     },
     disabled: !dValid,
     onClick: () => commitEntry(false)
@@ -2147,9 +2319,9 @@ function App() {
     className: "btn btn-ghost arc",
     style: {
       width: '100%',
-      fontSize: 13,
-      padding: '12px 16px',
-      marginTop: 8
+      fontSize: 11,
+      padding: '10px 14px',
+      marginTop: 6
     },
     disabled: !dValid,
     onClick: () => commitEntry(true)
@@ -2364,7 +2536,9 @@ function App() {
         fontSize: 18
       }
     }, "$", fmt2(p.total))));
-  })))), view === 'dashboard' && /*#__PURE__*/React.createElement(Dashboard, {
+  }))), /*#__PURE__*/React.createElement(CrateLoadBar, {
+    purchases: purchases
+  }))), view === 'dashboard' && /*#__PURE__*/React.createElement(Dashboard, {
     purchases: purchases,
     lines: lines,
     totals: totals,
@@ -5012,6 +5186,153 @@ function ResultCard({
       borderTop: `1px solid ${T.borderS}`
     }
   }, "“", inspection.notes, "”")));
+}
+
+// ----- Crate Load Bar -----
+// Shows 8 standard SBS crates (16 pens total) filling up as purchases are
+// recorded. Allocation is computed from the ASEL minimum pen area for the
+// average weight of all purchased head, applied against the 6.293 m² pen floor.
+
+function CrateLoadBar({
+  purchases
+}) {
+  // Only count BOUGHT animals (not watched)
+  const bought = purchases.filter(p => !p.watched);
+  const totals = useMemo(() => {
+    const head = bought.reduce((s, p) => s + (p.head || 0), 0);
+    const kg = bought.reduce((s, p) => s + (p.totalKg || 0), 0);
+    const avgWt = head > 0 ? kg / head : 0;
+    return {
+      head,
+      kg,
+      avgWt
+    };
+  }, [bought]);
+
+  // Max head per pen based on the live avg weight
+  const asel = aselAreaPerHead(totals.avgWt, ASEL_SHEEP);
+  const maxPerPen = asel && asel > 0 ? Math.floor(CRATE_PEN_AREA_M2 / asel) : 0;
+  const totalPens = CRATE_COUNT * CRATE_PENS_PER_CRATE;
+
+  // Allocate purchased head to pens in insertion order, filling each to maxPerPen
+  const pens = Array.from({
+    length: totalPens
+  }, () => 0);
+  let remaining = totals.head;
+  let idx = 0;
+  while (remaining > 0 && idx < totalPens && maxPerPen > 0) {
+    const take = Math.min(remaining, maxPerPen);
+    pens[idx] += take;
+    remaining -= take;
+    idx++;
+  }
+  const overflow = remaining; // head that didn't fit in any crate
+  const fullPens = pens.filter(n => n >= maxPerPen && maxPerPen > 0).length;
+  const totalCapacity = totalPens * maxPerPen;
+
+  // Group pens into crates (pairs of 2: top + bottom)
+  const crates = [];
+  for (let c = 0; c < CRATE_COUNT; c++) {
+    crates.push([pens[c * 2], pens[c * 2 + 1]]);
+  }
+  return /*#__PURE__*/React.createElement("section", {
+    className: "card",
+    style: {
+      padding: 10
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      alignItems: 'baseline',
+      justifyContent: 'space-between',
+      gap: 8,
+      marginBottom: 6,
+      flexWrap: 'wrap'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontSize: 10,
+      fontWeight: 800,
+      letterSpacing: '0.10em',
+      textTransform: 'uppercase',
+      color: T.text
+    }
+  }, "Crate load · sheep"), /*#__PURE__*/React.createElement("div", {
+    className: "arc mono",
+    style: {
+      fontSize: 10,
+      color: T.textMute,
+      letterSpacing: '0.04em'
+    }
+  }, totals.avgWt > 0 ? /*#__PURE__*/React.createElement(React.Fragment, null, "avg ", fmt1(totals.avgWt), " kg/hd · ASEL ", asel ? asel.toFixed(3) : '—', " m²/hd · max ", maxPerPen, "/pen · ", fullPens, "/", totalPens, " pens full", overflow > 0 ? /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: T.warnTxt,
+      fontWeight: 800
+    }
+  }, " · +", overflow, " over capacity") : null) : /*#__PURE__*/React.createElement(React.Fragment, null, "No purchases yet · 8 crates × 2 pens"))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'grid',
+      gridTemplateColumns: `repeat(${CRATE_COUNT}, minmax(0, 1fr))`,
+      gap: 4
+    }
+  }, crates.map((crate, ci) => /*#__PURE__*/React.createElement("div", {
+    key: ci,
+    style: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 2
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontSize: 8,
+      color: T.textMute,
+      textAlign: 'center',
+      letterSpacing: '0.06em',
+      fontWeight: 700,
+      textTransform: 'uppercase',
+      marginBottom: 1
+    }
+  }, "C", ci + 1), crate.map((pen, pi) => {
+    const isFull = maxPerPen > 0 && pen >= maxPerPen;
+    const isEmpty = pen === 0;
+    const bg = isFull ? 'rgba(134,239,172,0.22)' : isEmpty ? T.bgInset : 'rgba(255,214,107,0.15)';
+    const bdr = isFull ? T.okTxt : isEmpty ? T.borderS : T.accent;
+    const ink = isFull ? T.okTxt : isEmpty ? T.textMute : T.accent;
+    return /*#__PURE__*/React.createElement("div", {
+      key: pi,
+      style: {
+        aspectRatio: '1.2 / 1',
+        background: bg,
+        border: `1.5px solid ${bdr}`,
+        borderRadius: 4,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: ink,
+        fontWeight: 900,
+        fontFamily: "'JetBrains Mono', ui-monospace, monospace",
+        fontVariantNumeric: 'tabular-nums',
+        fontSize: 11,
+        lineHeight: 1
+      }
+    }, maxPerPen === 0 ? /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 8,
+        opacity: 0.6
+      }
+    }, "-") : isEmpty ? /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 9,
+        opacity: 0.5
+      }
+    }, "0/", maxPerPen) : isFull ? /*#__PURE__*/React.createElement("span", null, pen) : /*#__PURE__*/React.createElement("span", null, pen, /*#__PURE__*/React.createElement("span", {
+      style: {
+        opacity: 0.55
+      }
+    }, "/", maxPerPen)));
+  })))));
 }
 
 // Mount

@@ -4520,8 +4520,8 @@ function buildReportHtml({
   const dateShort = sessionDate || new Date().toISOString().split('T')[0];
   const headerLocation = sessionLocation || '';
 
-  // Combine inspections and purchases keyed by pen number where possible
-  // so each pen card shows both pre-sale view and the result.
+  // Combine inspections and purchases keyed by pen number.
+  // One "card" = one pen (either purchase + matching inspection, or purchase only, or inspection-only).
   const cards = [];
   const usedPurchaseIds = new Set();
   for (const insp of inspections) {
@@ -4532,7 +4532,6 @@ function buildReportHtml({
     });
     if (matchingPurchase) usedPurchaseIds.add(matchingPurchase.id);
   }
-  // Purchases with no matching inspection
   for (const p of purchases) {
     if (!usedPurchaseIds.has(p.id)) {
       cards.push({
@@ -4542,15 +4541,44 @@ function buildReportHtml({
     }
   }
 
-  // Sort: bought first by line/time, then watched, then inspections-only
-  cards.sort((a, b) => {
-    const score = c => {
-      if (c.purchase && !c.purchase.watched) return 0;
-      if (c.purchase && c.purchase.watched) return 1;
-      return 2;
-    };
-    return score(a) - score(b);
-  });
+  // Figure out each card's breed for grouping
+  function breedOf(card) {
+    const code = card.inspection && card.inspection.lineCode || card.purchase && card.purchase.lineCode || '';
+    const line = lines.find(l => l.code === code);
+    return line && line.breed || 'Other';
+  }
+
+  // Group cards by breed in a fixed preferred order
+  const BREED_ORDER = ['Merino', 'Merino X', 'Damara', 'Dorper', 'Goat'];
+  function breedRank(b) {
+    const i = BREED_ORDER.indexOf(b);
+    return i === -1 ? 99 : i;
+  }
+  const groups = {};
+  for (const c of cards) {
+    const b = breedOf(c);
+    if (!groups[b]) groups[b] = [];
+    groups[b].push(c);
+  }
+  // Within a group: bought first, then watched, then inspection-only; stable by pen number
+  function cardRank(c) {
+    if (c.purchase && !c.purchase.watched) return 0;
+    if (c.purchase && c.purchase.watched) return 1;
+    return 2;
+  }
+  for (const b of Object.keys(groups)) {
+    groups[b].sort((a, b2) => {
+      const d = cardRank(a) - cardRank(b2);
+      if (d !== 0) return d;
+      const pa = a.inspection && a.inspection.penNumber || a.purchase && a.purchase.penNumber || '';
+      const pb = b2.inspection && b2.inspection.penNumber || b2.purchase && b2.purchase.penNumber || '';
+      const na = parseInt(pa, 10),
+        nb = parseInt(pb, 10);
+      if (!isNaN(na) && !isNaN(nb)) return na - nb;
+      return String(pa).localeCompare(String(pb));
+    });
+  }
+  const orderedBreeds = Object.keys(groups).sort((a, b) => breedRank(a) - breedRank(b));
   const lineNameOf = code => {
     const l = lines.find(x => x.code === code);
     return l ? l.name : code;
@@ -4566,132 +4594,234 @@ function buildReportHtml({
       hour12: false
     });
   }
-  const bought = purchases.filter(p => !p.watched);
-  const watched = purchases.filter(p => p.watched);
 
-  // Summary table rows
-  const summaryRows = [['Pens bought', String(bought.length)], ['Pens watched', String(watched.length)], ['Pens inspected (total)', String(inspections.length)], ['Total head', String(totals.head)], ['Total weight', fmt1(totals.kg) + ' kg'], ['Total spent', '$' + fmt2(totals.dollars) + ' (GST free)'], ['Average $/kg', '$' + fmt2(totals.avgPpk)], ['Average $/hd', '$' + fmt2(totals.avgPph)]];
+  // CSS for the printable, breed-grouped, 2-up tile report (white theme)
   const css = `
-    @page { size: A4; margin: 12mm; }
+    :root {
+      --paper: #ffffff; --card: #fbf9f3; --inset: #f5f2e8;
+      --ink: #141414; --mute: #6b6b65; --label: #4a4a44;
+      --accent: #b7830f; --rule: #d7d2c3; --rule-soft: #e8e3d4;
+      --ok-ink: #2f7d3b; --ok-fill: #d8ead0; --watched: #8b8b85;
+      --cat-male: #4a74c4; --cat-female: #c4337c; --cat-wether: #5c8e4e;
+      --tag-black-fill: #0f0f0f;  --tag-black-ink: #ffffff;  --tag-black-edge: #0f0f0f;
+      --tag-white-fill: #ffffff;  --tag-white-ink: #141414;  --tag-white-edge: #141414;
+      --tag-orange-fill: #ea6b14; --tag-orange-ink: #ffffff; --tag-orange-edge: #ea6b14;
+      color-scheme: light;
+    }
     * { box-sizing: border-box; }
-    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; color: #0d0d0d; background: #f7f3ea; }
-    h1, h2, h3, h4 { margin: 0; font-weight: 800; letter-spacing: -0.01em; }
-    .container { max-width: 900px; margin: 0 auto; padding: 24px 16px 80px; }
-    .header { padding-bottom: 12px; border-bottom: 2px solid #0d0d0d; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; }
-    .header h1 { font-size: 24px; letter-spacing: 0.04em; text-transform: uppercase; }
-    .header .date { font-size: 14px; color: #555; }
-    .summary { background: #fff; border: 1px solid #1a1a1a; border-radius: 8px; padding: 14px 16px; margin-bottom: 20px; }
-    .summary h2 { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #555; margin-bottom: 10px; }
-    .summary table { width: 100%; border-collapse: collapse; font-size: 14px; }
-    .summary td { padding: 4px 0; }
-    .summary td:first-child { color: #555; width: 40%; }
-    .summary td:last-child  { font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }
-    .controls { background: #0d0d0d; color: #fafafa; padding: 12px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
-    .controls button { background: #fafafa; color: #0d0d0d; border: none; padding: 10px 18px; border-radius: 6px; font-weight: 800; cursor: pointer; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; }
-    .pen-card { background: #fff; border: 1px solid #1a1a1a; border-radius: 8px; padding: 14px; margin-bottom: 14px; page-break-inside: avoid; }
-    .pen-card .top { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 10px; flex-wrap: wrap; }
-    .pen-card img { width: 240px; height: 180px; object-fit: cover; border-radius: 6px; flex-shrink: 0; background: #eee; }
-    .pen-card .info { flex: 1; min-width: 240px; }
-    .pen-card .pen-no { font-size: 22px; font-weight: 900; letter-spacing: 0.04em; }
-    .pen-card .line-name { font-size: 13px; color: #555; margin-bottom: 6px; }
-    .pen-card .badge { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; vertical-align: middle; margin-left: 6px; }
-    .badge-bought   { background: #14532d; color: #fff; }
-    .badge-watched  { background: #555;    color: #fff; }
-    .badge-no-result{ background: #d4d4d4; color: #333; }
-    .tag-badge { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; vertical-align: middle; margin-left: 6px; }
-    .pen-card .data-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; font-variant-numeric: tabular-nums; }
-    .pen-card .data-table td { padding: 4px 8px; border: 1px solid #ddd; }
-    .pen-card .data-table td:first-child { color: #555; width: 35%; background: #f9f7f0; }
-    .pen-card .notes { margin-top: 8px; font-style: italic; color: #444; font-size: 13px; padding: 8px 10px; background: #f9f7f0; border-left: 3px solid #1a1a1a; }
-    .section-title { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #555; margin: 24px 0 8px; }
+    html, body { margin: 0; padding: 0; background: var(--paper); color: var(--ink); }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; }
+    .mono { font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-variant-numeric: tabular-nums; }
+    .wrap { max-width: 900px; margin: 0 auto; padding: 20px 16px 60px; }
+    header { border-bottom: 2px solid var(--ink); padding: 8px 0 14px; margin-bottom: 20px; }
+    .eyebrow { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mute); font-weight: 700; }
+    h1 { margin: 4px 0 2px; font-size: 26px; font-weight: 900; letter-spacing: 0.02em; }
+    .byline { font-size: 12px; color: var(--mute); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; }
+    .controls {
+      background: #0d0d0d; color: #fafafa; padding: 10px 12px; border-radius: 6px;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      margin-bottom: 14px; flex-wrap: wrap;
+    }
+    .controls .lbl {
+      font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; font-size: 11px;
+    }
+    .controls button {
+      background: #fafafa; color: #0d0d0d; border: none;
+      padding: 8px 16px; border-radius: 4px; font-weight: 800; font-size: 12px;
+      letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer;
+    }
+    .group { margin-bottom: 22px; }
+    .group-head {
+      display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+      margin: 0 0 10px; padding-bottom: 4px;
+      border-bottom: 1.5px solid var(--ink); flex-wrap: wrap;
+    }
+    .group-head h2 { margin: 0; font-size: 17px; font-weight: 900; letter-spacing: 0.04em; text-transform: uppercase; }
+    .group-head .meta { font-size: 11px; color: var(--mute); letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; }
+    .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .card {
+      background: var(--card); border: 1px solid var(--rule); border-radius: 8px;
+      overflow: hidden; display: flex; flex-direction: column;
+      min-width: 0; page-break-inside: avoid; break-inside: avoid;
+    }
+    .card.bought { border: 2px solid var(--ok-ink); }
+    .photo { background: var(--inset); }
+    .photo img { display: block; width: 100%; aspect-ratio: 4/3; object-fit: cover; }
+    .photo .noimg {
+      width: 100%; aspect-ratio: 4/3;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--mute); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700;
+    }
+    .body { padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 8px; }
+    .cardhead { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; min-width: 0; }
+    .pen-no { font-weight: 900; font-size: 15px; letter-spacing: 0.04em; }
+    .pill {
+      display: inline-flex; align-items: center;
+      padding: 2px 8px; border-radius: 999px;
+      font-size: 10px; font-weight: 800; letter-spacing: 0.08em;
+      text-transform: uppercase; line-height: 1.2;
+    }
+    .pill.cat-male { background: var(--cat-male); color: #fff; }
+    .pill.cat-female { background: var(--cat-female); color: #fff; }
+    .pill.cat-wether { background: var(--cat-wether); color: #fff; }
+    .pill.tag-black  { background: var(--tag-black-fill);  color: var(--tag-black-ink);  border: 1px solid var(--tag-black-edge); }
+    .pill.tag-white  { background: var(--tag-white-fill);  color: var(--tag-white-ink);  border: 1px solid var(--tag-white-edge); }
+    .pill.tag-orange { background: var(--tag-orange-fill); color: var(--tag-orange-ink); border: 1px solid var(--tag-orange-edge); }
+    .pill.status-bought { background: var(--ok-fill); color: var(--ok-ink); border: 1px solid var(--ok-ink); }
+    .pill.status-watched { background: transparent; color: var(--watched); border: 1px solid var(--rule); }
+    .pill.status-insp { background: transparent; color: var(--mute); border: 1px dashed var(--rule); }
+    .stock {
+      font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums;
+      font-size: 12px; color: var(--label);
+    }
+    .pricebox {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6px 10px;
+      padding: 8px 10px; background: var(--inset);
+      border: 1px solid var(--rule-soft); border-radius: 6px;
+    }
+    .pricebox .lbl { font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mute); font-weight: 700; margin-bottom: 2px; }
+    .pricebox .v { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; font-size: 15px; font-weight: 800; color: var(--ink); }
+    .pricebox .v.accent { color: var(--accent); }
+    .pricebox .total {
+      grid-column: 1 / -1; padding-top: 6px; margin-top: 2px;
+      border-top: 1px solid var(--rule-soft);
+    }
+    .pricebox .total .v { font-size: 18px; font-weight: 900; }
+    .foot {
+      font-size: 10px; color: var(--mute); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700;
+      display: flex; justify-content: space-between; gap: 10px;
+    }
+    .notes {
+      font-size: 12px; color: var(--label); font-style: italic;
+      padding-top: 6px; border-top: 1px solid var(--rule-soft);
+    }
     @media print {
+      @page { size: A4; margin: 10mm; }
       body { background: #fff; }
       .controls { display: none; }
-      .pen-card { box-shadow: none; }
+      .wrap { padding: 0; max-width: none; }
+      .group-head { page-break-after: avoid; break-after: avoid-page; }
+      .grid { gap: 6mm; }
+      .card { break-inside: avoid; page-break-inside: avoid; }
     }
+    @media (max-width: 500px) { .grid { grid-template-columns: 1fr; } h1 { font-size: 22px; } }
   `;
   function renderCard({
     inspection,
     purchase
   }) {
-    const penNo = inspection ? inspection.penNumber : purchase ? purchase.penNumber : '';
-    const code = inspection ? inspection.lineCode : purchase ? purchase.lineCode : '';
-    const name = lineNameOf(code);
-    // Prefer the purchase's own photo (taken at the rail) over the inspection photo (pre-sale)
+    const penNo = inspection && inspection.penNumber || purchase && purchase.penNumber || '';
+    const code = inspection && inspection.lineCode || purchase && purchase.lineCode || '';
+    const line = lines.find(l => l.code === code);
+    const catClass = line ? 'cat-' + line.category : 'cat-mixed';
+
+    // Photo: prefer the purchase photo, fall back to the inspection photo
     let photoUrl = null;
     if (purchase && photoUrls[purchase.id]) photoUrl = photoUrls[purchase.id];else if (inspection && photoUrls[inspection.id]) photoUrl = photoUrls[inspection.id];
-    let badge = '<span class="badge badge-no-result">Inspected only</span>';
-    if (purchase && !purchase.watched) badge = '<span class="badge badge-bought">Bought</span>';else if (purchase && purchase.watched) badge = '<span class="badge badge-watched">Watched</span>';
+    const statusLabel = purchase ? purchase.watched ? 'Watched' : 'Bought' : 'Inspected only';
+    const statusClass = purchase ? purchase.watched ? 'status-watched' : 'status-bought' : 'status-insp';
 
-    // Use purchase tag if recorded, else inspection tag
+    // Tag
     const tagCode = purchase && purchase.tagColour || inspection && inspection.tagColour || '';
     const tag = tagCode ? TAG_BY_CODE[tagCode] : null;
-    const tagBadge = tag ? `<span class="tag-badge" style="background:${tag.fill};color:${tag.inkSel};border:1px solid ${tag.edge};">${tag.label} ${tag.year}</span>` : '';
-    const rows = [];
-    if (tag) rows.push(['Tag colour', `${tag.label} (born ${tag.year})`]);
-    if (inspection) {
-      rows.push(['Inspection time', formatTime(inspection.timestamp)]);
-      if (inspection.head != null) rows.push(['Inspected head', String(inspection.head)]);
-      if (inspection.wtPerHead != null) rows.push(['Inspected kg/hd', fmt1(inspection.wtPerHead)]);
-      if (inspection.maxPph != null) rows.push(['Max $/head you set', '$' + fmt2(inspection.maxPph)]);
-    }
+    const tagPill = tag ? `<span class="pill tag-${tagCode}">${tag.year}</span>` : '';
+
+    // Price block only when there is a purchase; otherwise show inspection max
+    let priceHtml = '';
     if (purchase) {
-      rows.push(['Sale time', formatTime(purchase.timestamp)]);
-      rows.push(['Head', String(purchase.head)]);
-      rows.push(['Est. kg/hd', fmt1(purchase.wtPerHead)]);
-      rows.push(['Total weight', fmt1(purchase.totalKg) + ' kg']);
-      rows.push(['$ per kg', '$' + fmt2(purchase.pricePerKg)]);
-      rows.push(['$ per head', '$' + fmt2(purchase.pricePerHead)]);
-      rows.push([purchase.watched ? 'Sold for (pen total)' : 'Pen total', '$' + fmt2(purchase.total)]);
-      if (inspection && inspection.maxPph != null) {
-        const diff = purchase.pricePerHead - inspection.maxPph;
-        rows.push(['vs your max', (diff > 0 ? '+' : '') + '$' + fmt2(diff) + '/hd  ' + (diff > 0 ? '(over your max)' : diff < 0 ? '(under your max)' : '(on your max)')]);
-      }
+      const pl_h = purchase.watched ? 'Sold $/head' : 'Sale $/head';
+      const pl_k = purchase.watched ? 'Sold $/kg' : 'Sale $/kg';
+      const tl = purchase.watched ? 'Sold for' : 'Pen total';
+      priceHtml = `
+        <div class="stock">${purchase.head} head &middot; ${fmt1(purchase.wtPerHead)} kg/hd &middot; ${fmt1(purchase.totalKg)} kg total</div>
+        <div class="pricebox">
+          <div><div class="lbl">${pl_h}</div><div class="v accent">$${fmt2(purchase.pricePerHead)}</div></div>
+          <div><div class="lbl">${pl_k}</div><div class="v">$${fmt2(purchase.pricePerKg)}</div></div>
+          <div class="total"><div class="lbl">${tl}</div><div class="v">$${fmt2(purchase.total)}</div></div>
+        </div>`;
+    } else if (inspection) {
+      const insHead = inspection.head != null ? `${inspection.head} head` : '— head';
+      const insKg = inspection.wtPerHead != null ? ` &middot; ${fmt1(inspection.wtPerHead)} kg/hd` : '';
+      priceHtml = `
+        <div class="stock">${insHead}${insKg} &middot; inspection only</div>
+        <div class="pricebox">
+          <div><div class="lbl">Max $/head you set</div>
+               <div class="v accent">${inspection.maxPph != null ? '$' + fmt2(inspection.maxPph) : '—'}</div></div>
+          <div><div class="lbl">Not purchased</div>
+               <div class="v" style="color:var(--mute); font-size: 13px; font-weight: 600;">—</div></div>
+        </div>`;
     }
-    const rowsHtml = rows.map(([k, v]) => `<tr><td>${escapeHtml(k)}</td><td>${escapeHtml(v)}</td></tr>`).join('');
-    const notesHtml = inspection && inspection.notes ? `<div class="notes">${escapeHtml(inspection.notes)}</div>` : '';
+
+    // "vs your max" line when both exist
+    let vsHtml = '';
+    if (purchase && inspection && Number.isFinite(inspection.maxPph) && Number.isFinite(purchase.pricePerHead)) {
+      const diff = purchase.pricePerHead - inspection.maxPph;
+      const colour = diff > 0 ? '#b43233' : diff < 0 ? '#2f7d3b' : '#6b6b65';
+      vsHtml = `<div class="stock" style="color:${colour}; font-weight: 700;">
+        ${diff > 0 ? `$${fmt2(diff)}/hd over your inspection max ($${fmt2(inspection.maxPph)})` : diff < 0 ? `$${fmt2(-diff)}/hd under your inspection max ($${fmt2(inspection.maxPph)})` : `on your inspection max ($${fmt2(inspection.maxPph)})`}
+      </div>`;
+    }
+    const notesHtml = inspection && inspection.notes ? `<div class="notes">"${escapeHtml(inspection.notes)}"</div>` : '';
+    const timeStr = purchase ? formatTime(purchase.timestamp) : inspection ? formatTime(inspection.timestamp) : '';
     return `
-      <div class="pen-card">
-        <div class="top">
-          ${photoUrl ? `<img src="${photoUrl}" alt="pen ${escapeHtml(penNo)}" />` : ''}
-          <div class="info">
-            <div class="pen-no">PEN ${escapeHtml(penNo || '—')}${badge}${tagBadge}</div>
-            <div class="line-name">${escapeHtml(name || '')}</div>
-            <table class="data-table"><tbody>${rowsHtml}</tbody></table>
-          </div>
+      <article class="card ${purchase && !purchase.watched ? 'bought' : ''}">
+        <div class="photo">
+          ${photoUrl ? `<img src="${photoUrl}" alt="Pen ${escapeHtml(penNo)}" />` : `<div class="noimg">No photo</div>`}
         </div>
-        ${notesHtml}
-      </div>
-    `;
+        <div class="body">
+          <div class="cardhead">
+            <span class="pen-no">PEN ${escapeHtml(penNo || '—')}</span>
+            ${code ? `<span class="pill ${catClass}">${escapeHtml(code)}</span>` : ''}
+            ${tagPill}
+            <span class="pill ${statusClass}">${statusLabel}</span>
+          </div>
+          ${priceHtml}
+          ${vsHtml}
+          <div class="foot"><span>${escapeHtml(lineNameOf(code))}</span><span>${timeStr}</span></div>
+          ${notesHtml}
+        </div>
+      </article>`;
   }
-  const cardsHtml = cards.map(renderCard).join('');
-  const summaryRowsHtml = summaryRows.map(([k, v]) => `<tr><td>${escapeHtml(k)}</td><td>${escapeHtml(v)}</td></tr>`).join('');
+
+  // Build breed-grouped sections
+  const groupsHtml = orderedBreeds.map(breed => {
+    const gcards = groups[breed];
+    const headSum = gcards.reduce((s, c) => s + (c.purchase && c.purchase.head || 0), 0);
+    const totalSum = gcards.reduce((s, c) => s + (c.purchase && c.purchase.total || 0), 0);
+    return `
+      <section class="group">
+        <div class="group-head">
+          <h2>${escapeHtml(breed)}</h2>
+          <div class="meta">${gcards.length} pen${gcards.length === 1 ? '' : 's'} &middot; ${headSum} head &middot; $${totalSum.toLocaleString('en-AU', {
+      maximumFractionDigits: 0
+    })} turnover</div>
+        </div>
+        <div class="grid">${gcards.map(renderCard).join('')}</div>
+      </section>`;
+  }).join('');
   return `<!DOCTYPE html>
 <html lang="en-AU">
 <head>
   <meta charset="utf-8" />
   <title>Saleyard report ${dateShort}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap">
   <style>${css}</style>
 </head>
 <body>
-  <div class="container">
+  <div class="wrap">
     <div class="controls">
-      <span style="font-weight:700;letter-spacing:0.06em;text-transform:uppercase;font-size:12px;">
-        Tap PRINT to save this report as a PDF (use Safari's share sheet → Save to Files)
-      </span>
+      <span class="lbl">Tap PRINT to save as PDF, or share from the iPad share sheet</span>
       <button onclick="window.print()">PRINT</button>
     </div>
-    <div class="header">
-      <h1>Saleyard report</h1>
-      <div class="date">${headerLocation ? escapeHtml(headerLocation) + ' · ' : ''}${escapeHtml(today)} · prepared by Patrick Coole</div>
-    </div>
-    <div class="summary">
-      <h2>Day at a glance</h2>
-      <table><tbody>${summaryRowsHtml}</tbody></table>
-    </div>
-    <div class="section-title">Pens (${cards.length})</div>
-    ${cardsHtml || '<p style="color:#555;">No pens to display.</p>'}
+    <header>
+      <div class="eyebrow">Sale report</div>
+      <h1>${headerLocation ? escapeHtml(headerLocation) + ', ' : ''}${escapeHtml(today)}</h1>
+      <div class="byline">Prepared by Patrick Coole &middot; GST free &middot; Grouped by breed</div>
+    </header>
+    ${groupsHtml || '<p style="color:#555;">No pens to display.</p>'}
   </div>
 </body>
 </html>`;

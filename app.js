@@ -1739,74 +1739,109 @@ function App() {
       gap: 10,
       alignItems: 'flex-start'
     }
-  }, /*#__PURE__*/React.createElement("aside", {
-    style: {
-      flex: '0 0 auto',
-      width: 68,
-      display: 'flex',
-      flexDirection: 'column',
-      gap: 6,
-      maxHeight: '75vh',
-      overflowY: 'auto',
-      padding: 6,
-      background: T.bgCard,
-      border: `1px solid ${T.borderS}`,
-      borderRadius: 8
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "arc",
-    style: {
-      fontSize: 8,
-      fontWeight: 800,
-      letterSpacing: '0.10em',
-      color: T.textMute,
-      textTransform: 'uppercase',
-      textAlign: 'center',
-      marginBottom: 2,
-      lineHeight: 1.2
-    }
-  }, "Insp.", /*#__PURE__*/React.createElement("br", null), "Pens"), inspections.length === 0 ? /*#__PURE__*/React.createElement("div", {
-    className: "arc",
-    style: {
-      fontSize: 9,
-      color: T.textMute,
-      textAlign: 'center',
-      padding: '8px 2px',
-      lineHeight: 1.3
-    }
-  }, "No inspections yet") : [...inspections].sort((a, b) => {
-    // Sort numerically where possible
-    const na = parseInt(a.penNumber, 10);
-    const nb = parseInt(b.penNumber, 10);
-    if (!isNaN(na) && !isNaN(nb)) return na - nb;
-    return String(a.penNumber).localeCompare(String(b.penNumber));
-  }).map(insp => {
-    const line = lines.find(l => l.code === insp.lineCode);
-    const b = line ? breedStyle(line.breed) : breedStyle(null);
-    const active = appliedInspectionId === insp.id;
-    return /*#__PURE__*/React.createElement("button", {
-      key: insp.id,
-      type: "button",
-      onClick: () => applyInspectionToDraft(insp),
+  }, (() => {
+    const soldPens = new Set(purchases.map(p => (p.penNumber || '').trim()).filter(Boolean));
+    const remaining = inspections.filter(i => !soldPens.has((i.penNumber || '').trim())).length;
+    return /*#__PURE__*/React.createElement("aside", {
+      style: {
+        flex: '0 0 auto',
+        width: 72,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 5,
+        maxHeight: '75vh',
+        overflowY: 'auto',
+        padding: 5,
+        background: T.bgCard,
+        border: `1px solid ${T.borderS}`,
+        borderRadius: 8
+      }
+    }, /*#__PURE__*/React.createElement("div", {
       className: "arc",
       style: {
+        fontSize: 8,
+        fontWeight: 800,
+        letterSpacing: '0.08em',
+        color: T.textMute,
+        textTransform: 'uppercase',
+        textAlign: 'center',
+        marginBottom: 1,
+        lineHeight: 1.1
+      }
+    }, "Insp.", /*#__PURE__*/React.createElement("br", null), "Pens"), inspections.length > 0 && /*#__PURE__*/React.createElement("div", {
+      className: "arc",
+      style: {
+        fontSize: 9,
+        fontWeight: 800,
+        color: T.accent,
+        textAlign: 'center',
+        marginBottom: 2,
+        letterSpacing: '0.04em'
+      }
+    }, remaining, "/", inspections.length, " left"), inspections.length === 0 ? /*#__PURE__*/React.createElement("div", {
+      className: "arc",
+      style: {
+        fontSize: 9,
+        color: T.textMute,
+        textAlign: 'center',
         padding: '8px 2px',
-        borderRadius: 6,
-        background: active ? T.accent : b.soft,
-        color: active ? '#0D0D0F' : b.solid,
-        border: `2px solid ${active ? T.accent : b.solid}`,
-        fontWeight: 900,
-        fontSize: 13,
-        letterSpacing: '0.02em',
-        cursor: 'pointer',
-        minHeight: 40,
-        lineHeight: 1,
-        touchAction: 'manipulation',
-        WebkitTapHighlightColor: 'transparent'
-      },
-      title: `${insp.penNumber} · ${line ? line.code : ''} · max $${insp.maxPph != null ? insp.maxPph.toFixed(0) : '—'}/hd`
-    }, insp.penNumber || '—');
-  })), /*#__PURE__*/React.createElement("div", {
+        lineHeight: 1.3
+      }
+    }, "No inspections yet") : [...inspections].sort((a, b) => {
+      const na = parseInt(a.penNumber, 10);
+      const nb = parseInt(b.penNumber, 10);
+      if (!isNaN(na) && !isNaN(nb)) return na - nb;
+      return String(a.penNumber).localeCompare(String(b.penNumber));
+    }).map(insp => {
+      const line = lines.find(l => l.code === insp.lineCode);
+      const b = line ? breedStyle(line.breed) : breedStyle(null);
+      const active = appliedInspectionId === insp.id;
+      const penKey = (insp.penNumber || '').trim();
+      const sold = soldPens.has(penKey);
+      // Inspected head count (what to expect in the pen)
+      const hd = insp.head != null && Number.isFinite(insp.head) ? insp.head : null;
+      return /*#__PURE__*/React.createElement("button", {
+        key: insp.id,
+        type: "button",
+        onClick: () => applyInspectionToDraft(insp),
+        className: "arc",
+        style: {
+          padding: '4px 2px',
+          borderRadius: 6,
+          background: sold ? T.bgInset : active ? T.accent : b.soft,
+          color: sold ? T.textMute : active ? '#0D0D0F' : b.solid,
+          border: `2px solid ${sold ? T.borderS : active ? T.accent : b.solid}`,
+          opacity: sold ? 0.6 : 1,
+          fontWeight: 900,
+          letterSpacing: '0.02em',
+          cursor: 'pointer',
+          minHeight: 44,
+          lineHeight: 1,
+          touchAction: 'manipulation',
+          WebkitTapHighlightColor: 'transparent',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 1,
+          textDecoration: sold ? 'line-through' : 'none',
+          textDecorationThickness: 1.5
+        },
+        title: `${insp.penNumber}${line ? ' · ' + line.code : ''}${hd != null ? ' · ' + hd + ' head' : ''}${insp.maxPph != null ? ' · max $' + insp.maxPph.toFixed(0) + '/hd' : ''}${sold ? ' · already recorded' : ''}`
+      }, /*#__PURE__*/React.createElement("span", {
+        style: {
+          fontSize: 13
+        }
+      }, insp.penNumber || '—'), /*#__PURE__*/React.createElement("span", {
+        style: {
+          fontSize: 9,
+          fontWeight: 700,
+          opacity: 0.85,
+          letterSpacing: '0.04em'
+        }
+      }, hd != null ? `${hd} hd` : '— hd'));
+    }));
+  })(), /*#__PURE__*/React.createElement("div", {
     style: {
       flex: 1,
       minWidth: 0,

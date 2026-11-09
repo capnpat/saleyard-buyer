@@ -1,4 +1,3 @@
-import { jsxDEV as _jsxDEV, Fragment as _Fragment } from "react/jsx-dev-runtime";
 const {
   useState,
   useEffect,
@@ -1376,22 +1375,21 @@ function App() {
   }) {
     const line = lines.find(l => l.code === code);
     const cat = line ? CAT[line.category] : CAT.mixed;
-    return /*#__PURE__*/_jsxDEV("span", {
+    return /*#__PURE__*/React.createElement("span", {
       className: "pill",
       style: {
         background: watched ? 'transparent' : cat.solid,
         color: watched ? T.textMute : cat.ink,
         border: watched ? `1.5px solid ${T.borderH}` : 'none'
-      },
-      children: code
-    }, void 0, false);
+      }
+    }, code);
   }
   function LineButton({
     line,
     selected
   }) {
     const cat = CAT[line.category];
-    return /*#__PURE__*/_jsxDEV("button", {
+    return /*#__PURE__*/React.createElement("button", {
       type: "button",
       onClick: () => pickLine(line.code),
       className: "arc",
@@ -1410,19 +1408,15 @@ function App() {
         touchAction: 'manipulation',
         WebkitTapHighlightColor: 'transparent'
       },
-      title: line.name,
-      children: [/*#__PURE__*/_jsxDEV("div", {
-        children: line.code
-      }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-        style: {
-          fontSize: 9,
-          fontWeight: 600,
-          opacity: 0.85,
-          marginTop: 2
-        },
-        children: line.name
-      }, void 0, false)]
-    }, void 0, true);
+      title: line.name
+    }, /*#__PURE__*/React.createElement("div", null, line.code), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 9,
+        fontWeight: 600,
+        opacity: 0.85,
+        marginTop: 2
+      }
+    }, line.name));
   }
 
   // The contextual line of text under the $/kg input. Combines:
@@ -1496,50 +1490,46 @@ function App() {
       }
     }
     if (parts.length === 0) return null;
-    return /*#__PURE__*/_jsxDEV("div", {
+    return /*#__PURE__*/React.createElement("div", {
       className: "arc",
       style: {
         fontSize: 12,
         fontWeight: 600,
         marginTop: 6,
         letterSpacing: '0.02em'
-      },
-      children: parts.map((p, i) => /*#__PURE__*/_jsxDEV("span", {
-        style: {
-          color: p.color
-        },
-        children: [i > 0 ? /*#__PURE__*/_jsxDEV("span", {
-          style: {
-            color: T.borderH
-          },
-          children: ' · '
-        }, void 0, false) : null, p.text]
-      }, i, true))
-    }, void 0, false);
+      }
+    }, parts.map((p, i) => /*#__PURE__*/React.createElement("span", {
+      key: i,
+      style: {
+        color: p.color
+      }
+    }, i > 0 ? /*#__PURE__*/React.createElement("span", {
+      style: {
+        color: T.borderH
+      }
+    }, ' · ') : null, p.text)));
   }
 
   // ----- JSX -----
 
   if (!loaded) {
-    return /*#__PURE__*/_jsxDEV("div", {
+    return /*#__PURE__*/React.createElement("div", {
       style: {
         minHeight: '100vh',
         background: T.bgBody,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center'
-      },
-      children: /*#__PURE__*/_jsxDEV("div", {
-        className: "arc",
-        style: {
-          fontWeight: 800,
-          letterSpacing: '0.1em',
-          textTransform: 'uppercase',
-          color: T.textMute
-        },
-        children: "Loading…"
-      }, void 0, false)
-    }, void 0, false);
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "arc",
+      style: {
+        fontWeight: 800,
+        letterSpacing: '0.1em',
+        textTransform: 'uppercase',
+        color: T.textMute
+      }
+    }, "Loading…"));
   }
   const todayStr = new Date().toLocaleDateString('en-AU', {
     weekday: 'short',
@@ -1548,1252 +1538,1088 @@ function App() {
     year: 'numeric'
   });
   const sameAsLastDisabled = purchases.length === 0 || !!editingId;
-  return /*#__PURE__*/_jsxDEV("div", {
+  return /*#__PURE__*/React.createElement("div", {
     style: {
       background: T.bgBody,
       minHeight: '100vh',
       color: T.text,
       paddingBottom: 110
-    },
-    children: [/*#__PURE__*/_jsxDEV("header", {
-      style: {
-        background: T.bgHeader,
-        color: T.text,
-        borderBottom: `1.5px solid ${T.borderS}`,
-        padding: '14px 16px',
-        position: 'sticky',
-        top: 0,
-        zIndex: 30
-      },
-      children: /*#__PURE__*/_jsxDEV("div", {
-        style: {
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: 12
-        },
-        children: [/*#__PURE__*/_jsxDEV("div", {
-          children: [/*#__PURE__*/_jsxDEV("div", {
-            className: "arc",
-            style: {
-              fontWeight: 900,
-              fontSize: 20,
-              letterSpacing: '0.06em',
-              textTransform: 'uppercase'
-            },
-            children: "Saleyard Buyer"
-          }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-            className: "arc",
-            style: {
-              fontWeight: 600,
-              fontSize: 11,
-              letterSpacing: '0.12em',
-              textTransform: 'uppercase',
-              color: T.textMute
-            },
-            children: [location ? `${location} · ` : '', todayStr, " · GST free"]
-          }, void 0, true)]
-        }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-          style: {
-            display: 'flex',
-            gap: 8,
-            flexWrap: 'wrap',
-            justifyContent: 'flex-end'
-          },
-          children: [/*#__PURE__*/_jsxDEV(ViewTab, {
-            label: "INSPECT",
-            active: view === 'inspection',
-            onClick: () => setView('inspection')
-          }, void 0, false), /*#__PURE__*/_jsxDEV(ViewTab, {
-            label: "BIDDING",
-            active: view === 'buying',
-            onClick: () => setView('buying')
-          }, void 0, false), /*#__PURE__*/_jsxDEV(ViewTab, {
-            label: "RESULTS",
-            active: view === 'results',
-            onClick: () => setView('results')
-          }, void 0, false), /*#__PURE__*/_jsxDEV(ViewTab, {
-            label: "STATS",
-            active: view === 'dashboard',
-            onClick: () => setView('dashboard')
-          }, void 0, false), /*#__PURE__*/_jsxDEV(ViewTab, {
-            label: "SESSIONS",
-            active: view === 'sessions',
-            onClick: () => setView('sessions')
-          }, void 0, false), /*#__PURE__*/_jsxDEV("button", {
-            className: "btn arc",
-            onClick: emailSummary,
-            style: {
-              background: T.text,
-              color: '#0D0D0F',
-              borderColor: T.text,
-              padding: '10px 14px',
-              fontSize: 13
-            },
-            children: "EMAIL"
-          }, void 0, false), /*#__PURE__*/_jsxDEV("button", {
-            className: "btn arc btn-ghost",
-            onClick: openReport,
-            style: {
-              padding: '10px 14px',
-              fontSize: 13
-            },
-            children: "REPORT"
-          }, void 0, false), /*#__PURE__*/_jsxDEV("button", {
-            className: "btn arc btn-ghost",
-            onClick: () => setShowSettings(true),
-            style: {
-              padding: '10px 14px',
-              fontSize: 13
-            },
-            children: "SETTINGS"
-          }, void 0, false), /*#__PURE__*/_jsxDEV("button", {
-            className: "btn arc btn-ghost",
-            onClick: () => setShowResetConfirm(true),
-            style: {
-              padding: '10px 14px',
-              fontSize: 13
-            },
-            children: "NEW DAY"
-          }, void 0, false)]
-        }, void 0, true)]
-      }, void 0, true)
-    }, void 0, false), /*#__PURE__*/_jsxDEV("main", {
-      style: {
-        display: 'grid',
-        gridTemplateColumns: 'minmax(0, 1fr)',
-        gap: 16,
-        padding: 16,
-        maxWidth: 1280,
-        margin: '0 auto'
-      },
-      children: [/*#__PURE__*/_jsxDEV("style", {
-        children: `
+    }
+  }, /*#__PURE__*/React.createElement("header", {
+    style: {
+      background: T.bgHeader,
+      color: T.text,
+      borderBottom: `1.5px solid ${T.borderS}`,
+      padding: '14px 16px',
+      position: 'sticky',
+      top: 0,
+      zIndex: 30
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: 12
+    }
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontWeight: 900,
+      fontSize: 20,
+      letterSpacing: '0.06em',
+      textTransform: 'uppercase'
+    }
+  }, "Saleyard Buyer"), /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontWeight: 600,
+      fontSize: 11,
+      letterSpacing: '0.12em',
+      textTransform: 'uppercase',
+      color: T.textMute
+    }
+  }, location ? `${location} · ` : '', todayStr, " · GST free")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 8,
+      flexWrap: 'wrap',
+      justifyContent: 'flex-end'
+    }
+  }, /*#__PURE__*/React.createElement(ViewTab, {
+    label: "INSPECT",
+    active: view === 'inspection',
+    onClick: () => setView('inspection')
+  }), /*#__PURE__*/React.createElement(ViewTab, {
+    label: "BIDDING",
+    active: view === 'buying',
+    onClick: () => setView('buying')
+  }), /*#__PURE__*/React.createElement(ViewTab, {
+    label: "RESULTS",
+    active: view === 'results',
+    onClick: () => setView('results')
+  }), /*#__PURE__*/React.createElement(ViewTab, {
+    label: "STATS",
+    active: view === 'dashboard',
+    onClick: () => setView('dashboard')
+  }), /*#__PURE__*/React.createElement(ViewTab, {
+    label: "SESSIONS",
+    active: view === 'sessions',
+    onClick: () => setView('sessions')
+  }), /*#__PURE__*/React.createElement("button", {
+    className: "btn arc",
+    onClick: emailSummary,
+    style: {
+      background: T.text,
+      color: '#0D0D0F',
+      borderColor: T.text,
+      padding: '10px 14px',
+      fontSize: 13
+    }
+  }, "EMAIL"), /*#__PURE__*/React.createElement("button", {
+    className: "btn arc btn-ghost",
+    onClick: openReport,
+    style: {
+      padding: '10px 14px',
+      fontSize: 13
+    }
+  }, "REPORT"), /*#__PURE__*/React.createElement("button", {
+    className: "btn arc btn-ghost",
+    onClick: () => setShowSettings(true),
+    style: {
+      padding: '10px 14px',
+      fontSize: 13
+    }
+  }, "SETTINGS"), /*#__PURE__*/React.createElement("button", {
+    className: "btn arc btn-ghost",
+    onClick: () => setShowResetConfirm(true),
+    style: {
+      padding: '10px 14px',
+      fontSize: 13
+    }
+  }, "NEW DAY")))), /*#__PURE__*/React.createElement("main", {
+    style: {
+      display: 'grid',
+      gridTemplateColumns: 'minmax(0, 1fr)',
+      gap: 16,
+      padding: 16,
+      maxWidth: 1280,
+      margin: '0 auto'
+    }
+  }, /*#__PURE__*/React.createElement("style", null, `
           @media (min-width: 1024px) {
             .grid-2 { grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); }
           }
-        `
-      }, void 0, false), view === 'buying' && /*#__PURE__*/_jsxDEV("div", {
-        className: "grid-2",
-        style: {
-          display: 'grid',
-          gridTemplateColumns: 'minmax(0, 1fr)',
-          gap: 16
-        },
-        children: [/*#__PURE__*/_jsxDEV("section", {
-          ref: draftRef,
-          className: "card",
-          style: {
-            padding: 18
-          },
-          children: [/*#__PURE__*/_jsxDEV("div", {
-            style: {
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              marginBottom: 14,
-              gap: 8
-            },
-            children: [/*#__PURE__*/_jsxDEV("h2", {
-              className: "arc",
-              style: {
-                margin: 0,
-                fontWeight: 900,
-                fontSize: 18,
-                letterSpacing: '0.06em',
-                textTransform: 'uppercase'
-              },
-              children: editingId ? 'Edit pen' : 'Bid working'
-            }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-              style: {
-                display: 'flex',
-                gap: 6
-              },
-              children: [!editingId && /*#__PURE__*/_jsxDEV("button", {
-                className: "btn arc btn-ghost",
-                onClick: sameAsLast,
-                disabled: sameAsLastDisabled,
-                style: {
-                  padding: '8px 12px',
-                  fontSize: 11
-                },
-                children: "SAME AS LAST"
-              }, void 0, false), editingId && /*#__PURE__*/_jsxDEV("button", {
-                className: "btn arc btn-ghost",
-                style: {
-                  padding: '8px 12px',
-                  fontSize: 12
-                },
-                onClick: cancelEdit,
-                children: "CANCEL EDIT"
-              }, void 0, false)]
-            }, void 0, true)]
-          }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-            style: {
-              marginBottom: 12
-            },
-            children: [draftPhotoUrl ? /*#__PURE__*/_jsxDEV("div", {
-              style: {
-                display: 'flex',
-                gap: 10,
-                alignItems: 'center',
-                padding: 8,
-                border: `1.5px solid ${T.accent}`,
-                borderRadius: 8,
-                background: 'rgba(255,214,107,0.06)'
-              },
-              children: [/*#__PURE__*/_jsxDEV("img", {
-                src: draftPhotoUrl,
-                alt: "pen",
-                style: {
-                  width: 56,
-                  height: 56,
-                  objectFit: 'cover',
-                  borderRadius: 6,
-                  border: `1px solid ${T.borderH}`,
-                  flexShrink: 0
-                }
-              }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-                style: {
-                  flex: 1,
-                  minWidth: 0
-                },
-                children: [/*#__PURE__*/_jsxDEV("div", {
-                  className: "arc",
-                  style: {
-                    fontSize: 10,
-                    fontWeight: 800,
-                    letterSpacing: '0.10em',
-                    color: T.accent,
-                    textTransform: 'uppercase'
-                  },
-                  children: "Photo attached"
-                }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-                  className: "arc",
-                  style: {
-                    fontSize: 11,
-                    color: T.textMute,
-                    marginTop: 1
-                  },
-                  children: "saved when you record or watch this pen"
-                }, void 0, false)]
-              }, void 0, true), /*#__PURE__*/_jsxDEV("button", {
-                className: "btn arc btn-ghost",
-                style: {
-                  padding: '6px 10px',
-                  fontSize: 11
-                },
-                onClick: () => draftPhotoFileRef.current && draftPhotoFileRef.current.click(),
-                children: "RETAKE"
-              }, void 0, false), /*#__PURE__*/_jsxDEV("button", {
-                className: "btn arc",
-                style: {
-                  padding: '6px 10px',
-                  fontSize: 11,
-                  background: 'transparent',
-                  color: T.warnBdr,
-                  borderColor: T.warnBdr
-                },
-                onClick: removeDraftPhoto,
-                children: "REMOVE"
-              }, void 0, false)]
-            }, void 0, true) : /*#__PURE__*/_jsxDEV("button", {
-              className: "btn arc btn-ghost",
-              style: {
-                width: '100%',
-                padding: '12px 14px',
-                fontSize: 13,
-                letterSpacing: '0.04em'
-              },
-              onClick: () => draftPhotoFileRef.current && draftPhotoFileRef.current.click(),
-              children: "📷  ADD PHOTO OF THIS PEN"
-            }, void 0, false), /*#__PURE__*/_jsxDEV("input", {
-              ref: draftPhotoFileRef,
-              type: "file",
-              accept: "image/*",
-              capture: "environment",
-              style: {
-                display: 'none'
-              },
-              onChange: handleDraftPhotoFile
-            }, void 0, false)]
-          }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-            style: {
-              marginBottom: 14
-            },
-            children: [/*#__PURE__*/_jsxDEV("label", {
-              className: "lbl",
-              children: "Line type"
-            }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-              style: {
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(96px, 1fr))',
-                gap: 8
-              },
-              children: lines.map(l => /*#__PURE__*/_jsxDEV(LineButton, {
-                line: l,
-                selected: draft.lineCode === l.code
-              }, l.code, false))
-            }, void 0, false)]
-          }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-            style: {
-              marginBottom: 14
-            },
-            children: [/*#__PURE__*/_jsxDEV("label", {
-              className: "lbl",
-              children: "Tag colour · birth year"
-            }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-              style: {
-                display: 'grid',
-                gridTemplateColumns: 'repeat(3, 1fr)',
-                gap: 8
-              },
-              children: TAGS.map(t => {
-                const sel = draft.tagColour === t.code;
-                return /*#__PURE__*/_jsxDEV("button", {
-                  type: "button",
-                  className: "arc",
-                  onClick: () => updateField('tagColour', sel ? '' : t.code),
-                  style: {
-                    padding: '12px 6px',
-                    background: sel ? t.fill : t.softFill,
-                    color: sel ? t.inkSel : t.inkUnsel,
-                    border: `2px solid ${sel ? t.edgeSel : t.edge}`,
-                    borderRadius: 8,
-                    fontWeight: 800,
-                    letterSpacing: '0.04em',
-                    cursor: 'pointer',
-                    minHeight: 56,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: 2,
-                    touchAction: 'manipulation',
-                    WebkitTapHighlightColor: 'transparent'
-                  },
-                  children: [/*#__PURE__*/_jsxDEV("span", {
-                    style: {
-                      fontSize: 18,
-                      fontWeight: 900
-                    },
-                    children: t.year
-                  }, void 0, false), /*#__PURE__*/_jsxDEV("span", {
-                    style: {
-                      fontSize: 10,
-                      opacity: 0.85,
-                      textTransform: 'uppercase'
-                    },
-                    children: t.label
-                  }, void 0, false)]
-                }, t.code, true);
-              })
-            }, void 0, false)]
-          }, void 0, true), penMatch && /*#__PURE__*/_jsxDEV("div", {
-            style: {
-              marginBottom: 10,
-              padding: '10px 12px',
-              background: 'rgba(255,214,107,0.12)',
-              border: `1.5px solid ${T.accent}`,
-              borderRadius: 8,
-              color: T.text,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: 10,
-              flexWrap: 'wrap'
-            },
-            children: [/*#__PURE__*/_jsxDEV("div", {
-              style: {
-                minWidth: 0
-              },
-              children: [/*#__PURE__*/_jsxDEV("div", {
-                className: "arc",
-                style: {
-                  fontSize: 11,
-                  fontWeight: 800,
-                  letterSpacing: '0.10em',
-                  color: T.accent,
-                  textTransform: 'uppercase'
-                },
-                children: ["Inspection match · pen ", penMatch.penNumber]
-              }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-                className: "arc",
-                style: {
-                  fontSize: 12,
-                  marginTop: 2,
-                  color: T.textLbl
-                },
-                children: [penMatch.lineCode ? penMatch.lineCode + ' · ' : '', penMatch.head != null ? `${penMatch.head} head · ` : '', penMatch.wtPerHead != null ? `${fmt1(penMatch.wtPerHead)} kg/hd · ` : '', penMatch.maxPph != null ? `max $${fmt2(penMatch.maxPph)}/hd` : 'no max set']
-              }, void 0, true)]
-            }, void 0, true), /*#__PURE__*/_jsxDEV("button", {
-              className: "btn arc",
-              style: {
-                background: T.accent,
-                color: '#0D0D0F',
-                borderColor: T.accent,
-                padding: '8px 14px',
-                fontSize: 12
-              },
-              onClick: () => applyInspectionToDraft(penMatch),
-              children: "APPLY"
-            }, void 0, false)]
-          }, void 0, true), appliedInspection && /*#__PURE__*/_jsxDEV("div", {
-            style: {
-              marginBottom: 10,
-              padding: '6px 10px',
-              background: 'transparent',
-              border: `1px dashed ${T.accent}`,
-              borderRadius: 6,
-              color: T.accent,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: 10
-            },
-            children: [/*#__PURE__*/_jsxDEV("span", {
-              className: "arc",
-              style: {
-                fontSize: 11,
-                fontWeight: 700,
-                letterSpacing: '0.06em'
-              },
-              children: ["INSPECTION APPLIED · pen max $", fmt2(appliedInspection.maxPph || 0), "/hd"]
-            }, void 0, true), /*#__PURE__*/_jsxDEV("button", {
-              className: "btn arc btn-ghost",
-              style: {
-                padding: '4px 8px',
-                fontSize: 10,
-                borderColor: T.accent,
-                color: T.accent
-              },
-              onClick: () => setAppliedInspectionId(null),
-              children: "CLEAR"
-            }, void 0, false)]
-          }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-            style: {
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr 1.2fr',
-              gap: 10,
-              marginBottom: 12
-            },
-            children: [/*#__PURE__*/_jsxDEV("div", {
-              children: [/*#__PURE__*/_jsxDEV("label", {
-                className: "lbl",
-                children: "Pen #"
-              }, void 0, false), /*#__PURE__*/_jsxDEV("input", {
-                type: "text",
-                inputMode: "text",
-                className: "field",
-                style: {
-                  fontSize: 18
-                },
-                value: draft.penNumber,
-                onChange: e => updateField('penNumber', e.target.value.slice(0, 8)),
-                onFocus: e => e.target.select(),
-                placeholder: "opt"
-              }, void 0, false)]
-            }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-              children: [/*#__PURE__*/_jsxDEV("label", {
-                className: "lbl",
-                children: "Head"
-              }, void 0, false), /*#__PURE__*/_jsxDEV("input", {
-                type: "text",
-                inputMode: "numeric",
-                pattern: "[0-9]*",
-                className: "field",
-                value: draft.head,
-                onChange: e => updateField('head', e.target.value.replace(/[^0-9]/g, '')),
-                onFocus: e => e.target.select(),
-                placeholder: "0"
-              }, void 0, false)]
-            }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-              children: [/*#__PURE__*/_jsxDEV("label", {
-                className: "lbl",
-                children: "Est. kg per head"
-              }, void 0, false), /*#__PURE__*/_jsxDEV("input", {
-                type: "text",
-                inputMode: "decimal",
-                className: "field",
-                value: draft.wtPerHead,
-                onChange: e => updateField('wtPerHead', e.target.value.replace(/[^0-9.]/g, '')),
-                onFocus: e => e.target.select(),
-                placeholder: "0.0"
-              }, void 0, false)]
-            }, void 0, true)]
-          }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-            style: {
-              marginBottom: 10
-            },
-            children: [/*#__PURE__*/_jsxDEV("label", {
-              className: "lbl",
-              children: ["$ per head ", /*#__PURE__*/_jsxDEV("span", {
-                style: {
-                  textTransform: 'none',
-                  letterSpacing: 0,
-                  color: T.textMute,
-                  fontSize: 10
-                },
-                children: "(bidding unit)"
-              }, void 0, false)]
-            }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-              style: {
-                display: 'flex',
-                gap: 6
-              },
-              children: [/*#__PURE__*/_jsxDEV("input", {
-                type: "text",
-                inputMode: "decimal",
-                className: `field ${overBudget ? 'over' : ''}`,
-                style: {
-                  flex: 1,
-                  fontSize: 22,
-                  fontWeight: 800
-                },
-                value: draft.pricePerHead,
-                onChange: e => updateField('pricePerHead', e.target.value.replace(/[^0-9.]/g, '')),
-                onFocus: e => e.target.select(),
-                placeholder: "0.00"
-              }, void 0, false), /*#__PURE__*/_jsxDEV("button", {
-                className: "btn-step arc",
-                type: "button",
-                onClick: () => bumpPrice('head', -1),
-                "aria-label": "decrease price per head",
-                children: "−$1"
-              }, void 0, false), /*#__PURE__*/_jsxDEV("button", {
-                className: "btn-step arc",
-                type: "button",
-                onClick: () => bumpPrice('head', +1),
-                "aria-label": "increase price per head",
-                children: "+$1"
-              }, void 0, false)]
-            }, void 0, true), presets.length > 0 && /*#__PURE__*/_jsxDEV("div", {
-              style: {
-                display: 'grid',
-                gridTemplateColumns: 'repeat(5, 1fr)',
-                gap: 6,
-                marginTop: 8
-              },
-              children: presets.map((price, i) => /*#__PURE__*/_jsxDEV("button", {
-                type: "button",
-                className: `btn-preset arc ${i === 2 ? 'target' : ''}`,
-                onClick: () => setPresetPph(price),
-                children: ["$", price.toFixed(2)]
-              }, i, true))
-            }, void 0, false)]
-          }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-            style: {
-              marginBottom: 14
-            },
-            children: [/*#__PURE__*/_jsxDEV("label", {
-              className: "lbl",
-              children: ["$ per kg ", /*#__PURE__*/_jsxDEV("span", {
-                style: {
-                  textTransform: 'none',
-                  letterSpacing: 0,
-                  color: T.textMute,
-                  fontSize: 10
-                },
-                children: "(live, calculated)"
-              }, void 0, false)]
-            }, void 0, true), (() => {
-              const bg = kgStatus === 'red' ? 'rgba(248,113,113,0.14)' : kgStatus === 'yellow' ? 'rgba(255,214,107,0.14)' : kgStatus === 'green' ? 'rgba(134,239,172,0.12)' : T.bgInset;
-              const border = kgStatus === 'red' ? T.warnBdr : kgStatus === 'yellow' ? T.accent : kgStatus === 'green' ? T.okTxt : T.borderH;
-              const ink = kgStatus === 'red' ? T.warnTxt : kgStatus === 'yellow' ? T.accent : kgStatus === 'green' ? T.okTxt : T.text;
-              const hasPrice = Number.isFinite(dPpk) && dPpk > 0;
-              return /*#__PURE__*/_jsxDEV("div", {
-                style: {
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  gap: 10,
-                  padding: '10px 14px',
-                  background: bg,
-                  border: `1.5px solid ${border}`,
-                  borderRadius: 10
-                },
-                children: [/*#__PURE__*/_jsxDEV("div", {
-                  className: "mono",
-                  style: {
-                    fontSize: 24,
-                    fontWeight: 800,
-                    color: ink
-                  },
-                  children: ["$", hasPrice ? fmt2(dPpk) : '—.—', /*#__PURE__*/_jsxDEV("span", {
-                    style: {
-                      fontSize: 13,
-                      color: T.textMute,
-                      marginLeft: 6,
-                      fontWeight: 600
-                    },
-                    children: "/kg"
-                  }, void 0, false)]
-                }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-                  className: "arc",
-                  style: {
-                    fontSize: 10,
-                    letterSpacing: '0.08em',
-                    textAlign: 'right',
-                    color: T.textMute,
-                    textTransform: 'uppercase'
-                  },
-                  children: lineBudget ? /*#__PURE__*/_jsxDEV(_Fragment, {
-                    children: [/*#__PURE__*/_jsxDEV("div", {
-                      children: ["Ceiling $", fmt2(lineBudget), "/kg"]
-                    }, void 0, true), hasPrice && (kgStatus === 'red' ? /*#__PURE__*/_jsxDEV("div", {
-                      style: {
-                        color: T.warnTxt,
-                        fontWeight: 800
-                      },
-                      children: ["Over by $", fmt2(dPpk - lineBudget)]
-                    }, void 0, true) : kgStatus === 'yellow' ? /*#__PURE__*/_jsxDEV("div", {
-                      style: {
-                        color: T.accent,
-                        fontWeight: 800
-                      },
-                      children: ["Within $", fmt2(kgWarnBand)]
-                    }, void 0, true) : kgStatus === 'green' ? /*#__PURE__*/_jsxDEV("div", {
-                      style: {
-                        color: T.okTxt,
-                        fontWeight: 800
-                      },
-                      children: ["$", fmt2(lineBudget - dPpk), " under"]
-                    }, void 0, true) : null)]
-                  }, void 0, true) : /*#__PURE__*/_jsxDEV("div", {
-                    children: "No ceiling set"
-                  }, void 0, false)
-                }, void 0, false)]
-              }, void 0, true);
-            })(), priceContext()]
-          }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-            style: {
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gap: 12,
-              marginBottom: 14,
-              padding: 14,
-              background: T.bgInset,
-              border: `1.5px dashed ${T.borderH}`,
-              borderRadius: 10
-            },
-            children: [/*#__PURE__*/_jsxDEV("div", {
-              children: [/*#__PURE__*/_jsxDEV("div", {
-                className: "lbl",
-                children: "Pen weight"
-              }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-                className: "mono",
-                style: {
-                  fontSize: 22,
-                  fontWeight: 700
-                },
-                children: [fmt1(dTotalKg), " ", /*#__PURE__*/_jsxDEV("span", {
-                  style: {
-                    fontSize: 13,
-                    color: T.textMute
-                  },
-                  children: "kg"
-                }, void 0, false)]
-              }, void 0, true)]
-            }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-              children: [/*#__PURE__*/_jsxDEV("div", {
-                className: "lbl",
-                children: "Pen total"
-              }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-                className: "mono",
-                style: {
-                  fontSize: 22,
-                  fontWeight: 700
-                },
-                children: ["$", fmt2(dTotal)]
-              }, void 0, true)]
-            }, void 0, true)]
-          }, void 0, true), overBudget && /*#__PURE__*/_jsxDEV("div", {
-            style: {
-              padding: '10px 12px',
-              background: T.warnBg,
-              border: `1.5px solid ${T.warnBdr}`,
-              borderRadius: 8,
-              color: T.warnTxt,
-              marginBottom: 12
-            },
-            children: /*#__PURE__*/_jsxDEV("span", {
-              className: "arc",
-              style: {
-                fontWeight: 800,
-                letterSpacing: '0.04em'
-              },
-              children: insMaxPph != null ? `OVER PEN MAX of $${fmt2(insMaxPph)}/hd (inspection)` : `OVER BUDGET, your ceiling for ${draft.lineCode} is $${fmt2(lineBudget)}/kg`
-            }, void 0, false)
-          }, void 0, false), /*#__PURE__*/_jsxDEV("button", {
-            className: "btn btn-primary arc",
-            style: {
-              width: '100%',
-              fontSize: 18,
-              padding: '18px 16px'
-            },
-            disabled: !dValid,
-            onClick: () => commitEntry(false),
-            children: editingId ? 'SAVE CHANGES' : 'RECORD PURCHASE'
-          }, void 0, false), !editingId && /*#__PURE__*/_jsxDEV("button", {
-            className: "btn btn-ghost arc",
-            style: {
-              width: '100%',
-              fontSize: 13,
-              padding: '12px 16px',
-              marginTop: 8
-            },
-            disabled: !dValid,
-            onClick: () => commitEntry(true),
-            children: "LOG AS WATCHED (not bought)"
-          }, void 0, false)]
-        }, void 0, true), /*#__PURE__*/_jsxDEV("section", {
-          className: "card",
-          style: {
-            padding: 18
-          },
-          children: [/*#__PURE__*/_jsxDEV("div", {
-            style: {
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              marginBottom: 14
-            },
-            children: /*#__PURE__*/_jsxDEV("h2", {
-              className: "arc",
-              style: {
-                margin: 0,
-                fontWeight: 900,
-                fontSize: 18,
-                letterSpacing: '0.06em',
-                textTransform: 'uppercase'
-              },
-              children: ["Today’s pens · ", totals.pens, totals.watched > 0 && /*#__PURE__*/_jsxDEV("span", {
-                className: "arc",
-                style: {
-                  fontWeight: 600,
-                  fontSize: 12,
-                  color: T.textMute,
-                  marginLeft: 8
-                },
-                children: ["+ ", totals.watched, " watched"]
-              }, void 0, true)]
-            }, void 0, true)
-          }, void 0, false), purchases.length === 0 ? /*#__PURE__*/_jsxDEV("div", {
-            style: {
-              padding: 32,
-              textAlign: 'center',
-              border: `1.5px dashed ${T.borderH}`,
-              borderRadius: 10,
-              background: T.bgInset,
-              color: T.textMute
-            },
-            className: "arc",
-            children: "No pens recorded yet."
-          }, void 0, false) : /*#__PURE__*/_jsxDEV("div", {
-            style: {
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 10
-            },
-            children: purchases.map(p => {
-              const line = lines.find(l => l.code === p.lineCode);
-              const dim = p.watched;
-              return /*#__PURE__*/_jsxDEV("div", {
-                style: {
-                  border: `1.5px solid ${dim ? T.borderS : T.borderH}`,
-                  borderRadius: 10,
-                  padding: 12,
-                  background: editingId === p.id ? T.editBg : T.bgInset,
-                  opacity: dim ? 0.72 : 1
-                },
-                children: [/*#__PURE__*/_jsxDEV("div", {
-                  style: {
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    marginBottom: 8
-                  },
-                  children: [/*#__PURE__*/_jsxDEV("div", {
-                    style: {
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 10,
-                      flexWrap: 'wrap'
-                    },
-                    children: [/*#__PURE__*/_jsxDEV(LinePill, {
-                      code: p.lineCode,
-                      watched: p.watched
-                    }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-                      className: "arc",
-                      style: {
-                        fontWeight: 700,
-                        fontSize: 14
-                      },
-                      children: line ? line.name : p.lineCode
-                    }, void 0, false), p.watched && /*#__PURE__*/_jsxDEV("span", {
-                      className: "pill",
-                      style: {
-                        background: 'transparent',
-                        color: T.textMute,
-                        border: `1px solid ${T.borderH}`
-                      },
-                      children: "WATCHED"
-                    }, void 0, false), p.penNumber && /*#__PURE__*/_jsxDEV("span", {
-                      className: "arc",
-                      style: {
-                        fontSize: 11,
-                        color: T.textMute,
-                        letterSpacing: '0.06em'
-                      },
-                      children: ["PEN ", p.penNumber]
-                    }, void 0, true), p.tagColour && TAG_BY_CODE[p.tagColour] && /*#__PURE__*/_jsxDEV("span", {
-                      className: "arc",
-                      title: `${TAG_BY_CODE[p.tagColour].label} tag · ${TAG_BY_CODE[p.tagColour].year}`,
-                      style: {
-                        fontSize: 10,
-                        letterSpacing: '0.06em',
-                        padding: '2px 8px',
-                        borderRadius: 999,
-                        background: TAG_BY_CODE[p.tagColour].fill,
-                        color: TAG_BY_CODE[p.tagColour].inkSel,
-                        border: `1px solid ${TAG_BY_CODE[p.tagColour].edge}`,
-                        fontWeight: 800
-                      },
-                      children: TAG_BY_CODE[p.tagColour].year
-                    }, void 0, false), p.hasPhoto && /*#__PURE__*/_jsxDEV("span", {
-                      className: "arc",
-                      title: "Photo attached",
-                      style: {
-                        fontSize: 11,
-                        color: T.accent,
-                        letterSpacing: '0.06em'
-                      },
-                      children: "📷"
-                    }, void 0, false)]
-                  }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-                    style: {
-                      display: 'flex',
-                      gap: 6
-                    },
-                    children: [/*#__PURE__*/_jsxDEV("button", {
-                      className: "btn arc btn-ghost",
-                      style: {
-                        padding: '6px 10px',
-                        fontSize: 11
-                      },
-                      onClick: () => startEdit(p.id),
-                      children: "EDIT"
-                    }, void 0, false), /*#__PURE__*/_jsxDEV("button", {
-                      className: "btn arc",
-                      style: {
-                        padding: '6px 10px',
-                        fontSize: 11,
-                        background: 'transparent',
-                        color: T.warnBdr,
-                        borderColor: T.warnBdr
-                      },
-                      onClick: () => deletePurchase(p.id),
-                      children: "DEL"
-                    }, void 0, false)]
-                  }, void 0, true)]
-                }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-                  className: "mono",
-                  style: {
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(5, minmax(0, 1fr))',
-                    gap: 6,
-                    fontSize: 13
-                  },
-                  children: [/*#__PURE__*/_jsxDEV("div", {
-                    children: [/*#__PURE__*/_jsxDEV("div", {
-                      className: "lbl",
-                      style: {
-                        marginBottom: 2
-                      },
-                      children: "Head"
-                    }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-                      style: {
-                        fontWeight: 700
-                      },
-                      children: p.head
-                    }, void 0, false)]
-                  }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-                    children: [/*#__PURE__*/_jsxDEV("div", {
-                      className: "lbl",
-                      style: {
-                        marginBottom: 2
-                      },
-                      children: "Kg/hd"
-                    }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-                      style: {
-                        fontWeight: 700
-                      },
-                      children: fmt1(p.wtPerHead)
-                    }, void 0, false)]
-                  }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-                    children: [/*#__PURE__*/_jsxDEV("div", {
-                      className: "lbl",
-                      style: {
-                        marginBottom: 2
-                      },
-                      children: "Total kg"
-                    }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-                      style: {
-                        fontWeight: 700
-                      },
-                      children: fmt1(p.totalKg)
-                    }, void 0, false)]
-                  }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-                    children: [/*#__PURE__*/_jsxDEV("div", {
-                      className: "lbl",
-                      style: {
-                        marginBottom: 2
-                      },
-                      children: "$/kg"
-                    }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-                      style: {
-                        fontWeight: 700
-                      },
-                      children: ["$", fmt2(p.pricePerKg)]
-                    }, void 0, true)]
-                  }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-                    children: [/*#__PURE__*/_jsxDEV("div", {
-                      className: "lbl",
-                      style: {
-                        marginBottom: 2
-                      },
-                      children: "$/hd"
-                    }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-                      style: {
-                        fontWeight: 700
-                      },
-                      children: ["$", fmt2(p.pricePerHead)]
-                    }, void 0, true)]
-                  }, void 0, true)]
-                }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-                  style: {
-                    marginTop: 8,
-                    paddingTop: 8,
-                    borderTop: `1px dashed ${T.borderS}`,
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'baseline'
-                  },
-                  children: [/*#__PURE__*/_jsxDEV("div", {
-                    className: "lbl",
-                    style: {
-                      marginBottom: 0
-                    },
-                    children: p.watched ? 'Final pen total' : 'Pen total'
-                  }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-                    className: "mono",
-                    style: {
-                      fontWeight: 800,
-                      fontSize: 18
-                    },
-                    children: ["$", fmt2(p.total)]
-                  }, void 0, true)]
-                }, void 0, true)]
-              }, p.id, true);
-            })
-          }, void 0, false)]
-        }, void 0, true)]
-      }, void 0, true), view === 'dashboard' && /*#__PURE__*/_jsxDEV(Dashboard, {
-        purchases: purchases,
-        lines: lines,
-        totals: totals,
-        budgets: budgets,
-        estimatedPpks: estimatedPpks
-      }, void 0, false), view === 'inspection' && /*#__PURE__*/_jsxDEV(InspectionView, {
-        inspections: inspections,
-        lines: lines,
-        onAdd: () => setEditingInspection('new'),
-        onEdit: id => setEditingInspection({
-          id
-        }),
-        onDelete: deleteInspection,
-        onJumpToBidding: insp => {
-          setView('buying');
-          applyInspectionToDraft(insp);
-        }
-      }, void 0, false), view === 'results' && /*#__PURE__*/_jsxDEV(ResultsView, {
-        purchases: purchases,
-        inspections: inspections,
-        lines: lines,
-        totals: totals,
-        location: location
-      }, void 0, false), view === 'sessions' && /*#__PURE__*/_jsxDEV(SessionsView, {
-        sessions: sessions,
-        onView: viewSession,
-        onDelete: deleteSession
-      }, void 0, false)]
-    }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
+        `), view === 'buying' && /*#__PURE__*/React.createElement("div", {
+    className: "grid-2",
+    style: {
+      display: 'grid',
+      gridTemplateColumns: 'minmax(0, 1fr)',
+      gap: 16
+    }
+  }, /*#__PURE__*/React.createElement("section", {
+    ref: draftRef,
+    className: "card",
+    style: {
+      padding: 18
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginBottom: 14,
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement("h2", {
+    className: "arc",
+    style: {
+      margin: 0,
+      fontWeight: 900,
+      fontSize: 18,
+      letterSpacing: '0.06em',
+      textTransform: 'uppercase'
+    }
+  }, editingId ? 'Edit pen' : 'Bid working'), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 6
+    }
+  }, !editingId && /*#__PURE__*/React.createElement("button", {
+    className: "btn arc btn-ghost",
+    onClick: sameAsLast,
+    disabled: sameAsLastDisabled,
+    style: {
+      padding: '8px 12px',
+      fontSize: 11
+    }
+  }, "SAME AS LAST"), editingId && /*#__PURE__*/React.createElement("button", {
+    className: "btn arc btn-ghost",
+    style: {
+      padding: '8px 12px',
+      fontSize: 12
+    },
+    onClick: cancelEdit
+  }, "CANCEL EDIT"))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 12
+    }
+  }, draftPhotoUrl ? /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 10,
+      alignItems: 'center',
+      padding: 8,
+      border: `1.5px solid ${T.accent}`,
+      borderRadius: 8,
+      background: 'rgba(255,214,107,0.06)'
+    }
+  }, /*#__PURE__*/React.createElement("img", {
+    src: draftPhotoUrl,
+    alt: "pen",
+    style: {
+      width: 56,
+      height: 56,
+      objectFit: 'cover',
+      borderRadius: 6,
+      border: `1px solid ${T.borderH}`,
+      flexShrink: 0
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1,
+      minWidth: 0
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontSize: 10,
+      fontWeight: 800,
+      letterSpacing: '0.10em',
+      color: T.accent,
+      textTransform: 'uppercase'
+    }
+  }, "Photo attached"), /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontSize: 11,
+      color: T.textMute,
+      marginTop: 1
+    }
+  }, "saved when you record or watch this pen")), /*#__PURE__*/React.createElement("button", {
+    className: "btn arc btn-ghost",
+    style: {
+      padding: '6px 10px',
+      fontSize: 11
+    },
+    onClick: () => draftPhotoFileRef.current && draftPhotoFileRef.current.click()
+  }, "RETAKE"), /*#__PURE__*/React.createElement("button", {
+    className: "btn arc",
+    style: {
+      padding: '6px 10px',
+      fontSize: 11,
+      background: 'transparent',
+      color: T.warnBdr,
+      borderColor: T.warnBdr
+    },
+    onClick: removeDraftPhoto
+  }, "REMOVE")) : /*#__PURE__*/React.createElement("button", {
+    className: "btn arc btn-ghost",
+    style: {
+      width: '100%',
+      padding: '12px 14px',
+      fontSize: 13,
+      letterSpacing: '0.04em'
+    },
+    onClick: () => draftPhotoFileRef.current && draftPhotoFileRef.current.click()
+  }, "📷  ADD PHOTO OF THIS PEN"), /*#__PURE__*/React.createElement("input", {
+    ref: draftPhotoFileRef,
+    type: "file",
+    accept: "image/*",
+    capture: "environment",
+    style: {
+      display: 'none'
+    },
+    onChange: handleDraftPhotoFile
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 14
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    className: "lbl"
+  }, "Line type"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fill, minmax(96px, 1fr))',
+      gap: 8
+    }
+  }, lines.map(l => /*#__PURE__*/React.createElement(LineButton, {
+    key: l.code,
+    line: l,
+    selected: draft.lineCode === l.code
+  })))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 14
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    className: "lbl"
+  }, "Tag colour · birth year"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(3, 1fr)',
+      gap: 8
+    }
+  }, TAGS.map(t => {
+    const sel = draft.tagColour === t.code;
+    return /*#__PURE__*/React.createElement("button", {
+      key: t.code,
+      type: "button",
+      className: "arc",
+      onClick: () => updateField('tagColour', sel ? '' : t.code),
       style: {
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        zIndex: 40,
-        background: T.bgHeader,
-        color: T.text,
-        padding: '12px 16px calc(12px + env(safe-area-inset-bottom)) 16px',
-        borderTop: `1.5px solid ${T.borderS}`,
-        boxShadow: '0 -8px 24px rgba(0,0,0,0.45)'
-      },
-      children: /*#__PURE__*/_jsxDEV("div", {
-        style: {
-          maxWidth: 1280,
-          margin: '0 auto',
-          display: 'grid',
-          gridTemplateColumns: 'repeat(6, minmax(0, 1fr))',
-          gap: 10
-        },
-        children: [/*#__PURE__*/_jsxDEV(Totals, {
-          label: "Pens",
-          value: fmtInt(totals.pens)
-        }, void 0, false), /*#__PURE__*/_jsxDEV(Totals, {
-          label: "Head",
-          value: fmtInt(totals.head)
-        }, void 0, false), /*#__PURE__*/_jsxDEV(Totals, {
-          label: "Total kg",
-          value: fmt1(totals.kg)
-        }, void 0, false), /*#__PURE__*/_jsxDEV(Totals, {
-          label: "Total $",
-          value: `$${fmt0(totals.dollars)}`,
-          accent: true
-        }, void 0, false), /*#__PURE__*/_jsxDEV(Totals, {
-          label: "Avg $/kg",
-          value: `$${fmt2(totals.avgPpk)}`,
-          accent: true
-        }, void 0, false), /*#__PURE__*/_jsxDEV(Totals, {
-          label: "Avg $/hd",
-          value: `$${fmt2(totals.avgPph)}`,
-          accent: true
-        }, void 0, false)]
-      }, void 0, true)
-    }, void 0, false), toast && /*#__PURE__*/_jsxDEV("div", {
-      className: "toast",
-      children: [/*#__PURE__*/_jsxDEV("span", {
-        children: toast.message
-      }, void 0, false), toast.undo && /*#__PURE__*/_jsxDEV("button", {
-        onClick: toast.undo.run,
-        children: toast.undo.label
-      }, void 0, false)]
-    }, void 0, true), editingInspection && /*#__PURE__*/_jsxDEV(InspectionModal, {
-      mode: editingInspection === 'new' ? 'new' : 'edit',
-      existing: editingInspection !== 'new' ? inspections.find(i => i.id === editingInspection.id) : null,
-      lines: lines,
-      onSave: saveInspection,
-      onClose: () => setEditingInspection(null)
-    }, void 0, false), reportBlobUrl && /*#__PURE__*/_jsxDEV("div", {
-      style: {
-        position: 'fixed',
-        inset: 0,
-        zIndex: 1000,
-        background: '#fafafa',
+        padding: '12px 6px',
+        background: sel ? t.fill : t.softFill,
+        color: sel ? t.inkSel : t.inkUnsel,
+        border: `2px solid ${sel ? t.edgeSel : t.edge}`,
+        borderRadius: 8,
+        fontWeight: 800,
+        letterSpacing: '0.04em',
+        cursor: 'pointer',
+        minHeight: 56,
         display: 'flex',
-        flexDirection: 'column'
-      },
-      children: [/*#__PURE__*/_jsxDEV("div", {
-        style: {
-          padding: '10px 12px',
-          background: '#0d0d0d',
-          color: '#fafafa',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: 10,
-          flexWrap: 'wrap',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.3)'
-        },
-        children: [/*#__PURE__*/_jsxDEV("span", {
-          className: "arc",
-          style: {
-            fontSize: 11,
-            letterSpacing: '0.06em',
-            textTransform: 'uppercase',
-            fontWeight: 700
-          },
-          children: "Report ready. Tap Print to save as PDF, or share via the iPad share sheet."
-        }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-          style: {
-            display: 'flex',
-            gap: 8
-          },
-          children: [/*#__PURE__*/_jsxDEV("button", {
-            onClick: printReport,
-            className: "arc",
-            style: {
-              background: T.accent,
-              color: '#0D0D0F',
-              border: `2px solid ${T.accent}`,
-              padding: '8px 16px',
-              borderRadius: 6,
-              fontSize: 12,
-              fontWeight: 800,
-              letterSpacing: '0.06em',
-              textTransform: 'uppercase',
-              cursor: 'pointer'
-            },
-            children: "Print / Save PDF"
-          }, void 0, false), /*#__PURE__*/_jsxDEV("button", {
-            onClick: closeReport,
-            className: "arc",
-            style: {
-              background: 'transparent',
-              color: '#fafafa',
-              border: `2px solid #fafafa`,
-              padding: '8px 16px',
-              borderRadius: 6,
-              fontSize: 12,
-              fontWeight: 800,
-              letterSpacing: '0.06em',
-              textTransform: 'uppercase',
-              cursor: 'pointer'
-            },
-            children: "Close"
-          }, void 0, false)]
-        }, void 0, true)]
-      }, void 0, true), /*#__PURE__*/_jsxDEV("iframe", {
-        ref: reportIframeRef,
-        src: reportBlobUrl,
-        title: "Sale report",
-        style: {
-          flex: 1,
-          border: 'none',
-          width: '100%',
-          background: '#fafafa'
-        }
-      }, void 0, false)]
-    }, void 0, true), showSettings && /*#__PURE__*/_jsxDEV(SettingsModal, {
-      lines: lines,
-      budgets: budgets,
-      estimatedPpks: estimatedPpks,
-      defaultWeights: defaultWeights,
-      bidSteps: bidSteps,
-      buyerEmail: buyerEmail,
-      location: location,
-      kgWarnBand: kgWarnBand,
-      onSetBudget: setBudgetFor,
-      onSetEstimatedPpk: setEstimatedPpkFor,
-      onSetDefaultWeight: setDefaultWeightFor,
-      onSetBidStep: setBidStepFor,
-      onSetEmail: setBuyerEmail,
-      onSetLocation: setLocation,
-      onSetKgWarnBand: setKgWarnBand,
-      onAddLine: addLineType,
-      onRemoveLine: removeLineType,
-      onResetLines: resetLines,
-      onClose: () => setShowSettings(false)
-    }, void 0, false), showResetConfirm && /*#__PURE__*/_jsxDEV("div", {
-      className: "modal-bg",
-      onClick: () => setShowResetConfirm(false),
-      children: /*#__PURE__*/_jsxDEV("div", {
-        className: "modal",
-        style: {
-          padding: 20
-        },
-        onClick: e => e.stopPropagation(),
-        children: [/*#__PURE__*/_jsxDEV("h3", {
-          className: "arc",
-          style: {
-            margin: '0 0 8px 0',
-            fontWeight: 900,
-            letterSpacing: '0.04em',
-            textTransform: 'uppercase'
-          },
-          children: "Start a new day?"
-        }, void 0, false), /*#__PURE__*/_jsxDEV("p", {
-          style: {
-            margin: '0 0 12px 0',
-            color: T.textLbl
-          },
-          children: totals.pens || totals.watched || inspections.length ? /*#__PURE__*/_jsxDEV(_Fragment, {
-            children: ["The current day (", totals.pens, " bought", totals.watched ? `, ${totals.watched} watched` : '', inspections.length ? `, ${inspections.length} inspection${inspections.length === 1 ? '' : 's'}` : '', ") will be auto-saved to ", /*#__PURE__*/_jsxDEV("strong", {
-              children: "Sessions"
-            }, void 0, false), " as ", /*#__PURE__*/_jsxDEV("em", {
-              children: [(location || 'Saleyard').trim(), " · ", new Date().toLocaleDateString('en-AU', {
-                day: '2-digit',
-                month: 'short',
-                year: 'numeric'
-              })]
-            }, void 0, true), ", then cleared from the live view. Photos are retained."]
-          }, void 0, true) : /*#__PURE__*/_jsxDEV(_Fragment, {
-            children: "The live view will be cleared. Nothing to save (no pens or inspections recorded)."
-          }, void 0, false)
-        }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-          style: {
-            padding: 10,
-            background: 'rgba(255,214,107,0.10)',
-            border: `1px solid ${T.accent}`,
-            borderRadius: 8,
-            marginBottom: 16
-          },
-          children: /*#__PURE__*/_jsxDEV("span", {
-            className: "arc",
-            style: {
-              fontSize: 12,
-              color: T.accent,
-              fontWeight: 700,
-              letterSpacing: '0.04em'
-            },
-            children: "You can also email the spreadsheet or save a PDF report first if you want a copy off this device."
-          }, void 0, false)
-        }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-          style: {
-            display: 'flex',
-            gap: 8,
-            justifyContent: 'flex-end',
-            flexWrap: 'wrap'
-          },
-          children: [/*#__PURE__*/_jsxDEV("button", {
-            className: "btn arc btn-ghost",
-            onClick: () => setShowResetConfirm(false),
-            children: "CANCEL"
-          }, void 0, false), /*#__PURE__*/_jsxDEV("button", {
-            className: "btn arc",
-            style: {
-              background: T.text,
-              color: '#0D0D0F',
-              borderColor: T.text
-            },
-            onClick: () => {
-              setShowResetConfirm(false);
-              emailSummary();
-            },
-            children: "EMAIL FIRST"
-          }, void 0, false), /*#__PURE__*/_jsxDEV("button", {
-            className: "btn arc",
-            style: {
-              background: 'transparent',
-              color: T.accent,
-              borderColor: T.accent
-            },
-            onClick: () => {
-              setShowResetConfirm(false);
-              openReport();
-            },
-            children: "REPORT FIRST"
-          }, void 0, false), /*#__PURE__*/_jsxDEV("button", {
-            className: "btn arc btn-warn",
-            onClick: resetDay,
-            children: "SAVE & CLEAR"
-          }, void 0, false)]
-        }, void 0, true)]
-      }, void 0, true)
-    }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 2,
+        touchAction: 'manipulation',
+        WebkitTapHighlightColor: 'transparent'
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 18,
+        fontWeight: 900
+      }
+    }, t.year), /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 10,
+        opacity: 0.85,
+        textTransform: 'uppercase'
+      }
+    }, t.label));
+  }))), penMatch && /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 10,
+      padding: '10px 12px',
+      background: 'rgba(255,214,107,0.12)',
+      border: `1.5px solid ${T.accent}`,
+      borderRadius: 8,
+      color: T.text,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: 10,
+      flexWrap: 'wrap'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      minWidth: 0
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontSize: 11,
+      fontWeight: 800,
+      letterSpacing: '0.10em',
+      color: T.accent,
+      textTransform: 'uppercase'
+    }
+  }, "Inspection match · pen ", penMatch.penNumber), /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontSize: 12,
+      marginTop: 2,
+      color: T.textLbl
+    }
+  }, penMatch.lineCode ? penMatch.lineCode + ' · ' : '', penMatch.head != null ? `${penMatch.head} head · ` : '', penMatch.wtPerHead != null ? `${fmt1(penMatch.wtPerHead)} kg/hd · ` : '', penMatch.maxPph != null ? `max $${fmt2(penMatch.maxPph)}/hd` : 'no max set')), /*#__PURE__*/React.createElement("button", {
+    className: "btn arc",
+    style: {
+      background: T.accent,
+      color: '#0D0D0F',
+      borderColor: T.accent,
+      padding: '8px 14px',
+      fontSize: 12
+    },
+    onClick: () => applyInspectionToDraft(penMatch)
+  }, "APPLY")), appliedInspection && /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 10,
+      padding: '6px 10px',
+      background: 'transparent',
+      border: `1px dashed ${T.accent}`,
+      borderRadius: 6,
+      color: T.accent,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: 10
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "arc",
+    style: {
+      fontSize: 11,
+      fontWeight: 700,
+      letterSpacing: '0.06em'
+    }
+  }, "INSPECTION APPLIED · pen max $", fmt2(appliedInspection.maxPph || 0), "/hd"), /*#__PURE__*/React.createElement("button", {
+    className: "btn arc btn-ghost",
+    style: {
+      padding: '4px 8px',
+      fontSize: 10,
+      borderColor: T.accent,
+      color: T.accent
+    },
+    onClick: () => setAppliedInspectionId(null)
+  }, "CLEAR")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'grid',
+      gridTemplateColumns: '1fr 1fr 1.2fr',
+      gap: 10,
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    className: "lbl"
+  }, "Pen #"), /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    inputMode: "text",
+    className: "field",
+    style: {
+      fontSize: 18
+    },
+    value: draft.penNumber,
+    onChange: e => updateField('penNumber', e.target.value.slice(0, 8)),
+    onFocus: e => e.target.select(),
+    placeholder: "opt"
+  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    className: "lbl"
+  }, "Head"), /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    inputMode: "numeric",
+    pattern: "[0-9]*",
+    className: "field",
+    value: draft.head,
+    onChange: e => updateField('head', e.target.value.replace(/[^0-9]/g, '')),
+    onFocus: e => e.target.select(),
+    placeholder: "0"
+  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    className: "lbl"
+  }, "Est. kg per head"), /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    inputMode: "decimal",
+    className: "field",
+    value: draft.wtPerHead,
+    onChange: e => updateField('wtPerHead', e.target.value.replace(/[^0-9.]/g, '')),
+    onFocus: e => e.target.select(),
+    placeholder: "0.0"
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    className: "lbl"
+  }, "$ per head ", /*#__PURE__*/React.createElement("span", {
+    style: {
+      textTransform: 'none',
+      letterSpacing: 0,
+      color: T.textMute,
+      fontSize: 10
+    }
+  }, "(bidding unit)")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 6
+    }
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    inputMode: "decimal",
+    className: `field ${overBudget ? 'over' : ''}`,
+    style: {
+      flex: 1,
+      fontSize: 22,
+      fontWeight: 800
+    },
+    value: draft.pricePerHead,
+    onChange: e => updateField('pricePerHead', e.target.value.replace(/[^0-9.]/g, '')),
+    onFocus: e => e.target.select(),
+    placeholder: "0.00"
+  }), /*#__PURE__*/React.createElement("button", {
+    className: "btn-step arc",
+    type: "button",
+    onClick: () => bumpPrice('head', -1),
+    "aria-label": "decrease price per head"
+  }, "−$1"), /*#__PURE__*/React.createElement("button", {
+    className: "btn-step arc",
+    type: "button",
+    onClick: () => bumpPrice('head', +1),
+    "aria-label": "increase price per head"
+  }, "+$1")), presets.length > 0 && /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(5, 1fr)',
+      gap: 6,
+      marginTop: 8
+    }
+  }, presets.map((price, i) => /*#__PURE__*/React.createElement("button", {
+    key: i,
+    type: "button",
+    className: `btn-preset arc ${i === 2 ? 'target' : ''}`,
+    onClick: () => setPresetPph(price)
+  }, "$", price.toFixed(2))))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 14
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    className: "lbl"
+  }, "$ per kg ", /*#__PURE__*/React.createElement("span", {
+    style: {
+      textTransform: 'none',
+      letterSpacing: 0,
+      color: T.textMute,
+      fontSize: 10
+    }
+  }, "(live, calculated)")), (() => {
+    const bg = kgStatus === 'red' ? 'rgba(248,113,113,0.14)' : kgStatus === 'yellow' ? 'rgba(255,214,107,0.14)' : kgStatus === 'green' ? 'rgba(134,239,172,0.12)' : T.bgInset;
+    const border = kgStatus === 'red' ? T.warnBdr : kgStatus === 'yellow' ? T.accent : kgStatus === 'green' ? T.okTxt : T.borderH;
+    const ink = kgStatus === 'red' ? T.warnTxt : kgStatus === 'yellow' ? T.accent : kgStatus === 'green' ? T.okTxt : T.text;
+    const hasPrice = Number.isFinite(dPpk) && dPpk > 0;
+    return /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: 10,
+        padding: '10px 14px',
+        background: bg,
+        border: `1.5px solid ${border}`,
+        borderRadius: 10
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "mono",
+      style: {
+        fontSize: 24,
+        fontWeight: 800,
+        color: ink
+      }
+    }, "$", hasPrice ? fmt2(dPpk) : '—.—', /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 13,
+        color: T.textMute,
+        marginLeft: 6,
+        fontWeight: 600
+      }
+    }, "/kg")), /*#__PURE__*/React.createElement("div", {
       className: "arc",
       style: {
-        textAlign: 'center',
-        padding: '20px 16px 0 16px',
-        color: T.textMute,
-        fontSize: 11,
+        fontSize: 10,
         letterSpacing: '0.08em',
+        textAlign: 'right',
+        color: T.textMute,
         textTransform: 'uppercase'
+      }
+    }, lineBudget ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", null, "Ceiling $", fmt2(lineBudget), "/kg"), hasPrice && (kgStatus === 'red' ? /*#__PURE__*/React.createElement("div", {
+      style: {
+        color: T.warnTxt,
+        fontWeight: 800
+      }
+    }, "Over by $", fmt2(dPpk - lineBudget)) : kgStatus === 'yellow' ? /*#__PURE__*/React.createElement("div", {
+      style: {
+        color: T.accent,
+        fontWeight: 800
+      }
+    }, "Within $", fmt2(kgWarnBand)) : kgStatus === 'green' ? /*#__PURE__*/React.createElement("div", {
+      style: {
+        color: T.okTxt,
+        fontWeight: 800
+      }
+    }, "$", fmt2(lineBudget - dPpk), " under") : null)) : /*#__PURE__*/React.createElement("div", null, "No ceiling set")));
+  })(), priceContext()), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'grid',
+      gridTemplateColumns: '1fr 1fr',
+      gap: 12,
+      marginBottom: 14,
+      padding: 14,
+      background: T.bgInset,
+      border: `1.5px dashed ${T.borderH}`,
+      borderRadius: 10
+    }
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    className: "lbl"
+  }, "Pen weight"), /*#__PURE__*/React.createElement("div", {
+    className: "mono",
+    style: {
+      fontSize: 22,
+      fontWeight: 700
+    }
+  }, fmt1(dTotalKg), " ", /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 13,
+      color: T.textMute
+    }
+  }, "kg"))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    className: "lbl"
+  }, "Pen total"), /*#__PURE__*/React.createElement("div", {
+    className: "mono",
+    style: {
+      fontSize: 22,
+      fontWeight: 700
+    }
+  }, "$", fmt2(dTotal)))), overBudget && /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: '10px 12px',
+      background: T.warnBg,
+      border: `1.5px solid ${T.warnBdr}`,
+      borderRadius: 8,
+      color: T.warnTxt,
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "arc",
+    style: {
+      fontWeight: 800,
+      letterSpacing: '0.04em'
+    }
+  }, insMaxPph != null ? `OVER PEN MAX of $${fmt2(insMaxPph)}/hd (inspection)` : `OVER BUDGET, your ceiling for ${draft.lineCode} is $${fmt2(lineBudget)}/kg`)), /*#__PURE__*/React.createElement("button", {
+    className: "btn btn-primary arc",
+    style: {
+      width: '100%',
+      fontSize: 18,
+      padding: '18px 16px'
+    },
+    disabled: !dValid,
+    onClick: () => commitEntry(false)
+  }, editingId ? 'SAVE CHANGES' : 'RECORD PURCHASE'), !editingId && /*#__PURE__*/React.createElement("button", {
+    className: "btn btn-ghost arc",
+    style: {
+      width: '100%',
+      fontSize: 13,
+      padding: '12px 16px',
+      marginTop: 8
+    },
+    disabled: !dValid,
+    onClick: () => commitEntry(true)
+  }, "LOG AS WATCHED (not bought)")), /*#__PURE__*/React.createElement("section", {
+    className: "card",
+    style: {
+      padding: 18
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginBottom: 14
+    }
+  }, /*#__PURE__*/React.createElement("h2", {
+    className: "arc",
+    style: {
+      margin: 0,
+      fontWeight: 900,
+      fontSize: 18,
+      letterSpacing: '0.06em',
+      textTransform: 'uppercase'
+    }
+  }, "Today’s pens · ", totals.pens, totals.watched > 0 && /*#__PURE__*/React.createElement("span", {
+    className: "arc",
+    style: {
+      fontWeight: 600,
+      fontSize: 12,
+      color: T.textMute,
+      marginLeft: 8
+    }
+  }, "+ ", totals.watched, " watched"))), purchases.length === 0 ? /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: 32,
+      textAlign: 'center',
+      border: `1.5px dashed ${T.borderH}`,
+      borderRadius: 10,
+      background: T.bgInset,
+      color: T.textMute
+    },
+    className: "arc"
+  }, "No pens recorded yet.") : /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 10
+    }
+  }, purchases.map(p => {
+    const line = lines.find(l => l.code === p.lineCode);
+    const dim = p.watched;
+    return /*#__PURE__*/React.createElement("div", {
+      key: p.id,
+      style: {
+        border: `1.5px solid ${dim ? T.borderS : T.borderH}`,
+        borderRadius: 10,
+        padding: 12,
+        background: editingId === p.id ? T.editBg : T.bgInset,
+        opacity: dim ? 0.72 : 1
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: 8
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: 10,
+        flexWrap: 'wrap'
+      }
+    }, /*#__PURE__*/React.createElement(LinePill, {
+      code: p.lineCode,
+      watched: p.watched
+    }), /*#__PURE__*/React.createElement("div", {
+      className: "arc",
+      style: {
+        fontWeight: 700,
+        fontSize: 14
+      }
+    }, line ? line.name : p.lineCode), p.watched && /*#__PURE__*/React.createElement("span", {
+      className: "pill",
+      style: {
+        background: 'transparent',
+        color: T.textMute,
+        border: `1px solid ${T.borderH}`
+      }
+    }, "WATCHED"), p.penNumber && /*#__PURE__*/React.createElement("span", {
+      className: "arc",
+      style: {
+        fontSize: 11,
+        color: T.textMute,
+        letterSpacing: '0.06em'
+      }
+    }, "PEN ", p.penNumber), p.tagColour && TAG_BY_CODE[p.tagColour] && /*#__PURE__*/React.createElement("span", {
+      className: "arc",
+      title: `${TAG_BY_CODE[p.tagColour].label} tag · ${TAG_BY_CODE[p.tagColour].year}`,
+      style: {
+        fontSize: 10,
+        letterSpacing: '0.06em',
+        padding: '2px 8px',
+        borderRadius: 999,
+        background: TAG_BY_CODE[p.tagColour].fill,
+        color: TAG_BY_CODE[p.tagColour].inkSel,
+        border: `1px solid ${TAG_BY_CODE[p.tagColour].edge}`,
+        fontWeight: 800
+      }
+    }, TAG_BY_CODE[p.tagColour].year), p.hasPhoto && /*#__PURE__*/React.createElement("span", {
+      className: "arc",
+      title: "Photo attached",
+      style: {
+        fontSize: 11,
+        color: T.accent,
+        letterSpacing: '0.06em'
+      }
+    }, "📷")), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        gap: 6
+      }
+    }, /*#__PURE__*/React.createElement("button", {
+      className: "btn arc btn-ghost",
+      style: {
+        padding: '6px 10px',
+        fontSize: 11
       },
-      children: "Built by Patrick Coole"
-    }, void 0, false)]
-  }, void 0, true);
+      onClick: () => startEdit(p.id)
+    }, "EDIT"), /*#__PURE__*/React.createElement("button", {
+      className: "btn arc",
+      style: {
+        padding: '6px 10px',
+        fontSize: 11,
+        background: 'transparent',
+        color: T.warnBdr,
+        borderColor: T.warnBdr
+      },
+      onClick: () => deletePurchase(p.id)
+    }, "DEL"))), /*#__PURE__*/React.createElement("div", {
+      className: "mono",
+      style: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(5, minmax(0, 1fr))',
+        gap: 6,
+        fontSize: 13
+      }
+    }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+      className: "lbl",
+      style: {
+        marginBottom: 2
+      }
+    }, "Head"), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontWeight: 700
+      }
+    }, p.head)), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+      className: "lbl",
+      style: {
+        marginBottom: 2
+      }
+    }, "Kg/hd"), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontWeight: 700
+      }
+    }, fmt1(p.wtPerHead))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+      className: "lbl",
+      style: {
+        marginBottom: 2
+      }
+    }, "Total kg"), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontWeight: 700
+      }
+    }, fmt1(p.totalKg))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+      className: "lbl",
+      style: {
+        marginBottom: 2
+      }
+    }, "$/kg"), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontWeight: 700
+      }
+    }, "$", fmt2(p.pricePerKg))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+      className: "lbl",
+      style: {
+        marginBottom: 2
+      }
+    }, "$/hd"), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontWeight: 700
+      }
+    }, "$", fmt2(p.pricePerHead)))), /*#__PURE__*/React.createElement("div", {
+      style: {
+        marginTop: 8,
+        paddingTop: 8,
+        borderTop: `1px dashed ${T.borderS}`,
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'baseline'
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "lbl",
+      style: {
+        marginBottom: 0
+      }
+    }, p.watched ? 'Final pen total' : 'Pen total'), /*#__PURE__*/React.createElement("div", {
+      className: "mono",
+      style: {
+        fontWeight: 800,
+        fontSize: 18
+      }
+    }, "$", fmt2(p.total))));
+  })))), view === 'dashboard' && /*#__PURE__*/React.createElement(Dashboard, {
+    purchases: purchases,
+    lines: lines,
+    totals: totals,
+    budgets: budgets,
+    estimatedPpks: estimatedPpks
+  }), view === 'inspection' && /*#__PURE__*/React.createElement(InspectionView, {
+    inspections: inspections,
+    lines: lines,
+    onAdd: () => setEditingInspection('new'),
+    onEdit: id => setEditingInspection({
+      id
+    }),
+    onDelete: deleteInspection,
+    onJumpToBidding: insp => {
+      setView('buying');
+      applyInspectionToDraft(insp);
+    }
+  }), view === 'results' && /*#__PURE__*/React.createElement(ResultsView, {
+    purchases: purchases,
+    inspections: inspections,
+    lines: lines,
+    totals: totals,
+    location: location
+  }), view === 'sessions' && /*#__PURE__*/React.createElement(SessionsView, {
+    sessions: sessions,
+    onView: viewSession,
+    onDelete: deleteSession
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: 'fixed',
+      bottom: 0,
+      left: 0,
+      right: 0,
+      zIndex: 40,
+      background: T.bgHeader,
+      color: T.text,
+      padding: '12px 16px calc(12px + env(safe-area-inset-bottom)) 16px',
+      borderTop: `1.5px solid ${T.borderS}`,
+      boxShadow: '0 -8px 24px rgba(0,0,0,0.45)'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      maxWidth: 1280,
+      margin: '0 auto',
+      display: 'grid',
+      gridTemplateColumns: 'repeat(6, minmax(0, 1fr))',
+      gap: 10
+    }
+  }, /*#__PURE__*/React.createElement(Totals, {
+    label: "Pens",
+    value: fmtInt(totals.pens)
+  }), /*#__PURE__*/React.createElement(Totals, {
+    label: "Head",
+    value: fmtInt(totals.head)
+  }), /*#__PURE__*/React.createElement(Totals, {
+    label: "Total kg",
+    value: fmt1(totals.kg)
+  }), /*#__PURE__*/React.createElement(Totals, {
+    label: "Total $",
+    value: `$${fmt0(totals.dollars)}`,
+    accent: true
+  }), /*#__PURE__*/React.createElement(Totals, {
+    label: "Avg $/kg",
+    value: `$${fmt2(totals.avgPpk)}`,
+    accent: true
+  }), /*#__PURE__*/React.createElement(Totals, {
+    label: "Avg $/hd",
+    value: `$${fmt2(totals.avgPph)}`,
+    accent: true
+  }))), toast && /*#__PURE__*/React.createElement("div", {
+    className: "toast"
+  }, /*#__PURE__*/React.createElement("span", null, toast.message), toast.undo && /*#__PURE__*/React.createElement("button", {
+    onClick: toast.undo.run
+  }, toast.undo.label)), editingInspection && /*#__PURE__*/React.createElement(InspectionModal, {
+    mode: editingInspection === 'new' ? 'new' : 'edit',
+    existing: editingInspection !== 'new' ? inspections.find(i => i.id === editingInspection.id) : null,
+    lines: lines,
+    onSave: saveInspection,
+    onClose: () => setEditingInspection(null)
+  }), reportBlobUrl && /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: 'fixed',
+      inset: 0,
+      zIndex: 1000,
+      background: '#fafafa',
+      display: 'flex',
+      flexDirection: 'column'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: '10px 12px',
+      background: '#0d0d0d',
+      color: '#fafafa',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: 10,
+      flexWrap: 'wrap',
+      boxShadow: '0 2px 8px rgba(0,0,0,0.3)'
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "arc",
+    style: {
+      fontSize: 11,
+      letterSpacing: '0.06em',
+      textTransform: 'uppercase',
+      fontWeight: 700
+    }
+  }, "Report ready. Tap Print to save as PDF, or share via the iPad share sheet."), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: printReport,
+    className: "arc",
+    style: {
+      background: T.accent,
+      color: '#0D0D0F',
+      border: `2px solid ${T.accent}`,
+      padding: '8px 16px',
+      borderRadius: 6,
+      fontSize: 12,
+      fontWeight: 800,
+      letterSpacing: '0.06em',
+      textTransform: 'uppercase',
+      cursor: 'pointer'
+    }
+  }, "Print / Save PDF"), /*#__PURE__*/React.createElement("button", {
+    onClick: closeReport,
+    className: "arc",
+    style: {
+      background: 'transparent',
+      color: '#fafafa',
+      border: `2px solid #fafafa`,
+      padding: '8px 16px',
+      borderRadius: 6,
+      fontSize: 12,
+      fontWeight: 800,
+      letterSpacing: '0.06em',
+      textTransform: 'uppercase',
+      cursor: 'pointer'
+    }
+  }, "Close"))), /*#__PURE__*/React.createElement("iframe", {
+    ref: reportIframeRef,
+    src: reportBlobUrl,
+    title: "Sale report",
+    style: {
+      flex: 1,
+      border: 'none',
+      width: '100%',
+      background: '#fafafa'
+    }
+  })), showSettings && /*#__PURE__*/React.createElement(SettingsModal, {
+    lines: lines,
+    budgets: budgets,
+    estimatedPpks: estimatedPpks,
+    defaultWeights: defaultWeights,
+    bidSteps: bidSteps,
+    buyerEmail: buyerEmail,
+    location: location,
+    kgWarnBand: kgWarnBand,
+    onSetBudget: setBudgetFor,
+    onSetEstimatedPpk: setEstimatedPpkFor,
+    onSetDefaultWeight: setDefaultWeightFor,
+    onSetBidStep: setBidStepFor,
+    onSetEmail: setBuyerEmail,
+    onSetLocation: setLocation,
+    onSetKgWarnBand: setKgWarnBand,
+    onAddLine: addLineType,
+    onRemoveLine: removeLineType,
+    onResetLines: resetLines,
+    onClose: () => setShowSettings(false)
+  }), showResetConfirm && /*#__PURE__*/React.createElement("div", {
+    className: "modal-bg",
+    onClick: () => setShowResetConfirm(false)
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "modal",
+    style: {
+      padding: 20
+    },
+    onClick: e => e.stopPropagation()
+  }, /*#__PURE__*/React.createElement("h3", {
+    className: "arc",
+    style: {
+      margin: '0 0 8px 0',
+      fontWeight: 900,
+      letterSpacing: '0.04em',
+      textTransform: 'uppercase'
+    }
+  }, "Start a new day?"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      margin: '0 0 12px 0',
+      color: T.textLbl
+    }
+  }, totals.pens || totals.watched || inspections.length ? /*#__PURE__*/React.createElement(React.Fragment, null, "The current day (", totals.pens, " bought", totals.watched ? `, ${totals.watched} watched` : '', inspections.length ? `, ${inspections.length} inspection${inspections.length === 1 ? '' : 's'}` : '', ") will be auto-saved to ", /*#__PURE__*/React.createElement("strong", null, "Sessions"), " as ", /*#__PURE__*/React.createElement("em", null, (location || 'Saleyard').trim(), " · ", new Date().toLocaleDateString('en-AU', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric'
+  })), ", then cleared from the live view. Photos are retained.") : /*#__PURE__*/React.createElement(React.Fragment, null, "The live view will be cleared. Nothing to save (no pens or inspections recorded).")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: 10,
+      background: 'rgba(255,214,107,0.10)',
+      border: `1px solid ${T.accent}`,
+      borderRadius: 8,
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "arc",
+    style: {
+      fontSize: 12,
+      color: T.accent,
+      fontWeight: 700,
+      letterSpacing: '0.04em'
+    }
+  }, "You can also email the spreadsheet or save a PDF report first if you want a copy off this device.")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 8,
+      justifyContent: 'flex-end',
+      flexWrap: 'wrap'
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "btn arc btn-ghost",
+    onClick: () => setShowResetConfirm(false)
+  }, "CANCEL"), /*#__PURE__*/React.createElement("button", {
+    className: "btn arc",
+    style: {
+      background: T.text,
+      color: '#0D0D0F',
+      borderColor: T.text
+    },
+    onClick: () => {
+      setShowResetConfirm(false);
+      emailSummary();
+    }
+  }, "EMAIL FIRST"), /*#__PURE__*/React.createElement("button", {
+    className: "btn arc",
+    style: {
+      background: 'transparent',
+      color: T.accent,
+      borderColor: T.accent
+    },
+    onClick: () => {
+      setShowResetConfirm(false);
+      openReport();
+    }
+  }, "REPORT FIRST"), /*#__PURE__*/React.createElement("button", {
+    className: "btn arc btn-warn",
+    onClick: resetDay
+  }, "SAVE & CLEAR")))), /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      textAlign: 'center',
+      padding: '20px 16px 0 16px',
+      color: T.textMute,
+      fontSize: 11,
+      letterSpacing: '0.08em',
+      textTransform: 'uppercase'
+    }
+  }, "Built by Patrick Coole"));
 }
 
 // ----- Subcomponents -----
@@ -2803,37 +2629,34 @@ function Totals({
   value,
   accent
 }) {
-  return /*#__PURE__*/_jsxDEV("div", {
+  return /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'flex-start',
       minWidth: 0
-    },
-    children: [/*#__PURE__*/_jsxDEV("div", {
-      className: "arc",
-      style: {
-        fontWeight: 600,
-        fontSize: 9,
-        letterSpacing: '0.14em',
-        textTransform: 'uppercase',
-        color: '#9A9AA1'
-      },
-      children: label
-    }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-      className: "mono",
-      style: {
-        fontWeight: 700,
-        fontSize: 16,
-        marginTop: 2,
-        color: accent ? '#FFD66B' : '#EAEAEC',
-        whiteSpace: 'nowrap',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis'
-      },
-      children: value
-    }, void 0, false)]
-  }, void 0, true);
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontWeight: 600,
+      fontSize: 9,
+      letterSpacing: '0.14em',
+      textTransform: 'uppercase',
+      color: '#9A9AA1'
+    }
+  }, label), /*#__PURE__*/React.createElement("div", {
+    className: "mono",
+    style: {
+      fontWeight: 700,
+      fontSize: 16,
+      marginTop: 2,
+      color: accent ? '#FFD66B' : '#EAEAEC',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis'
+    }
+  }, value));
 }
 function SettingsModal({
   lines,
@@ -2869,390 +2692,343 @@ function SettingsModal({
     setNewName('');
     setNewCat('male');
   }
-  return /*#__PURE__*/_jsxDEV("div", {
+  return /*#__PURE__*/React.createElement("div", {
     className: "modal-bg",
-    onClick: onClose,
-    children: /*#__PURE__*/_jsxDEV("div", {
-      className: "modal",
+    onClick: onClose
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "modal",
+    style: {
+      padding: 20
+    },
+    onClick: e => e.stopPropagation()
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: 14
+    }
+  }, /*#__PURE__*/React.createElement("h3", {
+    className: "arc",
+    style: {
+      margin: 0,
+      fontWeight: 900,
+      letterSpacing: '0.06em',
+      textTransform: 'uppercase'
+    }
+  }, "Settings"), /*#__PURE__*/React.createElement("button", {
+    className: "btn arc btn-ghost",
+    style: {
+      padding: '8px 12px',
+      fontSize: 12
+    },
+    onClick: onClose
+  }, "CLOSE")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 18
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    className: "lbl"
+  }, "Saleyard location (used for session naming and reports)"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    className: "field",
+    style: {
+      fontSize: 16,
+      fontFamily: 'system-ui'
+    },
+    value: locationInput,
+    onChange: e => setLocationInput(e.target.value),
+    placeholder: "e.g. Muchea"
+  }), /*#__PURE__*/React.createElement("button", {
+    className: "btn btn-primary arc",
+    style: {
+      padding: '10px 14px',
+      fontSize: 13
+    },
+    onClick: () => onSetLocation(locationInput.trim())
+  }, "SAVE"))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 18
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    className: "lbl"
+  }, "Your email (for end of day summary)"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "email",
+    inputMode: "email",
+    className: "field",
+    style: {
+      fontSize: 16,
+      fontFamily: 'system-ui'
+    },
+    value: emailInput,
+    onChange: e => setEmailInput(e.target.value),
+    placeholder: "you@example.com.au"
+  }), /*#__PURE__*/React.createElement("button", {
+    className: "btn btn-primary arc",
+    style: {
+      padding: '10px 14px',
+      fontSize: 13
+    },
+    onClick: () => onSetEmail(emailInput.trim())
+  }, "SAVE"))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 18
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    className: "lbl"
+  }, "$/kg warning band (yellow zone before red)"), /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontSize: 11,
+      color: T.textMute,
+      marginBottom: 8,
+      letterSpacing: '0.04em'
+    }
+  }, "The $/kg readout turns green well under your line ceiling, yellow when you're within this many dollars per kilo of it, and red at or over the ceiling. Default is $0.20/kg."), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 8,
+      alignItems: 'center'
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "mono",
+    style: {
+      fontSize: 14,
+      color: T.textMute
+    }
+  }, "$"), /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    inputMode: "decimal",
+    className: "field",
+    style: {
+      flex: 1,
+      fontSize: 16
+    },
+    value: bandInput,
+    onChange: e => setBandInput(e.target.value.replace(/[^0-9.]/g, '')),
+    placeholder: "0.20"
+  }), /*#__PURE__*/React.createElement("span", {
+    className: "mono",
+    style: {
+      fontSize: 13,
+      color: T.textMute
+    }
+  }, "/kg"), /*#__PURE__*/React.createElement("button", {
+    className: "btn btn-primary arc",
+    style: {
+      padding: '10px 14px',
+      fontSize: 13
+    },
+    onClick: () => {
+      const v = parseFloat(bandInput);
+      if (Number.isFinite(v) && v > 0) onSetKgWarnBand(round2(v));
+    }
+  }, "SAVE"))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 18
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    className: "lbl"
+  }, "Lines · ceiling · estimate · default kg · step"), /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontSize: 11,
+      color: T.textMute,
+      marginBottom: 8,
+      letterSpacing: '0.04em'
+    }
+  }, "Bidding is in $/head. The 5 quick-tap presets under $/head come from Estimated $/kg × weight (estimate ± $1, ± $5). Default kg pre-fills the weight when you tap a line. Ceiling $/kg drives the traffic-light colour on the live $/kg readout."), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 8
+    }
+  }, lines.map(l => {
+    const cat = CAT[l.category];
+    return /*#__PURE__*/React.createElement("div", {
+      key: l.code,
       style: {
-        padding: 20
+        border: `1.5px solid ${T.borderH}`,
+        borderRadius: 8,
+        padding: '10px',
+        background: T.bgInset
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: 8,
+        gap: 8
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: 10
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "pill",
+      style: {
+        background: cat.solid,
+        color: cat.ink
+      }
+    }, l.code), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+      className: "arc",
+      style: {
+        fontWeight: 700,
+        fontSize: 14,
+        color: T.text
+      }
+    }, l.name), /*#__PURE__*/React.createElement("div", {
+      className: "arc",
+      style: {
+        fontSize: 10,
+        color: T.textMute,
+        textTransform: 'uppercase',
+        letterSpacing: '0.08em'
+      }
+    }, cat.label))), /*#__PURE__*/React.createElement("button", {
+      className: "btn arc",
+      style: {
+        padding: '6px 8px',
+        fontSize: 10,
+        background: 'transparent',
+        color: T.warnBdr,
+        borderColor: T.warnBdr
       },
-      onClick: e => e.stopPropagation(),
-      children: [/*#__PURE__*/_jsxDEV("div", {
-        style: {
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: 14
-        },
-        children: [/*#__PURE__*/_jsxDEV("h3", {
-          className: "arc",
-          style: {
-            margin: 0,
-            fontWeight: 900,
-            letterSpacing: '0.06em',
-            textTransform: 'uppercase'
-          },
-          children: "Settings"
-        }, void 0, false), /*#__PURE__*/_jsxDEV("button", {
-          className: "btn arc btn-ghost",
-          style: {
-            padding: '8px 12px',
-            fontSize: 12
-          },
-          onClick: onClose,
-          children: "CLOSE"
-        }, void 0, false)]
-      }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-        style: {
-          marginBottom: 18
-        },
-        children: [/*#__PURE__*/_jsxDEV("label", {
-          className: "lbl",
-          children: "Saleyard location (used for session naming and reports)"
-        }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-          style: {
-            display: 'flex',
-            gap: 8
-          },
-          children: [/*#__PURE__*/_jsxDEV("input", {
-            type: "text",
-            className: "field",
-            style: {
-              fontSize: 16,
-              fontFamily: 'system-ui'
-            },
-            value: locationInput,
-            onChange: e => setLocationInput(e.target.value),
-            placeholder: "e.g. Muchea"
-          }, void 0, false), /*#__PURE__*/_jsxDEV("button", {
-            className: "btn btn-primary arc",
-            style: {
-              padding: '10px 14px',
-              fontSize: 13
-            },
-            onClick: () => onSetLocation(locationInput.trim()),
-            children: "SAVE"
-          }, void 0, false)]
-        }, void 0, true)]
-      }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-        style: {
-          marginBottom: 18
-        },
-        children: [/*#__PURE__*/_jsxDEV("label", {
-          className: "lbl",
-          children: "Your email (for end of day summary)"
-        }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-          style: {
-            display: 'flex',
-            gap: 8
-          },
-          children: [/*#__PURE__*/_jsxDEV("input", {
-            type: "email",
-            inputMode: "email",
-            className: "field",
-            style: {
-              fontSize: 16,
-              fontFamily: 'system-ui'
-            },
-            value: emailInput,
-            onChange: e => setEmailInput(e.target.value),
-            placeholder: "you@example.com.au"
-          }, void 0, false), /*#__PURE__*/_jsxDEV("button", {
-            className: "btn btn-primary arc",
-            style: {
-              padding: '10px 14px',
-              fontSize: 13
-            },
-            onClick: () => onSetEmail(emailInput.trim()),
-            children: "SAVE"
-          }, void 0, false)]
-        }, void 0, true)]
-      }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-        style: {
-          marginBottom: 18
-        },
-        children: [/*#__PURE__*/_jsxDEV("label", {
-          className: "lbl",
-          children: "$/kg warning band (yellow zone before red)"
-        }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-          className: "arc",
-          style: {
-            fontSize: 11,
-            color: T.textMute,
-            marginBottom: 8,
-            letterSpacing: '0.04em'
-          },
-          children: "The $/kg readout turns green well under your line ceiling, yellow when you're within this many dollars per kilo of it, and red at or over the ceiling. Default is $0.20/kg."
-        }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-          style: {
-            display: 'flex',
-            gap: 8,
-            alignItems: 'center'
-          },
-          children: [/*#__PURE__*/_jsxDEV("span", {
-            className: "mono",
-            style: {
-              fontSize: 14,
-              color: T.textMute
-            },
-            children: "$"
-          }, void 0, false), /*#__PURE__*/_jsxDEV("input", {
-            type: "text",
-            inputMode: "decimal",
-            className: "field",
-            style: {
-              flex: 1,
-              fontSize: 16
-            },
-            value: bandInput,
-            onChange: e => setBandInput(e.target.value.replace(/[^0-9.]/g, '')),
-            placeholder: "0.20"
-          }, void 0, false), /*#__PURE__*/_jsxDEV("span", {
-            className: "mono",
-            style: {
-              fontSize: 13,
-              color: T.textMute
-            },
-            children: "/kg"
-          }, void 0, false), /*#__PURE__*/_jsxDEV("button", {
-            className: "btn btn-primary arc",
-            style: {
-              padding: '10px 14px',
-              fontSize: 13
-            },
-            onClick: () => {
-              const v = parseFloat(bandInput);
-              if (Number.isFinite(v) && v > 0) onSetKgWarnBand(round2(v));
-            },
-            children: "SAVE"
-          }, void 0, false)]
-        }, void 0, true)]
-      }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-        style: {
-          marginBottom: 18
-        },
-        children: [/*#__PURE__*/_jsxDEV("label", {
-          className: "lbl",
-          children: "Lines · ceiling · estimate · default kg · step"
-        }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-          className: "arc",
-          style: {
-            fontSize: 11,
-            color: T.textMute,
-            marginBottom: 8,
-            letterSpacing: '0.04em'
-          },
-          children: "Bidding is in $/head. The 5 quick-tap presets under $/head come from Estimated $/kg × weight (estimate ± $1, ± $5). Default kg pre-fills the weight when you tap a line. Ceiling $/kg drives the traffic-light colour on the live $/kg readout."
-        }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-          style: {
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 8
-          },
-          children: lines.map(l => {
-            const cat = CAT[l.category];
-            return /*#__PURE__*/_jsxDEV("div", {
-              style: {
-                border: `1.5px solid ${T.borderH}`,
-                borderRadius: 8,
-                padding: '10px',
-                background: T.bgInset
-              },
-              children: [/*#__PURE__*/_jsxDEV("div", {
-                style: {
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  marginBottom: 8,
-                  gap: 8
-                },
-                children: [/*#__PURE__*/_jsxDEV("div", {
-                  style: {
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 10
-                  },
-                  children: [/*#__PURE__*/_jsxDEV("span", {
-                    className: "pill",
-                    style: {
-                      background: cat.solid,
-                      color: cat.ink
-                    },
-                    children: l.code
-                  }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-                    children: [/*#__PURE__*/_jsxDEV("div", {
-                      className: "arc",
-                      style: {
-                        fontWeight: 700,
-                        fontSize: 14,
-                        color: T.text
-                      },
-                      children: l.name
-                    }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-                      className: "arc",
-                      style: {
-                        fontSize: 10,
-                        color: T.textMute,
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.08em'
-                      },
-                      children: cat.label
-                    }, void 0, false)]
-                  }, void 0, true)]
-                }, void 0, true), /*#__PURE__*/_jsxDEV("button", {
-                  className: "btn arc",
-                  style: {
-                    padding: '6px 8px',
-                    fontSize: 10,
-                    background: 'transparent',
-                    color: T.warnBdr,
-                    borderColor: T.warnBdr
-                  },
-                  onClick: () => onRemoveLine(l.code),
-                  children: "×"
-                }, void 0, false)]
-              }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-                style: {
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(2, 1fr)',
-                  gap: 8
-                },
-                children: [/*#__PURE__*/_jsxDEV(SmallInput, {
-                  label: "Estimated $/kg",
-                  prefix: "$",
-                  decimal2: true,
-                  value: estimatedPpks[l.code] != null ? String(estimatedPpks[l.code]) : '',
-                  onChange: v => onSetEstimatedPpk(l.code, v),
-                  placeholder: "for presets"
-                }, void 0, false), /*#__PURE__*/_jsxDEV(SmallInput, {
-                  label: "Ceiling $/kg",
-                  prefix: "$",
-                  decimal2: true,
-                  value: budgets[l.code] != null ? String(budgets[l.code]) : '',
-                  onChange: v => onSetBudget(l.code, v),
-                  placeholder: "not set"
-                }, void 0, false), /*#__PURE__*/_jsxDEV(SmallInput, {
-                  label: "Default kg",
-                  suffix: "kg",
-                  value: defaultWeights[l.code] != null ? String(defaultWeights[l.code]) : '',
-                  onChange: v => onSetDefaultWeight(l.code, v),
-                  placeholder: "not set"
-                }, void 0, false), /*#__PURE__*/_jsxDEV(SmallInput, {
-                  label: "Step $/kg",
-                  prefix: "$",
-                  value: bidSteps[l.code] != null ? String(bidSteps[l.code]) : '',
-                  onChange: v => onSetBidStep(l.code, v),
-                  placeholder: `${DEFAULT_KG_STEP.toFixed(2)} default`
-                }, void 0, false)]
-              }, void 0, true)]
-            }, l.code, true);
-          })
-        }, void 0, false)]
-      }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-        style: {
-          borderTop: `1.5px dashed ${T.borderS}`,
-          paddingTop: 14
-        },
-        children: [/*#__PURE__*/_jsxDEV("label", {
-          className: "lbl",
-          children: "Add a new line"
-        }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-          style: {
-            display: 'grid',
-            gridTemplateColumns: '90px 1fr 130px',
-            gap: 8,
-            marginBottom: 8
-          },
-          children: [/*#__PURE__*/_jsxDEV("input", {
-            type: "text",
-            className: "field",
-            style: {
-              padding: 10,
-              fontSize: 16
-            },
-            value: newCode,
-            onChange: e => setNewCode(e.target.value.toUpperCase().slice(0, 4)),
-            placeholder: "CODE"
-          }, void 0, false), /*#__PURE__*/_jsxDEV("input", {
-            type: "text",
-            className: "field",
-            style: {
-              padding: 10,
-              fontSize: 16,
-              fontFamily: 'system-ui'
-            },
-            value: newName,
-            onChange: e => setNewName(e.target.value),
-            placeholder: "Full name"
-          }, void 0, false), /*#__PURE__*/_jsxDEV("select", {
-            className: "field",
-            style: {
-              padding: 10,
-              fontSize: 14,
-              fontFamily: 'system-ui'
-            },
-            value: newCat,
-            onChange: e => setNewCat(e.target.value),
-            children: [/*#__PURE__*/_jsxDEV("option", {
-              value: "male",
-              children: "Male (ram/buck)"
-            }, void 0, false), /*#__PURE__*/_jsxDEV("option", {
-              value: "female",
-              children: "Female (ewe/doe)"
-            }, void 0, false), /*#__PURE__*/_jsxDEV("option", {
-              value: "wether",
-              children: "Wether"
-            }, void 0, false), /*#__PURE__*/_jsxDEV("option", {
-              value: "goat",
-              children: "Goat (any sex)"
-            }, void 0, false), /*#__PURE__*/_jsxDEV("option", {
-              value: "mixed",
-              children: "Mixed sex"
-            }, void 0, false)]
-          }, void 0, true)]
-        }, void 0, true), /*#__PURE__*/_jsxDEV("button", {
-          className: "btn btn-primary arc",
-          style: {
-            padding: '10px 14px',
-            fontSize: 13
-          },
-          onClick: handleAdd,
-          children: "ADD LINE"
-        }, void 0, false)]
-      }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-        style: {
-          marginTop: 18,
-          paddingTop: 14,
-          borderTop: `1px solid ${T.borderS}`
-        },
-        children: [/*#__PURE__*/_jsxDEV("label", {
-          className: "lbl",
-          children: "Reset line list"
-        }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-          className: "arc",
-          style: {
-            fontSize: 11,
-            color: T.textMute,
-            marginBottom: 8,
-            letterSpacing: '0.04em'
-          },
-          children: "Replaces all lines with the current default set (Merino, Merino X, Dorper, Damara, Goat × ram/ewe/wether). Per-line ceilings, estimates, default weights and steps are kept where the code matches; old codes that no longer exist are hidden but their data is retained in case you re-add them later."
-        }, void 0, false), /*#__PURE__*/_jsxDEV("button", {
-          className: "btn arc",
-          style: {
-            padding: '10px 14px',
-            fontSize: 12,
-            background: 'transparent',
-            color: T.accent,
-            borderColor: T.accent
-          },
-          onClick: onResetLines,
-          children: "RESET TO DEFAULTS"
-        }, void 0, false)]
-      }, void 0, true)]
-    }, void 0, true)
-  }, void 0, false);
+      onClick: () => onRemoveLine(l.code)
+    }, "×")), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(2, 1fr)',
+        gap: 8
+      }
+    }, /*#__PURE__*/React.createElement(SmallInput, {
+      label: "Estimated $/kg",
+      prefix: "$",
+      decimal2: true,
+      value: estimatedPpks[l.code] != null ? String(estimatedPpks[l.code]) : '',
+      onChange: v => onSetEstimatedPpk(l.code, v),
+      placeholder: "for presets"
+    }), /*#__PURE__*/React.createElement(SmallInput, {
+      label: "Ceiling $/kg",
+      prefix: "$",
+      decimal2: true,
+      value: budgets[l.code] != null ? String(budgets[l.code]) : '',
+      onChange: v => onSetBudget(l.code, v),
+      placeholder: "not set"
+    }), /*#__PURE__*/React.createElement(SmallInput, {
+      label: "Default kg",
+      suffix: "kg",
+      value: defaultWeights[l.code] != null ? String(defaultWeights[l.code]) : '',
+      onChange: v => onSetDefaultWeight(l.code, v),
+      placeholder: "not set"
+    }), /*#__PURE__*/React.createElement(SmallInput, {
+      label: "Step $/kg",
+      prefix: "$",
+      value: bidSteps[l.code] != null ? String(bidSteps[l.code]) : '',
+      onChange: v => onSetBidStep(l.code, v),
+      placeholder: `${DEFAULT_KG_STEP.toFixed(2)} default`
+    })));
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      borderTop: `1.5px dashed ${T.borderS}`,
+      paddingTop: 14
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    className: "lbl"
+  }, "Add a new line"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'grid',
+      gridTemplateColumns: '90px 1fr 130px',
+      gap: 8,
+      marginBottom: 8
+    }
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    className: "field",
+    style: {
+      padding: 10,
+      fontSize: 16
+    },
+    value: newCode,
+    onChange: e => setNewCode(e.target.value.toUpperCase().slice(0, 4)),
+    placeholder: "CODE"
+  }), /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    className: "field",
+    style: {
+      padding: 10,
+      fontSize: 16,
+      fontFamily: 'system-ui'
+    },
+    value: newName,
+    onChange: e => setNewName(e.target.value),
+    placeholder: "Full name"
+  }), /*#__PURE__*/React.createElement("select", {
+    className: "field",
+    style: {
+      padding: 10,
+      fontSize: 14,
+      fontFamily: 'system-ui'
+    },
+    value: newCat,
+    onChange: e => setNewCat(e.target.value)
+  }, /*#__PURE__*/React.createElement("option", {
+    value: "male"
+  }, "Male (ram/buck)"), /*#__PURE__*/React.createElement("option", {
+    value: "female"
+  }, "Female (ewe/doe)"), /*#__PURE__*/React.createElement("option", {
+    value: "wether"
+  }, "Wether"), /*#__PURE__*/React.createElement("option", {
+    value: "goat"
+  }, "Goat (any sex)"), /*#__PURE__*/React.createElement("option", {
+    value: "mixed"
+  }, "Mixed sex"))), /*#__PURE__*/React.createElement("button", {
+    className: "btn btn-primary arc",
+    style: {
+      padding: '10px 14px',
+      fontSize: 13
+    },
+    onClick: handleAdd
+  }, "ADD LINE")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: 18,
+      paddingTop: 14,
+      borderTop: `1px solid ${T.borderS}`
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    className: "lbl"
+  }, "Reset line list"), /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontSize: 11,
+      color: T.textMute,
+      marginBottom: 8,
+      letterSpacing: '0.04em'
+    }
+  }, "Replaces all lines with the current default set (Merino, Merino X, Dorper, Damara, Goat × ram/ewe/wether). Per-line ceilings, estimates, default weights and steps are kept where the code matches; old codes that no longer exist are hidden but their data is retained in case you re-add them later."), /*#__PURE__*/React.createElement("button", {
+    className: "btn arc",
+    style: {
+      padding: '10px 14px',
+      fontSize: 12,
+      background: 'transparent',
+      color: T.accent,
+      borderColor: T.accent
+    },
+    onClick: onResetLines
+  }, "RESET TO DEFAULTS"))));
 }
 function SmallInput({
   label,
@@ -3268,56 +3044,50 @@ function SmallInput({
   // so 5.5 shows as "5.50". Free-text editing while focused.
   const numericValue = parseFloat(value);
   const display = decimal2 && !focused && value !== '' && Number.isFinite(numericValue) ? numericValue.toFixed(2) : value;
-  return /*#__PURE__*/_jsxDEV("div", {
-    children: [/*#__PURE__*/_jsxDEV("div", {
-      className: "arc",
-      style: {
-        fontSize: 9,
-        fontWeight: 700,
-        letterSpacing: '0.10em',
-        textTransform: 'uppercase',
-        color: T.textMute,
-        marginBottom: 3
-      },
-      children: label
-    }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-      style: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: 4
-      },
-      children: [prefix && /*#__PURE__*/_jsxDEV("span", {
-        className: "mono",
-        style: {
-          fontSize: 12,
-          color: T.textMute
-        },
-        children: prefix
-      }, void 0, false), /*#__PURE__*/_jsxDEV("input", {
-        type: "text",
-        inputMode: "decimal",
-        className: "field",
-        style: {
-          flex: 1,
-          padding: '8px 8px',
-          fontSize: 15,
-          minWidth: 0
-        },
-        value: display,
-        onChange: e => onChange(e.target.value.replace(/[^0-9.]/g, '')),
-        onFocus: () => setFocused(true),
-        onBlur: () => setFocused(false),
-        placeholder: placeholder
-      }, void 0, false), suffix && /*#__PURE__*/_jsxDEV("span", {
-        className: "mono",
-        style: {
-          fontSize: 12,
-          color: T.textMute
-        },
-        children: suffix
-      }, void 0, false)]
-    }, void 0, true)]
-  }, void 0, true);
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontSize: 9,
+      fontWeight: 700,
+      letterSpacing: '0.10em',
+      textTransform: 'uppercase',
+      color: T.textMute,
+      marginBottom: 3
+    }
+  }, label), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: 4
+    }
+  }, prefix && /*#__PURE__*/React.createElement("span", {
+    className: "mono",
+    style: {
+      fontSize: 12,
+      color: T.textMute
+    }
+  }, prefix), /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    inputMode: "decimal",
+    className: "field",
+    style: {
+      flex: 1,
+      padding: '8px 8px',
+      fontSize: 15,
+      minWidth: 0
+    },
+    value: display,
+    onChange: e => onChange(e.target.value.replace(/[^0-9.]/g, '')),
+    onFocus: () => setFocused(true),
+    onBlur: () => setFocused(false),
+    placeholder: placeholder
+  }), suffix && /*#__PURE__*/React.createElement("span", {
+    className: "mono",
+    style: {
+      fontSize: 12,
+      color: T.textMute
+    }
+  }, suffix)));
 }
 
 // ----- Dashboard view -----
@@ -3386,55 +3156,51 @@ function Dashboard({
     })];
   }, [bought]);
   if (bought.length === 0) {
-    return /*#__PURE__*/_jsxDEV("section", {
+    return /*#__PURE__*/React.createElement("section", {
       className: "card",
       style: {
         padding: 40,
         textAlign: 'center'
-      },
-      children: [/*#__PURE__*/_jsxDEV("div", {
-        className: "arc",
-        style: {
-          fontWeight: 800,
-          fontSize: 14,
-          letterSpacing: '0.10em',
-          textTransform: 'uppercase',
-          color: T.textMute
-        },
-        children: "Dashboard fills in once you start recording pens"
-      }, void 0, false), watchedCount > 0 && /*#__PURE__*/_jsxDEV("div", {
-        className: "arc",
-        style: {
-          marginTop: 8,
-          fontSize: 12,
-          color: T.textMute
-        },
-        children: ["(", watchedCount, " watched pen", watchedCount === 1 ? '' : 's', " so far)"]
-      }, void 0, true)]
-    }, void 0, true);
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "arc",
+      style: {
+        fontWeight: 800,
+        fontSize: 14,
+        letterSpacing: '0.10em',
+        textTransform: 'uppercase',
+        color: T.textMute
+      }
+    }, "Dashboard fills in once you start recording pens"), watchedCount > 0 && /*#__PURE__*/React.createElement("div", {
+      className: "arc",
+      style: {
+        marginTop: 8,
+        fontSize: 12,
+        color: T.textMute
+      }
+    }, "(", watchedCount, " watched pen", watchedCount === 1 ? '' : 's', " so far)"));
   }
-  return /*#__PURE__*/_jsxDEV("div", {
+  return /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',
       flexDirection: 'column',
       gap: 16
-    },
-    children: [/*#__PURE__*/_jsxDEV(DashStatTiles, {
-      totals: totals,
-      watchedCount: watchedCount
-    }, void 0, false), /*#__PURE__*/_jsxDEV(DashByLine, {
-      items: byLine,
-      ceilings: budgets,
-      estimates: estimatedPpks
-    }, void 0, false), cumPoints.length >= 2 && /*#__PURE__*/_jsxDEV(DashCumulative, {
-      points: cumPoints
-    }, void 0, false)]
-  }, void 0, true);
+    }
+  }, /*#__PURE__*/React.createElement(DashStatTiles, {
+    totals: totals,
+    watchedCount: watchedCount
+  }), /*#__PURE__*/React.createElement(DashByLine, {
+    items: byLine,
+    ceilings: budgets,
+    estimates: estimatedPpks
+  }), cumPoints.length >= 2 && /*#__PURE__*/React.createElement(DashCumulative, {
+    points: cumPoints
+  }));
 }
 function SectionTitle({
   children
 }) {
-  return /*#__PURE__*/_jsxDEV("div", {
+  return /*#__PURE__*/React.createElement("div", {
     className: "arc",
     style: {
       fontWeight: 800,
@@ -3443,9 +3209,8 @@ function SectionTitle({
       textTransform: 'uppercase',
       color: T.textMute,
       marginBottom: 14
-    },
-    children: children
-  }, void 0, false);
+    }
+  }, children);
 }
 function DashStatTiles({
   totals,
@@ -3473,52 +3238,46 @@ function DashStatTiles({
     value: `$${fmt2(totals.avgPph)}`,
     accent: true
   }];
-  return /*#__PURE__*/_jsxDEV("section", {
+  return /*#__PURE__*/React.createElement("section", {
     className: "card",
     style: {
       padding: 16
-    },
-    children: [/*#__PURE__*/_jsxDEV(SectionTitle, {
-      children: ["Today at a glance", watchedCount > 0 ? ` · ${watchedCount} watched` : '']
-    }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-      style: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
-        gap: 10
-      },
-      children: tiles.map(t => /*#__PURE__*/_jsxDEV("div", {
-        style: {
-          background: T.bgInset,
-          border: `1.5px solid ${T.borderS}`,
-          borderRadius: 10,
-          padding: 14
-        },
-        children: [/*#__PURE__*/_jsxDEV("div", {
-          className: "arc",
-          style: {
-            fontWeight: 600,
-            fontSize: 10,
-            letterSpacing: '0.12em',
-            textTransform: 'uppercase',
-            color: T.textMute
-          },
-          children: t.label
-        }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-          className: "mono",
-          style: {
-            fontWeight: 800,
-            fontSize: 26,
-            marginTop: 4,
-            color: t.accent ? T.accent : T.text,
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis'
-          },
-          children: t.value
-        }, void 0, false)]
-      }, t.label, true))
-    }, void 0, false)]
-  }, void 0, true);
+    }
+  }, /*#__PURE__*/React.createElement(SectionTitle, null, "Today at a glance", watchedCount > 0 ? ` · ${watchedCount} watched` : ''), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+      gap: 10
+    }
+  }, tiles.map(t => /*#__PURE__*/React.createElement("div", {
+    key: t.label,
+    style: {
+      background: T.bgInset,
+      border: `1.5px solid ${T.borderS}`,
+      borderRadius: 10,
+      padding: 14
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontWeight: 600,
+      fontSize: 10,
+      letterSpacing: '0.12em',
+      textTransform: 'uppercase',
+      color: T.textMute
+    }
+  }, t.label), /*#__PURE__*/React.createElement("div", {
+    className: "mono",
+    style: {
+      fontWeight: 800,
+      fontSize: 26,
+      marginTop: 4,
+      color: t.accent ? T.accent : T.text,
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis'
+    }
+  }, t.value)))));
 }
 function DashByLine({
   items,
@@ -3528,209 +3287,185 @@ function DashByLine({
   if (items.length === 0) return null;
   const maxTotal = Math.max(...items.map(i => i.total));
   const maxAvg = Math.max(...items.map(i => i.avgPpk));
-  return /*#__PURE__*/_jsxDEV("section", {
+  return /*#__PURE__*/React.createElement("section", {
     className: "card",
     style: {
       padding: 16
-    },
-    children: [/*#__PURE__*/_jsxDEV(SectionTitle, {
-      children: "Spend by line"
-    }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
+    }
+  }, /*#__PURE__*/React.createElement(SectionTitle, null, "Spend by line"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 14
+    }
+  }, items.map(item => {
+    const cat = CAT[item.category];
+    const totalPct = item.total / maxTotal * 100;
+    const ceiling = ceilings[item.code];
+    const estimate = estimates[item.code];
+    const avgPct = maxAvg > 0 ? item.avgPpk / maxAvg * 100 : 0;
+    // Ceiling/estimate markers are positioned on the avg-$/kg bar, scaled to maxAvg
+    const ceilingPct = ceiling && maxAvg > 0 ? Math.min(100, ceiling / maxAvg * 100) : null;
+    const estimatePct = estimate && maxAvg > 0 ? Math.min(100, estimate / maxAvg * 100) : null;
+    return /*#__PURE__*/React.createElement("div", {
+      key: item.code
+    }, /*#__PURE__*/React.createElement("div", {
       style: {
         display: 'flex',
-        flexDirection: 'column',
-        gap: 14
-      },
-      children: items.map(item => {
-        const cat = CAT[item.category];
-        const totalPct = item.total / maxTotal * 100;
-        const ceiling = ceilings[item.code];
-        const estimate = estimates[item.code];
-        const avgPct = maxAvg > 0 ? item.avgPpk / maxAvg * 100 : 0;
-        // Ceiling/estimate markers are positioned on the avg-$/kg bar, scaled to maxAvg
-        const ceilingPct = ceiling && maxAvg > 0 ? Math.min(100, ceiling / maxAvg * 100) : null;
-        const estimatePct = estimate && maxAvg > 0 ? Math.min(100, estimate / maxAvg * 100) : null;
-        return /*#__PURE__*/_jsxDEV("div", {
-          children: [/*#__PURE__*/_jsxDEV("div", {
-            style: {
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: 6,
-              gap: 8
-            },
-            children: [/*#__PURE__*/_jsxDEV("div", {
-              style: {
-                display: 'flex',
-                alignItems: 'center',
-                gap: 8,
-                minWidth: 0
-              },
-              children: [/*#__PURE__*/_jsxDEV("span", {
-                className: "pill",
-                style: {
-                  background: cat.solid,
-                  color: cat.ink
-                },
-                children: item.code
-              }, void 0, false), /*#__PURE__*/_jsxDEV("span", {
-                className: "arc",
-                style: {
-                  fontWeight: 700,
-                  fontSize: 13,
-                  whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis'
-                },
-                children: item.name
-              }, void 0, false)]
-            }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-              className: "mono",
-              style: {
-                fontWeight: 800,
-                fontSize: 15,
-                color: T.text
-              },
-              children: ["$", fmt0(item.total)]
-            }, void 0, true)]
-          }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-            style: {
-              height: 12,
-              background: T.bgInset,
-              border: `1.5px solid ${T.borderS}`,
-              borderRadius: 6,
-              overflow: 'hidden',
-              position: 'relative'
-            },
-            children: /*#__PURE__*/_jsxDEV("div", {
-              style: {
-                width: `${totalPct}%`,
-                height: '100%',
-                background: cat.solid
-              }
-            }, void 0, false)
-          }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-            className: "arc",
-            style: {
-              marginTop: 6,
-              fontSize: 11,
-              color: T.textMute,
-              display: 'flex',
-              justifyContent: 'space-between',
-              flexWrap: 'wrap',
-              gap: 6
-            },
-            children: [/*#__PURE__*/_jsxDEV("span", {
-              children: [item.pens, " pen", item.pens === 1 ? '' : 's', " · ", fmtInt(item.head), " head · ", fmt1(item.kg), " kg"]
-            }, void 0, true), /*#__PURE__*/_jsxDEV("span", {
-              className: "mono",
-              style: {
-                color: T.text,
-                fontWeight: 700
-              },
-              children: ["$", fmt2(item.avgPpk), "/kg", ceiling ? /*#__PURE__*/_jsxDEV("span", {
-                style: {
-                  color: T.textMute,
-                  fontWeight: 600
-                },
-                children: [" · ceiling $", fmt2(ceiling)]
-              }, void 0, true) : null, estimate ? /*#__PURE__*/_jsxDEV("span", {
-                style: {
-                  color: T.textMute,
-                  fontWeight: 600
-                },
-                children: [" · est $", fmt2(estimate)]
-              }, void 0, true) : null]
-            }, void 0, true)]
-          }, void 0, true), maxAvg > 0 && /*#__PURE__*/_jsxDEV("div", {
-            style: {
-              marginTop: 4,
-              height: 4,
-              background: T.bgInset,
-              borderRadius: 2,
-              position: 'relative',
-              overflow: 'visible'
-            },
-            children: [/*#__PURE__*/_jsxDEV("div", {
-              style: {
-                width: `${avgPct}%`,
-                height: '100%',
-                background: T.text,
-                borderRadius: 2
-              }
-            }, void 0, false), ceilingPct != null && /*#__PURE__*/_jsxDEV("div", {
-              style: {
-                position: 'absolute',
-                top: -3,
-                height: 10,
-                width: 2,
-                left: `calc(${ceilingPct}% - 1px)`,
-                background: T.warnBdr
-              },
-              title: `Ceiling $${fmt2(ceiling)}`
-            }, void 0, false), estimatePct != null && /*#__PURE__*/_jsxDEV("div", {
-              style: {
-                position: 'absolute',
-                top: -3,
-                height: 10,
-                width: 2,
-                left: `calc(${estimatePct}% - 1px)`,
-                background: T.accent
-              },
-              title: `Estimate $${fmt2(estimate)}`
-            }, void 0, false)]
-          }, void 0, true)]
-        }, item.code, true);
-      })
-    }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 6,
+        gap: 8
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: 8,
+        minWidth: 0
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "pill",
+      style: {
+        background: cat.solid,
+        color: cat.ink
+      }
+    }, item.code), /*#__PURE__*/React.createElement("span", {
       className: "arc",
       style: {
-        marginTop: 14,
-        paddingTop: 10,
-        borderTop: `1px dashed ${T.borderS}`,
-        fontSize: 10,
+        fontWeight: 700,
+        fontSize: 13,
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis'
+      }
+    }, item.name)), /*#__PURE__*/React.createElement("div", {
+      className: "mono",
+      style: {
+        fontWeight: 800,
+        fontSize: 15,
+        color: T.text
+      }
+    }, "$", fmt0(item.total))), /*#__PURE__*/React.createElement("div", {
+      style: {
+        height: 12,
+        background: T.bgInset,
+        border: `1.5px solid ${T.borderS}`,
+        borderRadius: 6,
+        overflow: 'hidden',
+        position: 'relative'
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        width: `${totalPct}%`,
+        height: '100%',
+        background: cat.solid
+      }
+    })), /*#__PURE__*/React.createElement("div", {
+      className: "arc",
+      style: {
+        marginTop: 6,
+        fontSize: 11,
         color: T.textMute,
-        letterSpacing: '0.04em',
         display: 'flex',
-        gap: 14,
-        flexWrap: 'wrap'
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: 6
+      }
+    }, /*#__PURE__*/React.createElement("span", null, item.pens, " pen", item.pens === 1 ? '' : 's', " · ", fmtInt(item.head), " head · ", fmt1(item.kg), " kg"), /*#__PURE__*/React.createElement("span", {
+      className: "mono",
+      style: {
+        color: T.text,
+        fontWeight: 700
+      }
+    }, "$", fmt2(item.avgPpk), "/kg", ceiling ? /*#__PURE__*/React.createElement("span", {
+      style: {
+        color: T.textMute,
+        fontWeight: 600
+      }
+    }, " · ceiling $", fmt2(ceiling)) : null, estimate ? /*#__PURE__*/React.createElement("span", {
+      style: {
+        color: T.textMute,
+        fontWeight: 600
+      }
+    }, " · est $", fmt2(estimate)) : null)), maxAvg > 0 && /*#__PURE__*/React.createElement("div", {
+      style: {
+        marginTop: 4,
+        height: 4,
+        background: T.bgInset,
+        borderRadius: 2,
+        position: 'relative',
+        overflow: 'visible'
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        width: `${avgPct}%`,
+        height: '100%',
+        background: T.text,
+        borderRadius: 2
+      }
+    }), ceilingPct != null && /*#__PURE__*/React.createElement("div", {
+      style: {
+        position: 'absolute',
+        top: -3,
+        height: 10,
+        width: 2,
+        left: `calc(${ceilingPct}% - 1px)`,
+        background: T.warnBdr
       },
-      children: [/*#__PURE__*/_jsxDEV("span", {
-        children: [/*#__PURE__*/_jsxDEV("span", {
-          style: {
-            display: 'inline-block',
-            width: 16,
-            height: 4,
-            background: T.text,
-            verticalAlign: 'middle',
-            marginRight: 4
-          }
-        }, void 0, false), " Avg $/kg"]
-      }, void 0, true), /*#__PURE__*/_jsxDEV("span", {
-        children: [/*#__PURE__*/_jsxDEV("span", {
-          style: {
-            display: 'inline-block',
-            width: 2,
-            height: 10,
-            background: T.warnBdr,
-            verticalAlign: 'middle',
-            marginRight: 4
-          }
-        }, void 0, false), " Ceiling"]
-      }, void 0, true), /*#__PURE__*/_jsxDEV("span", {
-        children: [/*#__PURE__*/_jsxDEV("span", {
-          style: {
-            display: 'inline-block',
-            width: 2,
-            height: 10,
-            background: T.accent,
-            verticalAlign: 'middle',
-            marginRight: 4
-          }
-        }, void 0, false), " Estimate"]
-      }, void 0, true)]
-    }, void 0, true)]
-  }, void 0, true);
+      title: `Ceiling $${fmt2(ceiling)}`
+    }), estimatePct != null && /*#__PURE__*/React.createElement("div", {
+      style: {
+        position: 'absolute',
+        top: -3,
+        height: 10,
+        width: 2,
+        left: `calc(${estimatePct}% - 1px)`,
+        background: T.accent
+      },
+      title: `Estimate $${fmt2(estimate)}`
+    })));
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      marginTop: 14,
+      paddingTop: 10,
+      borderTop: `1px dashed ${T.borderS}`,
+      fontSize: 10,
+      color: T.textMute,
+      letterSpacing: '0.04em',
+      display: 'flex',
+      gap: 14,
+      flexWrap: 'wrap'
+    }
+  }, /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("span", {
+    style: {
+      display: 'inline-block',
+      width: 16,
+      height: 4,
+      background: T.text,
+      verticalAlign: 'middle',
+      marginRight: 4
+    }
+  }), " Avg $/kg"), /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("span", {
+    style: {
+      display: 'inline-block',
+      width: 2,
+      height: 10,
+      background: T.warnBdr,
+      verticalAlign: 'middle',
+      marginRight: 4
+    }
+  }), " Ceiling"), /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("span", {
+    style: {
+      display: 'inline-block',
+      width: 2,
+      height: 10,
+      background: T.accent,
+      verticalAlign: 'middle',
+      marginRight: 4
+    }
+  }), " Estimate")));
 }
 function DashCumulative({
   points
@@ -3778,66 +3513,64 @@ function DashCumulative({
     minute: '2-digit',
     hour12: false
   });
-  return /*#__PURE__*/_jsxDEV("section", {
+  return /*#__PURE__*/React.createElement("section", {
     className: "card",
     style: {
       padding: 16
+    }
+  }, /*#__PURE__*/React.createElement(SectionTitle, null, "Cumulative spend through the day"), /*#__PURE__*/React.createElement("svg", {
+    viewBox: `0 0 ${W} ${H}`,
+    style: {
+      width: '100%',
+      height: 'auto',
+      display: 'block'
     },
-    children: [/*#__PURE__*/_jsxDEV(SectionTitle, {
-      children: "Cumulative spend through the day"
-    }, void 0, false), /*#__PURE__*/_jsxDEV("svg", {
-      viewBox: `0 0 ${W} ${H}`,
-      style: {
-        width: '100%',
-        height: 'auto',
-        display: 'block'
-      },
-      preserveAspectRatio: "none",
-      children: [yTicks.map((v, i) => /*#__PURE__*/_jsxDEV("line", {
-        x1: PAD.l,
-        x2: W - PAD.r,
-        y1: yCoord(v),
-        y2: yCoord(v),
-        stroke: T.borderS,
-        strokeWidth: "1",
-        strokeDasharray: i === 0 ? '0' : '2 4'
-      }, i, false)), yTicks.map((v, i) => /*#__PURE__*/_jsxDEV("text", {
-        x: PAD.l - 8,
-        y: yCoord(v) + 4,
-        fontSize: "11",
-        fontFamily: "JetBrains Mono",
-        fill: T.textMute,
-        textAnchor: "end",
-        children: ["$", fmt0(v)]
-      }, i, true)), xTicks.map((t, i) => /*#__PURE__*/_jsxDEV("text", {
-        x: xCoord(t.time),
-        y: H - 8,
-        fontSize: "11",
-        fontFamily: "JetBrains Mono",
-        fill: T.textMute,
-        textAnchor: t.anchor,
-        children: formatTime(t.time)
-      }, i, false)), /*#__PURE__*/_jsxDEV("path", {
-        d: areaD,
-        fill: T.accent,
-        fillOpacity: "0.10"
-      }, void 0, false), /*#__PURE__*/_jsxDEV("path", {
-        d: pathD,
-        stroke: T.accent,
-        strokeWidth: "2",
-        fill: "none",
-        strokeLinejoin: "round",
-        strokeLinecap: "round"
-      }, void 0, false), points.map((p, i) => i > 0 && /*#__PURE__*/_jsxDEV("circle", {
-        cx: xCoord(p.time),
-        cy: yCoord(p.cum),
-        r: "3.5",
-        fill: T.accent,
-        stroke: T.bgCard,
-        strokeWidth: "2"
-      }, i, false))]
-    }, void 0, true)]
-  }, void 0, true);
+    preserveAspectRatio: "none"
+  }, yTicks.map((v, i) => /*#__PURE__*/React.createElement("line", {
+    key: i,
+    x1: PAD.l,
+    x2: W - PAD.r,
+    y1: yCoord(v),
+    y2: yCoord(v),
+    stroke: T.borderS,
+    strokeWidth: "1",
+    strokeDasharray: i === 0 ? '0' : '2 4'
+  })), yTicks.map((v, i) => /*#__PURE__*/React.createElement("text", {
+    key: i,
+    x: PAD.l - 8,
+    y: yCoord(v) + 4,
+    fontSize: "11",
+    fontFamily: "JetBrains Mono",
+    fill: T.textMute,
+    textAnchor: "end"
+  }, "$", fmt0(v))), xTicks.map((t, i) => /*#__PURE__*/React.createElement("text", {
+    key: i,
+    x: xCoord(t.time),
+    y: H - 8,
+    fontSize: "11",
+    fontFamily: "JetBrains Mono",
+    fill: T.textMute,
+    textAnchor: t.anchor
+  }, formatTime(t.time))), /*#__PURE__*/React.createElement("path", {
+    d: areaD,
+    fill: T.accent,
+    fillOpacity: "0.10"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: pathD,
+    stroke: T.accent,
+    strokeWidth: "2",
+    fill: "none",
+    strokeLinejoin: "round",
+    strokeLinecap: "round"
+  }), points.map((p, i) => i > 0 && /*#__PURE__*/React.createElement("circle", {
+    key: i,
+    cx: xCoord(p.time),
+    cy: yCoord(p.cum),
+    r: "3.5",
+    fill: T.accent,
+    stroke: T.bgCard,
+    strokeWidth: "2"
+  }))));
 }
 
 // ----- View tab pill -----
@@ -3847,7 +3580,7 @@ function ViewTab({
   active,
   onClick
 }) {
-  return /*#__PURE__*/_jsxDEV("button", {
+  return /*#__PURE__*/React.createElement("button", {
     onClick: onClick,
     className: "btn arc",
     style: {
@@ -3856,9 +3589,8 @@ function ViewTab({
       borderColor: active ? T.accent : T.borderH,
       padding: '10px 14px',
       fontSize: 13
-    },
-    children: label
-  }, void 0, false);
+    }
+  }, label);
 }
 
 // ----- Inspection: list view -----
@@ -3871,95 +3603,85 @@ function InspectionView({
   onDelete,
   onJumpToBidding
 }) {
-  return /*#__PURE__*/_jsxDEV("div", {
+  return /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',
       flexDirection: 'column',
       gap: 16
+    }
+  }, /*#__PURE__*/React.createElement("section", {
+    className: "card",
+    style: {
+      padding: 14,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: 12,
+      flexWrap: 'wrap'
+    }
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontWeight: 900,
+      fontSize: 16,
+      letterSpacing: '0.06em',
+      textTransform: 'uppercase'
+    }
+  }, "Pre-sale inspection"), /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontWeight: 600,
+      fontSize: 11,
+      letterSpacing: '0.06em',
+      color: T.textMute,
+      marginTop: 2
+    }
+  }, inspections.length, " pen", inspections.length === 1 ? '' : 's', " inspected")), /*#__PURE__*/React.createElement("button", {
+    className: "btn arc",
+    style: {
+      background: T.accent,
+      color: '#0D0D0F',
+      borderColor: T.accent,
+      padding: '12px 18px',
+      fontSize: 14
     },
-    children: [/*#__PURE__*/_jsxDEV("section", {
-      className: "card",
-      style: {
-        padding: 14,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: 12,
-        flexWrap: 'wrap'
-      },
-      children: [/*#__PURE__*/_jsxDEV("div", {
-        children: [/*#__PURE__*/_jsxDEV("div", {
-          className: "arc",
-          style: {
-            fontWeight: 900,
-            fontSize: 16,
-            letterSpacing: '0.06em',
-            textTransform: 'uppercase'
-          },
-          children: "Pre-sale inspection"
-        }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-          className: "arc",
-          style: {
-            fontWeight: 600,
-            fontSize: 11,
-            letterSpacing: '0.06em',
-            color: T.textMute,
-            marginTop: 2
-          },
-          children: [inspections.length, " pen", inspections.length === 1 ? '' : 's', " inspected"]
-        }, void 0, true)]
-      }, void 0, true), /*#__PURE__*/_jsxDEV("button", {
-        className: "btn arc",
-        style: {
-          background: T.accent,
-          color: '#0D0D0F',
-          borderColor: T.accent,
-          padding: '12px 18px',
-          fontSize: 14
-        },
-        onClick: onAdd,
-        children: "+ ADD INSPECTION"
-      }, void 0, false)]
-    }, void 0, true), inspections.length === 0 ? /*#__PURE__*/_jsxDEV("section", {
-      className: "card",
-      style: {
-        padding: 32,
-        textAlign: 'center'
-      },
-      children: [/*#__PURE__*/_jsxDEV("div", {
-        className: "arc",
-        style: {
-          fontWeight: 800,
-          fontSize: 13,
-          letterSpacing: '0.10em',
-          textTransform: 'uppercase',
-          color: T.textMute
-        },
-        children: "No pens inspected yet"
-      }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-        className: "arc",
-        style: {
-          marginTop: 8,
-          fontSize: 12,
-          color: T.textMute
-        },
-        children: "Walk the pens, photograph each one, set what you'd pay per head. They'll show up here."
-      }, void 0, false)]
-    }, void 0, true) : /*#__PURE__*/_jsxDEV("div", {
-      style: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-        gap: 12
-      },
-      children: inspections.map(insp => /*#__PURE__*/_jsxDEV(InspectionCard, {
-        inspection: insp,
-        lines: lines,
-        onEdit: () => onEdit(insp.id),
-        onDelete: () => onDelete(insp.id),
-        onJumpToBidding: () => onJumpToBidding(insp)
-      }, insp.id, false))
-    }, void 0, false)]
-  }, void 0, true);
+    onClick: onAdd
+  }, "+ ADD INSPECTION")), inspections.length === 0 ? /*#__PURE__*/React.createElement("section", {
+    className: "card",
+    style: {
+      padding: 32,
+      textAlign: 'center'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontWeight: 800,
+      fontSize: 13,
+      letterSpacing: '0.10em',
+      textTransform: 'uppercase',
+      color: T.textMute
+    }
+  }, "No pens inspected yet"), /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      marginTop: 8,
+      fontSize: 12,
+      color: T.textMute
+    }
+  }, "Walk the pens, photograph each one, set what you'd pay per head. They'll show up here.")) : /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+      gap: 12
+    }
+  }, inspections.map(insp => /*#__PURE__*/React.createElement(InspectionCard, {
+    key: insp.id,
+    inspection: insp,
+    lines: lines,
+    onEdit: () => onEdit(insp.id),
+    onDelete: () => onDelete(insp.id),
+    onJumpToBidding: () => onJumpToBidding(insp)
+  }))));
 }
 function InspectionCard({
   inspection,
@@ -3970,135 +3692,122 @@ function InspectionCard({
 }) {
   const line = lines.find(l => l.code === inspection.lineCode);
   const cat = line ? CAT[line.category] : CAT.mixed;
-  return /*#__PURE__*/_jsxDEV("div", {
+  return /*#__PURE__*/React.createElement("div", {
     className: "card",
     style: {
       overflow: 'hidden',
       display: 'flex',
       flexDirection: 'column'
+    }
+  }, inspection.hasPhoto ? /*#__PURE__*/React.createElement(InspectionPhoto, {
+    inspectionId: inspection.id,
+    style: {
+      width: '100%',
+      aspectRatio: '4/3',
+      objectFit: 'cover',
+      display: 'block',
+      background: T.bgInset
+    }
+  }) : /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: '100%',
+      aspectRatio: '4/3',
+      background: T.bgInset,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      color: T.textMute,
+      fontSize: 11,
+      fontFamily: "'Archivo', sans-serif",
+      letterSpacing: '0.10em',
+      textTransform: 'uppercase'
+    }
+  }, "No photo"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: 12,
+      flex: 1,
+      display: 'flex',
+      flexDirection: 'column'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: 8,
+      marginBottom: 6,
+      flexWrap: 'wrap'
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "arc",
+    style: {
+      fontWeight: 900,
+      fontSize: 14,
+      letterSpacing: '0.04em'
+    }
+  }, "PEN ", inspection.penNumber || '—'), line && /*#__PURE__*/React.createElement("span", {
+    className: "pill",
+    style: {
+      background: cat.solid,
+      color: cat.ink
+    }
+  }, line.code), inspection.tagColour && TAG_BY_CODE[inspection.tagColour] && /*#__PURE__*/React.createElement("span", {
+    className: "pill",
+    title: `${TAG_BY_CODE[inspection.tagColour].label} tag · ${TAG_BY_CODE[inspection.tagColour].year}`,
+    style: {
+      background: TAG_BY_CODE[inspection.tagColour].fill,
+      color: TAG_BY_CODE[inspection.tagColour].inkSel,
+      border: `1px solid ${TAG_BY_CODE[inspection.tagColour].edge}`
+    }
+  }, TAG_BY_CODE[inspection.tagColour].year)), /*#__PURE__*/React.createElement("div", {
+    className: "mono",
+    style: {
+      fontSize: 13,
+      color: T.textLbl,
+      marginBottom: 6
+    }
+  }, inspection.head != null ? `${inspection.head} head` : '—', inspection.wtPerHead != null ? ` · ${fmt1(inspection.wtPerHead)} kg/hd` : ''), /*#__PURE__*/React.createElement("div", {
+    className: "mono",
+    style: {
+      fontSize: 16,
+      fontWeight: 700,
+      color: T.accent,
+      marginBottom: 8
+    }
+  }, inspection.maxPph != null ? `max $${fmt2(inspection.maxPph)}/hd` : 'no max set'), inspection.notes && /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontSize: 12,
+      color: T.textLbl,
+      marginBottom: 10,
+      fontStyle: 'italic',
+      flex: 1
+    }
+  }, "“", inspection.notes, "”"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 6,
+      marginTop: 'auto'
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "btn arc btn-ghost",
+    style: {
+      padding: '8px 10px',
+      fontSize: 11,
+      flex: 1
     },
-    children: [inspection.hasPhoto ? /*#__PURE__*/_jsxDEV(InspectionPhoto, {
-      inspectionId: inspection.id,
-      style: {
-        width: '100%',
-        aspectRatio: '4/3',
-        objectFit: 'cover',
-        display: 'block',
-        background: T.bgInset
-      }
-    }, void 0, false) : /*#__PURE__*/_jsxDEV("div", {
-      style: {
-        width: '100%',
-        aspectRatio: '4/3',
-        background: T.bgInset,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: T.textMute,
-        fontSize: 11,
-        fontFamily: "'Archivo', sans-serif",
-        letterSpacing: '0.10em',
-        textTransform: 'uppercase'
-      },
-      children: "No photo"
-    }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-      style: {
-        padding: 12,
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column'
-      },
-      children: [/*#__PURE__*/_jsxDEV("div", {
-        style: {
-          display: 'flex',
-          alignItems: 'center',
-          gap: 8,
-          marginBottom: 6,
-          flexWrap: 'wrap'
-        },
-        children: [/*#__PURE__*/_jsxDEV("span", {
-          className: "arc",
-          style: {
-            fontWeight: 900,
-            fontSize: 14,
-            letterSpacing: '0.04em'
-          },
-          children: ["PEN ", inspection.penNumber || '—']
-        }, void 0, true), line && /*#__PURE__*/_jsxDEV("span", {
-          className: "pill",
-          style: {
-            background: cat.solid,
-            color: cat.ink
-          },
-          children: line.code
-        }, void 0, false), inspection.tagColour && TAG_BY_CODE[inspection.tagColour] && /*#__PURE__*/_jsxDEV("span", {
-          className: "pill",
-          title: `${TAG_BY_CODE[inspection.tagColour].label} tag · ${TAG_BY_CODE[inspection.tagColour].year}`,
-          style: {
-            background: TAG_BY_CODE[inspection.tagColour].fill,
-            color: TAG_BY_CODE[inspection.tagColour].inkSel,
-            border: `1px solid ${TAG_BY_CODE[inspection.tagColour].edge}`
-          },
-          children: TAG_BY_CODE[inspection.tagColour].year
-        }, void 0, false)]
-      }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-        className: "mono",
-        style: {
-          fontSize: 13,
-          color: T.textLbl,
-          marginBottom: 6
-        },
-        children: [inspection.head != null ? `${inspection.head} head` : '—', inspection.wtPerHead != null ? ` · ${fmt1(inspection.wtPerHead)} kg/hd` : '']
-      }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-        className: "mono",
-        style: {
-          fontSize: 16,
-          fontWeight: 700,
-          color: T.accent,
-          marginBottom: 8
-        },
-        children: inspection.maxPph != null ? `max $${fmt2(inspection.maxPph)}/hd` : 'no max set'
-      }, void 0, false), inspection.notes && /*#__PURE__*/_jsxDEV("div", {
-        className: "arc",
-        style: {
-          fontSize: 12,
-          color: T.textLbl,
-          marginBottom: 10,
-          fontStyle: 'italic',
-          flex: 1
-        },
-        children: ["“", inspection.notes, "”"]
-      }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-        style: {
-          display: 'flex',
-          gap: 6,
-          marginTop: 'auto'
-        },
-        children: [/*#__PURE__*/_jsxDEV("button", {
-          className: "btn arc btn-ghost",
-          style: {
-            padding: '8px 10px',
-            fontSize: 11,
-            flex: 1
-          },
-          onClick: onEdit,
-          children: "EDIT"
-        }, void 0, false), /*#__PURE__*/_jsxDEV("button", {
-          className: "btn arc",
-          style: {
-            padding: '8px 10px',
-            fontSize: 11,
-            background: 'transparent',
-            color: T.warnBdr,
-            borderColor: T.warnBdr,
-            flex: 1
-          },
-          onClick: onDelete,
-          children: "DEL"
-        }, void 0, false)]
-      }, void 0, true)]
-    }, void 0, true)]
-  }, void 0, true);
+    onClick: onEdit
+  }, "EDIT"), /*#__PURE__*/React.createElement("button", {
+    className: "btn arc",
+    style: {
+      padding: '8px 10px',
+      fontSize: 11,
+      background: 'transparent',
+      color: T.warnBdr,
+      borderColor: T.warnBdr,
+      flex: 1
+    },
+    onClick: onDelete
+  }, "DEL"))));
 }
 
 // Loads a photo Blob from IndexedDB and renders it as an <img>
@@ -4121,7 +3830,7 @@ function InspectionPhoto({
     };
   }, [inspectionId]);
   if (!url) {
-    return /*#__PURE__*/_jsxDEV("div", {
+    return /*#__PURE__*/React.createElement("div", {
       style: {
         ...style,
         display: 'flex',
@@ -4129,15 +3838,14 @@ function InspectionPhoto({
         justifyContent: 'center',
         color: T.textMute,
         fontSize: 11
-      },
-      children: "loading…"
-    }, void 0, false);
+      }
+    }, "loading…");
   }
-  return /*#__PURE__*/_jsxDEV("img", {
+  return /*#__PURE__*/React.createElement("img", {
     src: url,
     alt: "",
     style: style
-  }, void 0, false);
+  });
 }
 
 // ----- Inspection: add/edit modal -----
@@ -4266,341 +3974,299 @@ function InspectionModal({
       hasPhoto: hasExistingPhoto
     }, photoBlob);
   }
-  return /*#__PURE__*/_jsxDEV("div", {
+  return /*#__PURE__*/React.createElement("div", {
     className: "modal-bg",
-    onClick: onClose,
-    children: /*#__PURE__*/_jsxDEV("div", {
-      className: "modal",
+    onClick: onClose
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "modal",
+    style: {
+      padding: 20
+    },
+    onClick: e => e.stopPropagation()
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: 14
+    }
+  }, /*#__PURE__*/React.createElement("h3", {
+    className: "arc",
+    style: {
+      margin: 0,
+      fontWeight: 900,
+      letterSpacing: '0.06em',
+      textTransform: 'uppercase'
+    }
+  }, mode === 'edit' ? 'Edit inspection' : 'New inspection'), /*#__PURE__*/React.createElement("button", {
+    className: "btn arc btn-ghost",
+    style: {
+      padding: '8px 12px',
+      fontSize: 12
+    },
+    onClick: onClose
+  }, "CLOSE")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 14
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    className: "lbl"
+  }, "Photo"), photoUrl ? /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: 'relative'
+    }
+  }, /*#__PURE__*/React.createElement("img", {
+    src: photoUrl,
+    alt: "pen",
+    style: {
+      width: '100%',
+      maxHeight: 280,
+      objectFit: 'cover',
+      borderRadius: 8,
+      border: `1.5px solid ${T.borderH}`,
+      display: 'block'
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: 8,
+      display: 'flex',
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "btn arc btn-ghost",
+    style: {
+      padding: '8px 12px',
+      fontSize: 12,
+      flex: 1
+    },
+    onClick: () => fileRef.current && fileRef.current.click(),
+    disabled: busy
+  }, "RETAKE"), /*#__PURE__*/React.createElement("button", {
+    className: "btn arc",
+    style: {
+      padding: '8px 12px',
+      fontSize: 12,
+      flex: 1,
+      background: 'transparent',
+      color: T.warnBdr,
+      borderColor: T.warnBdr
+    },
+    onClick: removePhoto,
+    disabled: busy
+  }, "REMOVE"))) : /*#__PURE__*/React.createElement("button", {
+    className: "btn arc btn-ghost",
+    style: {
+      width: '100%',
+      padding: '20px 16px',
+      fontSize: 14
+    },
+    onClick: () => fileRef.current && fileRef.current.click(),
+    disabled: busy
+  }, busy ? 'PROCESSING…' : '📷  TAKE / CHOOSE PHOTO'), /*#__PURE__*/React.createElement("input", {
+    ref: fileRef,
+    type: "file",
+    accept: "image/*",
+    capture: "environment",
+    style: {
+      display: 'none'
+    },
+    onChange: handlePhoto
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    className: "lbl"
+  }, "Pen number (required)"), /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    inputMode: "text",
+    className: "field",
+    value: form.penNumber,
+    onChange: e => update('penNumber', e.target.value.slice(0, 8)),
+    placeholder: "e.g. 12",
+    style: {
+      fontSize: 22
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    className: "lbl"
+  }, "Line type"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fill, minmax(80px, 1fr))',
+      gap: 6
+    }
+  }, lines.map(l => {
+    const cat = CAT[l.category];
+    const sel = form.lineCode === l.code;
+    return /*#__PURE__*/React.createElement("button", {
+      key: l.code,
+      type: "button",
+      className: "arc",
+      onClick: () => update('lineCode', sel ? '' : l.code),
       style: {
-        padding: 20
-      },
-      onClick: e => e.stopPropagation(),
-      children: [/*#__PURE__*/_jsxDEV("div", {
-        style: {
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: 14
-        },
-        children: [/*#__PURE__*/_jsxDEV("h3", {
-          className: "arc",
-          style: {
-            margin: 0,
-            fontWeight: 900,
-            letterSpacing: '0.06em',
-            textTransform: 'uppercase'
-          },
-          children: mode === 'edit' ? 'Edit inspection' : 'New inspection'
-        }, void 0, false), /*#__PURE__*/_jsxDEV("button", {
-          className: "btn arc btn-ghost",
-          style: {
-            padding: '8px 12px',
-            fontSize: 12
-          },
-          onClick: onClose,
-          children: "CLOSE"
-        }, void 0, false)]
-      }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-        style: {
-          marginBottom: 14
-        },
-        children: [/*#__PURE__*/_jsxDEV("label", {
-          className: "lbl",
-          children: "Photo"
-        }, void 0, false), photoUrl ? /*#__PURE__*/_jsxDEV("div", {
-          style: {
-            position: 'relative'
-          },
-          children: [/*#__PURE__*/_jsxDEV("img", {
-            src: photoUrl,
-            alt: "pen",
-            style: {
-              width: '100%',
-              maxHeight: 280,
-              objectFit: 'cover',
-              borderRadius: 8,
-              border: `1.5px solid ${T.borderH}`,
-              display: 'block'
-            }
-          }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-            style: {
-              marginTop: 8,
-              display: 'flex',
-              gap: 8
-            },
-            children: [/*#__PURE__*/_jsxDEV("button", {
-              className: "btn arc btn-ghost",
-              style: {
-                padding: '8px 12px',
-                fontSize: 12,
-                flex: 1
-              },
-              onClick: () => fileRef.current && fileRef.current.click(),
-              disabled: busy,
-              children: "RETAKE"
-            }, void 0, false), /*#__PURE__*/_jsxDEV("button", {
-              className: "btn arc",
-              style: {
-                padding: '8px 12px',
-                fontSize: 12,
-                flex: 1,
-                background: 'transparent',
-                color: T.warnBdr,
-                borderColor: T.warnBdr
-              },
-              onClick: removePhoto,
-              disabled: busy,
-              children: "REMOVE"
-            }, void 0, false)]
-          }, void 0, true)]
-        }, void 0, true) : /*#__PURE__*/_jsxDEV("button", {
-          className: "btn arc btn-ghost",
-          style: {
-            width: '100%',
-            padding: '20px 16px',
-            fontSize: 14
-          },
-          onClick: () => fileRef.current && fileRef.current.click(),
-          disabled: busy,
-          children: busy ? 'PROCESSING…' : '📷  TAKE / CHOOSE PHOTO'
-        }, void 0, false), /*#__PURE__*/_jsxDEV("input", {
-          ref: fileRef,
-          type: "file",
-          accept: "image/*",
-          capture: "environment",
-          style: {
-            display: 'none'
-          },
-          onChange: handlePhoto
-        }, void 0, false)]
-      }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-        style: {
-          marginBottom: 12
-        },
-        children: [/*#__PURE__*/_jsxDEV("label", {
-          className: "lbl",
-          children: "Pen number (required)"
-        }, void 0, false), /*#__PURE__*/_jsxDEV("input", {
-          type: "text",
-          inputMode: "text",
-          className: "field",
-          value: form.penNumber,
-          onChange: e => update('penNumber', e.target.value.slice(0, 8)),
-          placeholder: "e.g. 12",
-          style: {
-            fontSize: 22
-          }
-        }, void 0, false)]
-      }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-        style: {
-          marginBottom: 12
-        },
-        children: [/*#__PURE__*/_jsxDEV("label", {
-          className: "lbl",
-          children: "Line type"
-        }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-          style: {
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(80px, 1fr))',
-            gap: 6
-          },
-          children: lines.map(l => {
-            const cat = CAT[l.category];
-            const sel = form.lineCode === l.code;
-            return /*#__PURE__*/_jsxDEV("button", {
-              type: "button",
-              className: "arc",
-              onClick: () => update('lineCode', sel ? '' : l.code),
-              style: {
-                padding: '10px 6px',
-                border: `2px solid ${cat.solid}`,
-                borderRadius: 8,
-                background: sel ? cat.solid : cat.soft,
-                color: sel ? cat.ink : cat.solid,
-                fontWeight: 800,
-                fontSize: 13,
-                letterSpacing: '0.04em',
-                textTransform: 'uppercase',
-                cursor: 'pointer',
-                minHeight: 44,
-                touchAction: 'manipulation',
-                WebkitTapHighlightColor: 'transparent'
-              },
-              children: l.code
-            }, l.code, false);
-          })
-        }, void 0, false)]
-      }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-        style: {
-          marginBottom: 12
-        },
-        children: [/*#__PURE__*/_jsxDEV("label", {
-          className: "lbl",
-          children: "Tag colour · birth year"
-        }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-          style: {
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: 6
-          },
-          children: TAGS.map(t => {
-            const sel = form.tagColour === t.code;
-            return /*#__PURE__*/_jsxDEV("button", {
-              type: "button",
-              className: "arc",
-              onClick: () => update('tagColour', sel ? '' : t.code),
-              style: {
-                padding: '10px 6px',
-                background: sel ? t.fill : t.softFill,
-                color: sel ? t.inkSel : t.inkUnsel,
-                border: `2px solid ${sel ? t.edgeSel : t.edge}`,
-                borderRadius: 8,
-                fontWeight: 800,
-                letterSpacing: '0.04em',
-                cursor: 'pointer',
-                minHeight: 50,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 2,
-                touchAction: 'manipulation',
-                WebkitTapHighlightColor: 'transparent'
-              },
-              children: [/*#__PURE__*/_jsxDEV("span", {
-                style: {
-                  fontSize: 16,
-                  fontWeight: 900
-                },
-                children: t.year
-              }, void 0, false), /*#__PURE__*/_jsxDEV("span", {
-                style: {
-                  fontSize: 10,
-                  opacity: 0.85,
-                  textTransform: 'uppercase'
-                },
-                children: t.label
-              }, void 0, false)]
-            }, t.code, true);
-          })
-        }, void 0, false)]
-      }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-        style: {
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: 10,
-          marginBottom: 12
-        },
-        children: [/*#__PURE__*/_jsxDEV("div", {
-          children: [/*#__PURE__*/_jsxDEV("label", {
-            className: "lbl",
-            children: "Head (estimated)"
-          }, void 0, false), /*#__PURE__*/_jsxDEV("input", {
-            type: "text",
-            inputMode: "numeric",
-            pattern: "[0-9]*",
-            className: "field",
-            value: form.head,
-            onChange: e => update('head', e.target.value.replace(/[^0-9]/g, '')),
-            placeholder: "0"
-          }, void 0, false)]
-        }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-          children: [/*#__PURE__*/_jsxDEV("label", {
-            className: "lbl",
-            children: "Est. kg per head"
-          }, void 0, false), /*#__PURE__*/_jsxDEV("input", {
-            type: "text",
-            inputMode: "decimal",
-            className: "field",
-            value: form.wtPerHead,
-            onChange: e => update('wtPerHead', e.target.value.replace(/[^0-9.]/g, '')),
-            placeholder: "0.0"
-          }, void 0, false)]
-        }, void 0, true)]
-      }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-        style: {
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: 10,
-          marginBottom: 12
-        },
-        children: [/*#__PURE__*/_jsxDEV("div", {
-          children: [/*#__PURE__*/_jsxDEV("label", {
-            className: "lbl",
-            children: "Max $/head you'd pay"
-          }, void 0, false), /*#__PURE__*/_jsxDEV("input", {
-            type: "text",
-            inputMode: "decimal",
-            className: "field",
-            value: form.maxPph,
-            onChange: e => update('maxPph', e.target.value.replace(/[^0-9.]/g, '')),
-            placeholder: "0.00"
-          }, void 0, false)]
-        }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-          children: [/*#__PURE__*/_jsxDEV("label", {
-            className: "lbl",
-            children: ["Max $/kg ", /*#__PURE__*/_jsxDEV("span", {
-              style: {
-                textTransform: 'none',
-                letterSpacing: 0,
-                color: T.textMute,
-                fontSize: 10
-              },
-              children: "(auto)"
-            }, void 0, false)]
-          }, void 0, true), /*#__PURE__*/_jsxDEV("input", {
-            type: "text",
-            inputMode: "decimal",
-            className: "field",
-            value: form.maxPpk,
-            onChange: e => update('maxPpk', e.target.value.replace(/[^0-9.]/g, '')),
-            placeholder: "0.00"
-          }, void 0, false)]
-        }, void 0, true)]
-      }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-        style: {
-          marginBottom: 16
-        },
-        children: [/*#__PURE__*/_jsxDEV("label", {
-          className: "lbl",
-          children: "Notes"
-        }, void 0, false), /*#__PURE__*/_jsxDEV("textarea", {
-          value: form.notes,
-          onChange: e => update('notes', e.target.value),
-          placeholder: "condition, breed type, observations…",
-          rows: 3,
-          style: {
-            width: '100%',
-            boxSizing: 'border-box',
-            padding: 12,
-            border: `1.5px solid ${T.borderH}`,
-            borderRadius: 8,
-            background: T.bgField,
-            color: T.text,
-            fontFamily: 'system-ui, sans-serif',
-            fontSize: 14,
-            outline: 'none',
-            resize: 'vertical'
-          }
-        }, void 0, false)]
-      }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-        style: {
-          display: 'flex',
-          gap: 8,
-          justifyContent: 'flex-end'
-        },
-        children: [/*#__PURE__*/_jsxDEV("button", {
-          className: "btn arc btn-ghost",
-          onClick: onClose,
-          children: "CANCEL"
-        }, void 0, false), /*#__PURE__*/_jsxDEV("button", {
-          className: "btn arc btn-primary",
-          onClick: handleSave,
-          children: "SAVE"
-        }, void 0, false)]
-      }, void 0, true)]
-    }, void 0, true)
-  }, void 0, false);
+        padding: '10px 6px',
+        border: `2px solid ${cat.solid}`,
+        borderRadius: 8,
+        background: sel ? cat.solid : cat.soft,
+        color: sel ? cat.ink : cat.solid,
+        fontWeight: 800,
+        fontSize: 13,
+        letterSpacing: '0.04em',
+        textTransform: 'uppercase',
+        cursor: 'pointer',
+        minHeight: 44,
+        touchAction: 'manipulation',
+        WebkitTapHighlightColor: 'transparent'
+      }
+    }, l.code);
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    className: "lbl"
+  }, "Tag colour · birth year"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(3, 1fr)',
+      gap: 6
+    }
+  }, TAGS.map(t => {
+    const sel = form.tagColour === t.code;
+    return /*#__PURE__*/React.createElement("button", {
+      key: t.code,
+      type: "button",
+      className: "arc",
+      onClick: () => update('tagColour', sel ? '' : t.code),
+      style: {
+        padding: '10px 6px',
+        background: sel ? t.fill : t.softFill,
+        color: sel ? t.inkSel : t.inkUnsel,
+        border: `2px solid ${sel ? t.edgeSel : t.edge}`,
+        borderRadius: 8,
+        fontWeight: 800,
+        letterSpacing: '0.04em',
+        cursor: 'pointer',
+        minHeight: 50,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 2,
+        touchAction: 'manipulation',
+        WebkitTapHighlightColor: 'transparent'
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 16,
+        fontWeight: 900
+      }
+    }, t.year), /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 10,
+        opacity: 0.85,
+        textTransform: 'uppercase'
+      }
+    }, t.label));
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'grid',
+      gridTemplateColumns: '1fr 1fr',
+      gap: 10,
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    className: "lbl"
+  }, "Head (estimated)"), /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    inputMode: "numeric",
+    pattern: "[0-9]*",
+    className: "field",
+    value: form.head,
+    onChange: e => update('head', e.target.value.replace(/[^0-9]/g, '')),
+    placeholder: "0"
+  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    className: "lbl"
+  }, "Est. kg per head"), /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    inputMode: "decimal",
+    className: "field",
+    value: form.wtPerHead,
+    onChange: e => update('wtPerHead', e.target.value.replace(/[^0-9.]/g, '')),
+    placeholder: "0.0"
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'grid',
+      gridTemplateColumns: '1fr 1fr',
+      gap: 10,
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    className: "lbl"
+  }, "Max $/head you'd pay"), /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    inputMode: "decimal",
+    className: "field",
+    value: form.maxPph,
+    onChange: e => update('maxPph', e.target.value.replace(/[^0-9.]/g, '')),
+    placeholder: "0.00"
+  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    className: "lbl"
+  }, "Max $/kg ", /*#__PURE__*/React.createElement("span", {
+    style: {
+      textTransform: 'none',
+      letterSpacing: 0,
+      color: T.textMute,
+      fontSize: 10
+    }
+  }, "(auto)")), /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    inputMode: "decimal",
+    className: "field",
+    value: form.maxPpk,
+    onChange: e => update('maxPpk', e.target.value.replace(/[^0-9.]/g, '')),
+    placeholder: "0.00"
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    className: "lbl"
+  }, "Notes"), /*#__PURE__*/React.createElement("textarea", {
+    value: form.notes,
+    onChange: e => update('notes', e.target.value),
+    placeholder: "condition, breed type, observations…",
+    rows: 3,
+    style: {
+      width: '100%',
+      boxSizing: 'border-box',
+      padding: 12,
+      border: `1.5px solid ${T.borderH}`,
+      borderRadius: 8,
+      background: T.bgField,
+      color: T.text,
+      fontFamily: 'system-ui, sans-serif',
+      fontSize: 14,
+      outline: 'none',
+      resize: 'vertical'
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 8,
+      justifyContent: 'flex-end'
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "btn arc btn-ghost",
+    onClick: onClose
+  }, "CANCEL"), /*#__PURE__*/React.createElement("button", {
+    className: "btn arc btn-primary",
+    onClick: handleSave
+  }, "SAVE"))));
 }
 
 // ----- HTML report generator -----
@@ -4811,75 +4477,68 @@ function SessionsView({
   onView,
   onDelete
 }) {
-  return /*#__PURE__*/_jsxDEV("div", {
+  return /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',
       flexDirection: 'column',
       gap: 16
-    },
-    children: [/*#__PURE__*/_jsxDEV("section", {
-      className: "card",
-      style: {
-        padding: 14
-      },
-      children: [/*#__PURE__*/_jsxDEV("div", {
-        className: "arc",
-        style: {
-          fontWeight: 900,
-          fontSize: 16,
-          letterSpacing: '0.06em',
-          textTransform: 'uppercase'
-        },
-        children: "Past sessions"
-      }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-        className: "arc",
-        style: {
-          fontWeight: 600,
-          fontSize: 11,
-          letterSpacing: '0.06em',
-          color: T.textMute,
-          marginTop: 2
-        },
-        children: [sessions.length, " session", sessions.length === 1 ? '' : 's', " saved · sessions are stored on this iPad only"]
-      }, void 0, true)]
-    }, void 0, true), sessions.length === 0 ? /*#__PURE__*/_jsxDEV("section", {
-      className: "card",
-      style: {
-        padding: 32,
-        textAlign: 'center'
-      },
-      children: [/*#__PURE__*/_jsxDEV("div", {
-        className: "arc",
-        style: {
-          fontWeight: 800,
-          fontSize: 13,
-          letterSpacing: '0.10em',
-          textTransform: 'uppercase',
-          color: T.textMute
-        },
-        children: "No sessions saved yet"
-      }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-        className: "arc",
-        style: {
-          marginTop: 8,
-          fontSize: 12,
-          color: T.textMute
-        },
-        children: "Each time you tap NEW DAY → SAVE & CLEAR, the current day is saved here for later review."
-      }, void 0, false)]
-    }, void 0, true) : /*#__PURE__*/_jsxDEV("div", {
-      style: {
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 10
-      },
-      children: sessions.map(s => /*#__PURE__*/_jsxDEV(SessionCard, {
-        session: s,
-        onView: () => onView(s),
-        onDelete: () => onDelete(s.id)
-      }, s.id, false))
-    }, void 0, false)]
-  }, void 0, true);
+    }
+  }, /*#__PURE__*/React.createElement("section", {
+    className: "card",
+    style: {
+      padding: 14
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontWeight: 900,
+      fontSize: 16,
+      letterSpacing: '0.06em',
+      textTransform: 'uppercase'
+    }
+  }, "Past sessions"), /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontWeight: 600,
+      fontSize: 11,
+      letterSpacing: '0.06em',
+      color: T.textMute,
+      marginTop: 2
+    }
+  }, sessions.length, " session", sessions.length === 1 ? '' : 's', " saved · sessions are stored on this iPad only")), sessions.length === 0 ? /*#__PURE__*/React.createElement("section", {
+    className: "card",
+    style: {
+      padding: 32,
+      textAlign: 'center'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontWeight: 800,
+      fontSize: 13,
+      letterSpacing: '0.10em',
+      textTransform: 'uppercase',
+      color: T.textMute
+    }
+  }, "No sessions saved yet"), /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      marginTop: 8,
+      fontSize: 12,
+      color: T.textMute
+    }
+  }, "Each time you tap NEW DAY → SAVE & CLEAR, the current day is saved here for later review.")) : /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 10
+    }
+  }, sessions.map(s => /*#__PURE__*/React.createElement(SessionCard, {
+    key: s.id,
+    session: s,
+    onView: () => onView(s),
+    onDelete: () => onDelete(s.id)
+  }))));
 }
 function SessionCard({
   session,
@@ -4897,162 +4556,129 @@ function SessionCard({
       year: 'numeric'
     });
   }, [session.date]);
-  return /*#__PURE__*/_jsxDEV("div", {
+  return /*#__PURE__*/React.createElement("div", {
     className: "card",
     style: {
       padding: 14
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'flex-start',
+      gap: 12,
+      flexWrap: 'wrap'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      minWidth: 0,
+      flex: 1
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontWeight: 900,
+      fontSize: 16,
+      letterSpacing: '0.04em',
+      textTransform: 'uppercase'
+    }
+  }, session.location || 'Saleyard'), /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontWeight: 600,
+      fontSize: 11,
+      letterSpacing: '0.06em',
+      color: T.textMute,
+      marginTop: 2
+    }
+  }, dateLabel), /*#__PURE__*/React.createElement("div", {
+    className: "mono",
+    style: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fill, minmax(110px, 1fr))',
+      gap: 8,
+      fontSize: 13,
+      marginTop: 10
+    }
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    className: "lbl",
+    style: {
+      marginBottom: 2
+    }
+  }, "Bought"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontWeight: 700
+    }
+  }, totals.pens)), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    className: "lbl",
+    style: {
+      marginBottom: 2
+    }
+  }, "Watched"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontWeight: 700
+    }
+  }, totals.watched)), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    className: "lbl",
+    style: {
+      marginBottom: 2
+    }
+  }, "Inspections"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontWeight: 700
+    }
+  }, (session.inspections || []).length)), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    className: "lbl",
+    style: {
+      marginBottom: 2
+    }
+  }, "Head"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontWeight: 700
+    }
+  }, totals.head)), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    className: "lbl",
+    style: {
+      marginBottom: 2
+    }
+  }, "Spent"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontWeight: 700,
+      color: T.accent
+    }
+  }, "$", fmt2(totals.dollars))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    className: "lbl",
+    style: {
+      marginBottom: 2
+    }
+  }, "Avg $/kg"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontWeight: 700
+    }
+  }, "$", fmt2(totals.avgPpk))))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 6,
+      alignItems: 'flex-start'
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "btn arc btn-primary",
+    style: {
+      padding: '10px 14px',
+      fontSize: 12
     },
-    children: /*#__PURE__*/_jsxDEV("div", {
-      style: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
-        gap: 12,
-        flexWrap: 'wrap'
-      },
-      children: [/*#__PURE__*/_jsxDEV("div", {
-        style: {
-          minWidth: 0,
-          flex: 1
-        },
-        children: [/*#__PURE__*/_jsxDEV("div", {
-          className: "arc",
-          style: {
-            fontWeight: 900,
-            fontSize: 16,
-            letterSpacing: '0.04em',
-            textTransform: 'uppercase'
-          },
-          children: session.location || 'Saleyard'
-        }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-          className: "arc",
-          style: {
-            fontWeight: 600,
-            fontSize: 11,
-            letterSpacing: '0.06em',
-            color: T.textMute,
-            marginTop: 2
-          },
-          children: dateLabel
-        }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-          className: "mono",
-          style: {
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(110px, 1fr))',
-            gap: 8,
-            fontSize: 13,
-            marginTop: 10
-          },
-          children: [/*#__PURE__*/_jsxDEV("div", {
-            children: [/*#__PURE__*/_jsxDEV("div", {
-              className: "lbl",
-              style: {
-                marginBottom: 2
-              },
-              children: "Bought"
-            }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-              style: {
-                fontWeight: 700
-              },
-              children: totals.pens
-            }, void 0, false)]
-          }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-            children: [/*#__PURE__*/_jsxDEV("div", {
-              className: "lbl",
-              style: {
-                marginBottom: 2
-              },
-              children: "Watched"
-            }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-              style: {
-                fontWeight: 700
-              },
-              children: totals.watched
-            }, void 0, false)]
-          }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-            children: [/*#__PURE__*/_jsxDEV("div", {
-              className: "lbl",
-              style: {
-                marginBottom: 2
-              },
-              children: "Inspections"
-            }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-              style: {
-                fontWeight: 700
-              },
-              children: (session.inspections || []).length
-            }, void 0, false)]
-          }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-            children: [/*#__PURE__*/_jsxDEV("div", {
-              className: "lbl",
-              style: {
-                marginBottom: 2
-              },
-              children: "Head"
-            }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-              style: {
-                fontWeight: 700
-              },
-              children: totals.head
-            }, void 0, false)]
-          }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-            children: [/*#__PURE__*/_jsxDEV("div", {
-              className: "lbl",
-              style: {
-                marginBottom: 2
-              },
-              children: "Spent"
-            }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-              style: {
-                fontWeight: 700,
-                color: T.accent
-              },
-              children: ["$", fmt2(totals.dollars)]
-            }, void 0, true)]
-          }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-            children: [/*#__PURE__*/_jsxDEV("div", {
-              className: "lbl",
-              style: {
-                marginBottom: 2
-              },
-              children: "Avg $/kg"
-            }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-              style: {
-                fontWeight: 700
-              },
-              children: ["$", fmt2(totals.avgPpk)]
-            }, void 0, true)]
-          }, void 0, true)]
-        }, void 0, true)]
-      }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-        style: {
-          display: 'flex',
-          gap: 6,
-          alignItems: 'flex-start'
-        },
-        children: [/*#__PURE__*/_jsxDEV("button", {
-          className: "btn arc btn-primary",
-          style: {
-            padding: '10px 14px',
-            fontSize: 12
-          },
-          onClick: onView,
-          children: "VIEW REPORT"
-        }, void 0, false), /*#__PURE__*/_jsxDEV("button", {
-          className: "btn arc",
-          style: {
-            padding: '10px 12px',
-            fontSize: 12,
-            background: 'transparent',
-            color: T.warnBdr,
-            borderColor: T.warnBdr
-          },
-          onClick: onDelete,
-          children: "DEL"
-        }, void 0, false)]
-      }, void 0, true)]
-    }, void 0, true)
-  }, void 0, false);
+    onClick: onView
+  }, "VIEW REPORT"), /*#__PURE__*/React.createElement("button", {
+    className: "btn arc",
+    style: {
+      padding: '10px 12px',
+      fontSize: 12,
+      background: 'transparent',
+      color: T.warnBdr,
+      borderColor: T.warnBdr
+    },
+    onClick: onDelete
+  }, "DEL"))));
 }
 
 // ----- Results: today's purchases, tile view with photos and actual sale data -----
@@ -5087,164 +4713,132 @@ function ResultsView({
     month: 'long',
     year: 'numeric'
   });
-  return /*#__PURE__*/_jsxDEV("div", {
+  return /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',
       flexDirection: 'column',
       gap: 16
-    },
-    children: [/*#__PURE__*/_jsxDEV("section", {
-      className: "card",
-      style: {
-        padding: 14
-      },
-      children: [/*#__PURE__*/_jsxDEV("div", {
-        className: "arc",
-        style: {
-          fontWeight: 900,
-          fontSize: 16,
-          letterSpacing: '0.06em',
-          textTransform: 'uppercase'
-        },
-        children: "Today's results"
-      }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-        className: "arc",
-        style: {
-          fontWeight: 600,
-          fontSize: 11,
-          letterSpacing: '0.06em',
-          color: T.textMute,
-          marginTop: 2
-        },
-        children: [location ? location + ' · ' : '', headerDate]
-      }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-        className: "mono",
-        style: {
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(110px, 1fr))',
-          gap: 8,
-          fontSize: 13,
-          marginTop: 12
-        },
-        children: [/*#__PURE__*/_jsxDEV("div", {
-          children: [/*#__PURE__*/_jsxDEV("div", {
-            className: "lbl",
-            style: {
-              marginBottom: 2
-            },
-            children: "Bought"
-          }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-            style: {
-              fontWeight: 700
-            },
-            children: totals.pens
-          }, void 0, false)]
-        }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-          children: [/*#__PURE__*/_jsxDEV("div", {
-            className: "lbl",
-            style: {
-              marginBottom: 2
-            },
-            children: "Watched"
-          }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-            style: {
-              fontWeight: 700
-            },
-            children: totals.watched
-          }, void 0, false)]
-        }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-          children: [/*#__PURE__*/_jsxDEV("div", {
-            className: "lbl",
-            style: {
-              marginBottom: 2
-            },
-            children: "Head"
-          }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-            style: {
-              fontWeight: 700
-            },
-            children: totals.head
-          }, void 0, false)]
-        }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-          children: [/*#__PURE__*/_jsxDEV("div", {
-            className: "lbl",
-            style: {
-              marginBottom: 2
-            },
-            children: "Weight"
-          }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-            style: {
-              fontWeight: 700
-            },
-            children: [fmt1(totals.kg), " kg"]
-          }, void 0, true)]
-        }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-          children: [/*#__PURE__*/_jsxDEV("div", {
-            className: "lbl",
-            style: {
-              marginBottom: 2
-            },
-            children: "Spent"
-          }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-            style: {
-              fontWeight: 700,
-              color: T.accent
-            },
-            children: ["$", fmt2(totals.dollars)]
-          }, void 0, true)]
-        }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-          children: [/*#__PURE__*/_jsxDEV("div", {
-            className: "lbl",
-            style: {
-              marginBottom: 2
-            },
-            children: "Avg $/kg"
-          }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-            style: {
-              fontWeight: 700
-            },
-            children: ["$", fmt2(totals.avgPpk)]
-          }, void 0, true)]
-        }, void 0, true)]
-      }, void 0, true)]
-    }, void 0, true), sorted.length === 0 ? /*#__PURE__*/_jsxDEV("section", {
-      className: "card",
-      style: {
-        padding: 32,
-        textAlign: 'center'
-      },
-      children: [/*#__PURE__*/_jsxDEV("div", {
-        className: "arc",
-        style: {
-          fontWeight: 800,
-          fontSize: 13,
-          letterSpacing: '0.10em',
-          textTransform: 'uppercase',
-          color: T.textMute
-        },
-        children: "No pens recorded yet"
-      }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-        className: "arc",
-        style: {
-          marginTop: 8,
-          fontSize: 12,
-          color: T.textMute
-        },
-        children: "Record or watch a pen from the BIDDING tab and it will appear here."
-      }, void 0, false)]
-    }, void 0, true) : /*#__PURE__*/_jsxDEV("div", {
-      style: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-        gap: 12
-      },
-      children: sorted.map(p => /*#__PURE__*/_jsxDEV(ResultCard, {
-        purchase: p,
-        inspection: p.penNumber ? insByPen[p.penNumber.trim()] : null,
-        lines: lines
-      }, p.id, false))
-    }, void 0, false)]
-  }, void 0, true);
+    }
+  }, /*#__PURE__*/React.createElement("section", {
+    className: "card",
+    style: {
+      padding: 14
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontWeight: 900,
+      fontSize: 16,
+      letterSpacing: '0.06em',
+      textTransform: 'uppercase'
+    }
+  }, "Today's results"), /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontWeight: 600,
+      fontSize: 11,
+      letterSpacing: '0.06em',
+      color: T.textMute,
+      marginTop: 2
+    }
+  }, location ? location + ' · ' : '', headerDate), /*#__PURE__*/React.createElement("div", {
+    className: "mono",
+    style: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fill, minmax(110px, 1fr))',
+      gap: 8,
+      fontSize: 13,
+      marginTop: 12
+    }
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    className: "lbl",
+    style: {
+      marginBottom: 2
+    }
+  }, "Bought"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontWeight: 700
+    }
+  }, totals.pens)), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    className: "lbl",
+    style: {
+      marginBottom: 2
+    }
+  }, "Watched"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontWeight: 700
+    }
+  }, totals.watched)), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    className: "lbl",
+    style: {
+      marginBottom: 2
+    }
+  }, "Head"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontWeight: 700
+    }
+  }, totals.head)), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    className: "lbl",
+    style: {
+      marginBottom: 2
+    }
+  }, "Weight"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontWeight: 700
+    }
+  }, fmt1(totals.kg), " kg")), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    className: "lbl",
+    style: {
+      marginBottom: 2
+    }
+  }, "Spent"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontWeight: 700,
+      color: T.accent
+    }
+  }, "$", fmt2(totals.dollars))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    className: "lbl",
+    style: {
+      marginBottom: 2
+    }
+  }, "Avg $/kg"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontWeight: 700
+    }
+  }, "$", fmt2(totals.avgPpk))))), sorted.length === 0 ? /*#__PURE__*/React.createElement("section", {
+    className: "card",
+    style: {
+      padding: 32,
+      textAlign: 'center'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontWeight: 800,
+      fontSize: 13,
+      letterSpacing: '0.10em',
+      textTransform: 'uppercase',
+      color: T.textMute
+    }
+  }, "No pens recorded yet"), /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      marginTop: 8,
+      fontSize: 12,
+      color: T.textMute
+    }
+  }, "Record or watch a pen from the BIDDING tab and it will appear here.")) : /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+      gap: 12
+    }
+  }, sorted.map(p => /*#__PURE__*/React.createElement(ResultCard, {
+    key: p.id,
+    purchase: p,
+    inspection: p.penNumber ? insByPen[p.penNumber.trim()] : null,
+    lines: lines
+  }))));
 }
 function ResultCard({
   purchase,
@@ -5261,180 +4855,157 @@ function ResultCard({
   const isWatched = !!purchase.watched;
   // Variance from the inspection's max, if any
   const vsMax = inspection && Number.isFinite(inspection.maxPph) && Number.isFinite(purchase.pricePerHead) ? purchase.pricePerHead - inspection.maxPph : null;
-  return /*#__PURE__*/_jsxDEV("div", {
+  return /*#__PURE__*/React.createElement("div", {
     className: "card",
     style: {
       overflow: 'hidden',
       display: 'flex',
       flexDirection: 'column'
-    },
-    children: [photoId ? /*#__PURE__*/_jsxDEV(InspectionPhoto, {
-      inspectionId: photoId,
-      style: {
-        width: '100%',
-        aspectRatio: '4/3',
-        objectFit: 'cover',
-        display: 'block',
-        background: T.bgInset
-      }
-    }, void 0, false) : /*#__PURE__*/_jsxDEV("div", {
-      style: {
-        width: '100%',
-        aspectRatio: '4/3',
-        background: T.bgInset,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: T.textMute,
-        fontSize: 11,
-        fontFamily: "'Archivo', sans-serif",
-        letterSpacing: '0.10em',
-        textTransform: 'uppercase'
-      },
-      children: "No photo"
-    }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-      style: {
-        padding: 12,
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column'
-      },
-      children: [/*#__PURE__*/_jsxDEV("div", {
-        style: {
-          display: 'flex',
-          alignItems: 'center',
-          gap: 8,
-          marginBottom: 8,
-          flexWrap: 'wrap'
-        },
-        children: [/*#__PURE__*/_jsxDEV("span", {
-          className: "arc",
-          style: {
-            fontWeight: 900,
-            fontSize: 14,
-            letterSpacing: '0.04em'
-          },
-          children: ["PEN ", purchase.penNumber || '—']
-        }, void 0, true), line && /*#__PURE__*/_jsxDEV("span", {
-          className: "pill",
-          style: {
-            background: cat.solid,
-            color: cat.ink
-          },
-          children: line.code
-        }, void 0, false), tag && /*#__PURE__*/_jsxDEV("span", {
-          className: "pill",
-          title: `${tag.label} tag · ${tag.year}`,
-          style: {
-            background: tag.fill,
-            color: tag.inkSel,
-            border: `1px solid ${tag.edge}`
-          },
-          children: tag.year
-        }, void 0, false), /*#__PURE__*/_jsxDEV("span", {
-          className: "pill",
-          style: {
-            background: isWatched ? 'transparent' : T.okTxt,
-            color: isWatched ? T.textMute : '#0D0D0F',
-            border: isWatched ? `1px solid ${T.borderH}` : 'none'
-          },
-          children: isWatched ? 'WATCHED' : 'BOUGHT'
-        }, void 0, false)]
-      }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-        className: "mono",
-        style: {
-          fontSize: 13,
-          color: T.textLbl,
-          marginBottom: 10
-        },
-        children: [purchase.head, " head · ", fmt1(purchase.wtPerHead), " kg/hd · ", fmt1(purchase.totalKg), " kg total"]
-      }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-        style: {
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: 8,
-          marginBottom: 10,
-          padding: 10,
-          background: T.bgInset,
-          border: `1px solid ${T.borderS}`,
-          borderRadius: 8
-        },
-        children: [/*#__PURE__*/_jsxDEV("div", {
-          children: [/*#__PURE__*/_jsxDEV("div", {
-            className: "lbl",
-            style: {
-              marginBottom: 2
-            },
-            children: "Sale $/head"
-          }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-            className: "mono",
-            style: {
-              fontSize: 18,
-              fontWeight: 800,
-              color: T.accent
-            },
-            children: ["$", fmt2(purchase.pricePerHead)]
-          }, void 0, true)]
-        }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-          children: [/*#__PURE__*/_jsxDEV("div", {
-            className: "lbl",
-            style: {
-              marginBottom: 2
-            },
-            children: "Sale $/kg"
-          }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-            className: "mono",
-            style: {
-              fontSize: 18,
-              fontWeight: 800
-            },
-            children: ["$", fmt2(purchase.pricePerKg)]
-          }, void 0, true)]
-        }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
-          style: {
-            gridColumn: '1 / -1',
-            borderTop: `1px solid ${T.borderS}`,
-            paddingTop: 8,
-            marginTop: 2
-          },
-          children: [/*#__PURE__*/_jsxDEV("div", {
-            className: "lbl",
-            style: {
-              marginBottom: 2
-            },
-            children: isWatched ? 'Sold for (pen total)' : 'Pen total'
-          }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
-            className: "mono",
-            style: {
-              fontSize: 20,
-              fontWeight: 900
-            },
-            children: ["$", fmt2(purchase.total)]
-          }, void 0, true)]
-        }, void 0, true)]
-      }, void 0, true), vsMax != null && /*#__PURE__*/_jsxDEV("div", {
-        className: "arc",
-        style: {
-          fontSize: 11,
-          letterSpacing: '0.04em',
-          color: vsMax > 0 ? T.warnTxt : vsMax < 0 ? T.okTxt : T.textMute,
-          marginBottom: 8,
-          fontWeight: 700
-        },
-        children: vsMax > 0 ? `$${fmt2(vsMax)}/hd over your inspection max ($${fmt2(inspection.maxPph)})` : vsMax < 0 ? `$${fmt2(-vsMax)}/hd under your inspection max ($${fmt2(inspection.maxPph)})` : `on your inspection max ($${fmt2(inspection.maxPph)})`
-      }, void 0, false), inspection && inspection.notes && /*#__PURE__*/_jsxDEV("div", {
-        className: "arc",
-        style: {
-          fontSize: 12,
-          color: T.textLbl,
-          fontStyle: 'italic',
-          paddingTop: 8,
-          borderTop: `1px solid ${T.borderS}`
-        },
-        children: ["“", inspection.notes, "”"]
-      }, void 0, true)]
-    }, void 0, true)]
-  }, void 0, true);
+    }
+  }, photoId ? /*#__PURE__*/React.createElement(InspectionPhoto, {
+    inspectionId: photoId,
+    style: {
+      width: '100%',
+      aspectRatio: '4/3',
+      objectFit: 'cover',
+      display: 'block',
+      background: T.bgInset
+    }
+  }) : /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: '100%',
+      aspectRatio: '4/3',
+      background: T.bgInset,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      color: T.textMute,
+      fontSize: 11,
+      fontFamily: "'Archivo', sans-serif",
+      letterSpacing: '0.10em',
+      textTransform: 'uppercase'
+    }
+  }, "No photo"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: 12,
+      flex: 1,
+      display: 'flex',
+      flexDirection: 'column'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: 8,
+      marginBottom: 8,
+      flexWrap: 'wrap'
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "arc",
+    style: {
+      fontWeight: 900,
+      fontSize: 14,
+      letterSpacing: '0.04em'
+    }
+  }, "PEN ", purchase.penNumber || '—'), line && /*#__PURE__*/React.createElement("span", {
+    className: "pill",
+    style: {
+      background: cat.solid,
+      color: cat.ink
+    }
+  }, line.code), tag && /*#__PURE__*/React.createElement("span", {
+    className: "pill",
+    title: `${tag.label} tag · ${tag.year}`,
+    style: {
+      background: tag.fill,
+      color: tag.inkSel,
+      border: `1px solid ${tag.edge}`
+    }
+  }, tag.year), /*#__PURE__*/React.createElement("span", {
+    className: "pill",
+    style: {
+      background: isWatched ? 'transparent' : T.okTxt,
+      color: isWatched ? T.textMute : '#0D0D0F',
+      border: isWatched ? `1px solid ${T.borderH}` : 'none'
+    }
+  }, isWatched ? 'WATCHED' : 'BOUGHT')), /*#__PURE__*/React.createElement("div", {
+    className: "mono",
+    style: {
+      fontSize: 13,
+      color: T.textLbl,
+      marginBottom: 10
+    }
+  }, purchase.head, " head · ", fmt1(purchase.wtPerHead), " kg/hd · ", fmt1(purchase.totalKg), " kg total"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'grid',
+      gridTemplateColumns: '1fr 1fr',
+      gap: 8,
+      marginBottom: 10,
+      padding: 10,
+      background: T.bgInset,
+      border: `1px solid ${T.borderS}`,
+      borderRadius: 8
+    }
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    className: "lbl",
+    style: {
+      marginBottom: 2
+    }
+  }, "Sale $/head"), /*#__PURE__*/React.createElement("div", {
+    className: "mono",
+    style: {
+      fontSize: 18,
+      fontWeight: 800,
+      color: T.accent
+    }
+  }, "$", fmt2(purchase.pricePerHead))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    className: "lbl",
+    style: {
+      marginBottom: 2
+    }
+  }, "Sale $/kg"), /*#__PURE__*/React.createElement("div", {
+    className: "mono",
+    style: {
+      fontSize: 18,
+      fontWeight: 800
+    }
+  }, "$", fmt2(purchase.pricePerKg))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      gridColumn: '1 / -1',
+      borderTop: `1px solid ${T.borderS}`,
+      paddingTop: 8,
+      marginTop: 2
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "lbl",
+    style: {
+      marginBottom: 2
+    }
+  }, isWatched ? 'Sold for (pen total)' : 'Pen total'), /*#__PURE__*/React.createElement("div", {
+    className: "mono",
+    style: {
+      fontSize: 20,
+      fontWeight: 900
+    }
+  }, "$", fmt2(purchase.total)))), vsMax != null && /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontSize: 11,
+      letterSpacing: '0.04em',
+      color: vsMax > 0 ? T.warnTxt : vsMax < 0 ? T.okTxt : T.textMute,
+      marginBottom: 8,
+      fontWeight: 700
+    }
+  }, vsMax > 0 ? `$${fmt2(vsMax)}/hd over your inspection max ($${fmt2(inspection.maxPph)})` : vsMax < 0 ? `$${fmt2(-vsMax)}/hd under your inspection max ($${fmt2(inspection.maxPph)})` : `on your inspection max ($${fmt2(inspection.maxPph)})`), inspection && inspection.notes && /*#__PURE__*/React.createElement("div", {
+    className: "arc",
+    style: {
+      fontSize: 12,
+      color: T.textLbl,
+      fontStyle: 'italic',
+      paddingTop: 8,
+      borderTop: `1px solid ${T.borderS}`
+    }
+  }, "“", inspection.notes, "”")));
 }
 
 // Mount

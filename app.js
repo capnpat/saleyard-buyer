@@ -1460,7 +1460,7 @@ function App() {
     line,
     selected
   }) {
-    // Breed drives the main colour; sex shows as a corner dot
+    // Breed drives the main colour; sex shows as a dot beside the code
     const b = breedStyle(line.breed);
     const sex = CAT[line.category] || CAT.mixed;
     return /*#__PURE__*/React.createElement("button", {
@@ -1468,51 +1468,38 @@ function App() {
       onClick: () => pickLine(line.code),
       className: "arc",
       style: {
-        position: 'relative',
-        padding: '10px 6px',
+        padding: '4px 6px',
         border: `2px solid ${b.solid}`,
-        borderRadius: 7,
+        borderRadius: 5,
         background: selected ? b.solid : b.soft,
         color: selected ? b.ink : b.solid,
-        fontWeight: 800,
+        fontWeight: 900,
         fontSize: 13,
         letterSpacing: '0.04em',
         textTransform: 'uppercase',
         cursor: 'pointer',
-        minHeight: 44,
+        minHeight: 28,
+        lineHeight: 1,
         touchAction: 'manipulation',
         WebkitTapHighlightColor: 'transparent',
         display: 'flex',
-        flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
-        gap: 1
+        justifyContent: 'center'
       },
       title: line.name
     }, /*#__PURE__*/React.createElement("span", {
       "aria-hidden": "true",
       style: {
-        position: 'absolute',
-        top: 4,
-        right: 4,
-        width: 8,
-        height: 8,
+        display: 'inline-block',
+        width: 6,
+        height: 6,
         borderRadius: 999,
         background: sex.solid,
-        boxShadow: selected ? '0 0 0 1.5px rgba(0,0,0,0.25)' : '0 0 0 1.5px rgba(255,255,255,0.08)'
+        marginRight: 5,
+        flexShrink: 0,
+        boxShadow: selected ? '0 0 0 1px rgba(0,0,0,0.25)' : '0 0 0 1px rgba(255,255,255,0.08)'
       }
-    }), /*#__PURE__*/React.createElement("span", {
-      style: {
-        fontSize: 14
-      }
-    }, line.code), /*#__PURE__*/React.createElement("span", {
-      style: {
-        fontSize: 8,
-        fontWeight: 600,
-        opacity: 0.85,
-        letterSpacing: '0.04em'
-      }
-    }, line.breed || line.name));
+    }), /*#__PURE__*/React.createElement("span", null, line.code));
   }
 
   // The contextual line of text under the $/kg input. Combines:
@@ -1872,7 +1859,7 @@ function App() {
     onClick: cancelEdit
   }, "CANCEL EDIT"))), /*#__PURE__*/React.createElement("div", {
     style: {
-      marginBottom: 12
+      marginBottom: 8
     }
   }, draftPhotoUrl ? /*#__PURE__*/React.createElement("div", {
     style: {
@@ -1937,12 +1924,13 @@ function App() {
     className: "btn arc btn-ghost",
     style: {
       width: '100%',
-      padding: '12px 14px',
-      fontSize: 13,
-      letterSpacing: '0.04em'
+      padding: '6px 10px',
+      fontSize: 11,
+      letterSpacing: '0.04em',
+      minHeight: 28
     },
     onClick: () => draftPhotoFileRef.current && draftPhotoFileRef.current.click()
-  }, "📷  ADD PHOTO OF THIS PEN"), /*#__PURE__*/React.createElement("input", {
+  }, "📷 ADD PHOTO"), /*#__PURE__*/React.createElement("input", {
     ref: draftPhotoFileRef,
     type: "file",
     accept: "image/*",
@@ -1995,33 +1983,33 @@ function App() {
       className: "arc",
       onClick: () => updateField('tagColour', sel ? '' : t.code),
       style: {
-        padding: '8px 6px',
+        padding: '4px 6px',
         background: sel ? t.fill : t.softFill,
         color: sel ? t.inkSel : t.inkUnsel,
         border: `2px solid ${sel ? t.edgeSel : t.edge}`,
-        borderRadius: 7,
-        fontWeight: 800,
+        borderRadius: 5,
+        fontWeight: 900,
         letterSpacing: '0.04em',
         cursor: 'pointer',
-        minHeight: 44,
+        minHeight: 28,
+        lineHeight: 1,
         display: 'flex',
-        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: 1,
+        gap: 6,
         touchAction: 'manipulation',
         WebkitTapHighlightColor: 'transparent'
       }
     }, /*#__PURE__*/React.createElement("span", {
       style: {
-        fontSize: 15,
-        fontWeight: 900
+        fontSize: 14
       }
     }, t.year), /*#__PURE__*/React.createElement("span", {
       style: {
         fontSize: 9,
-        opacity: 0.85,
-        textTransform: 'uppercase'
+        opacity: 0.8,
+        textTransform: 'uppercase',
+        fontWeight: 700
       }
     }, t.label));
   }))), penMatch && /*#__PURE__*/React.createElement("div", {
@@ -2101,60 +2089,85 @@ function App() {
     style: {
       display: 'grid',
       gridTemplateColumns: '1fr 1fr 1.2fr',
-      gap: 10,
-      marginBottom: 12
+      gap: 6,
+      marginBottom: 8
     }
   }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
-    className: "lbl"
+    className: "lbl",
+    style: {
+      fontSize: 9,
+      marginBottom: 2
+    }
   }, "Pen #"), /*#__PURE__*/React.createElement("input", {
     type: "text",
     inputMode: "text",
     className: "field",
     style: {
-      fontSize: 18
+      fontSize: 15,
+      padding: '6px 10px'
     },
     value: draft.penNumber,
     onChange: e => updateField('penNumber', e.target.value.slice(0, 8)),
     onFocus: e => e.target.select(),
     placeholder: "opt"
   })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
-    className: "lbl"
+    className: "lbl",
+    style: {
+      fontSize: 9,
+      marginBottom: 2
+    }
   }, "Head"), /*#__PURE__*/React.createElement("input", {
     type: "text",
     inputMode: "numeric",
     pattern: "[0-9]*",
     className: "field",
+    style: {
+      fontSize: 15,
+      padding: '6px 10px'
+    },
     value: draft.head,
     onChange: e => updateField('head', e.target.value.replace(/[^0-9]/g, '')),
     onFocus: e => e.target.select(),
     placeholder: "0"
   })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
-    className: "lbl"
+    className: "lbl",
+    style: {
+      fontSize: 9,
+      marginBottom: 2
+    }
   }, "Est. kg per head"), /*#__PURE__*/React.createElement("input", {
     type: "text",
     inputMode: "decimal",
     className: "field",
+    style: {
+      fontSize: 15,
+      padding: '6px 10px'
+    },
     value: draft.wtPerHead,
     onChange: e => updateField('wtPerHead', e.target.value.replace(/[^0-9.]/g, '')),
     onFocus: e => e.target.select(),
     placeholder: "0.0"
   }))), /*#__PURE__*/React.createElement("div", {
     style: {
-      marginBottom: 10
+      marginBottom: 6
     }
   }, /*#__PURE__*/React.createElement("label", {
-    className: "lbl"
+    className: "lbl",
+    style: {
+      fontSize: 9,
+      marginBottom: 2
+    }
   }, "$ per head ", /*#__PURE__*/React.createElement("span", {
     style: {
       textTransform: 'none',
       letterSpacing: 0,
       color: T.textMute,
-      fontSize: 10
+      fontSize: 9
     }
   }, "(bidding unit)")), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',
-      gap: 6
+      gap: 4
     }
   }, /*#__PURE__*/React.createElement("input", {
     type: "text",
@@ -2162,8 +2175,9 @@ function App() {
     className: `field ${overBudget ? 'over' : ''}`,
     style: {
       flex: 1,
-      fontSize: 22,
-      fontWeight: 800
+      fontSize: 16,
+      fontWeight: 800,
+      padding: '6px 10px'
     },
     value: draft.pricePerHead,
     onChange: e => updateField('pricePerHead', e.target.value.replace(/[^0-9.]/g, '')),
@@ -2173,38 +2187,57 @@ function App() {
     className: "btn-step arc",
     type: "button",
     onClick: () => bumpPrice('head', -1),
+    style: {
+      padding: '4px 8px',
+      fontSize: 11,
+      minHeight: 32
+    },
     "aria-label": "decrease price per head"
   }, "−$1"), /*#__PURE__*/React.createElement("button", {
     className: "btn-step arc",
     type: "button",
     onClick: () => bumpPrice('head', +1),
+    style: {
+      padding: '4px 8px',
+      fontSize: 11,
+      minHeight: 32
+    },
     "aria-label": "increase price per head"
   }, "+$1")), presets.length > 0 && /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'grid',
       gridTemplateColumns: 'repeat(5, 1fr)',
-      gap: 6,
-      marginTop: 8
+      gap: 4,
+      marginTop: 4
     }
   }, presets.map((price, i) => /*#__PURE__*/React.createElement("button", {
     key: i,
     type: "button",
     className: `btn-preset arc ${i === 2 ? 'target' : ''}`,
+    style: {
+      padding: '4px 4px',
+      fontSize: 11,
+      minHeight: 28
+    },
     onClick: () => setPresetPph(price)
   }, "$", price.toFixed(2))))), /*#__PURE__*/React.createElement("div", {
     style: {
-      marginBottom: 14
+      marginBottom: 8
     }
   }, /*#__PURE__*/React.createElement("label", {
-    className: "lbl"
+    className: "lbl",
+    style: {
+      fontSize: 9,
+      marginBottom: 2
+    }
   }, "$ per kg ", /*#__PURE__*/React.createElement("span", {
     style: {
       textTransform: 'none',
       letterSpacing: 0,
       color: T.textMute,
-      fontSize: 10
+      fontSize: 9
     }
-  }, "(live, calculated)")), (() => {
+  }, "(live)")), (() => {
     const bg = kgStatus === 'red' ? 'rgba(248,113,113,0.14)' : kgStatus === 'yellow' ? 'rgba(255,214,107,0.14)' : kgStatus === 'green' ? 'rgba(134,239,172,0.12)' : T.bgInset;
     const border = kgStatus === 'red' ? T.warnBdr : kgStatus === 'yellow' ? T.accent : kgStatus === 'green' ? T.okTxt : T.borderH;
     const ink = kgStatus === 'red' ? T.warnTxt : kgStatus === 'yellow' ? T.accent : kgStatus === 'green' ? T.okTxt : T.text;
@@ -2214,34 +2247,36 @@ function App() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        gap: 10,
-        padding: '10px 14px',
+        gap: 8,
+        padding: '6px 10px',
         background: bg,
         border: `1.5px solid ${border}`,
-        borderRadius: 10
+        borderRadius: 7
       }
     }, /*#__PURE__*/React.createElement("div", {
       className: "mono",
       style: {
-        fontSize: 24,
+        fontSize: 17,
         fontWeight: 800,
-        color: ink
+        color: ink,
+        lineHeight: 1.1
       }
     }, "$", hasPrice ? fmt2(dPpk) : '—.—', /*#__PURE__*/React.createElement("span", {
       style: {
-        fontSize: 13,
+        fontSize: 10,
         color: T.textMute,
-        marginLeft: 6,
+        marginLeft: 4,
         fontWeight: 600
       }
     }, "/kg")), /*#__PURE__*/React.createElement("div", {
       className: "arc",
       style: {
-        fontSize: 10,
-        letterSpacing: '0.08em',
+        fontSize: 9,
+        letterSpacing: '0.06em',
         textAlign: 'right',
         color: T.textMute,
-        textTransform: 'uppercase'
+        textTransform: 'uppercase',
+        lineHeight: 1.2
       }
     }, lineBudget ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", null, "Ceiling $", fmt2(lineBudget), "/kg"), hasPrice && (kgStatus === 'red' ? /*#__PURE__*/React.createElement("div", {
       style: {
@@ -2263,33 +2298,43 @@ function App() {
     style: {
       display: 'grid',
       gridTemplateColumns: '1fr 1fr',
-      gap: 12,
-      marginBottom: 14,
-      padding: 14,
+      gap: 8,
+      marginBottom: 8,
+      padding: 8,
       background: T.bgInset,
       border: `1.5px dashed ${T.borderH}`,
-      borderRadius: 10
+      borderRadius: 7
     }
   }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
-    className: "lbl"
+    className: "lbl",
+    style: {
+      fontSize: 9,
+      marginBottom: 1
+    }
   }, "Pen weight"), /*#__PURE__*/React.createElement("div", {
     className: "mono",
     style: {
-      fontSize: 22,
-      fontWeight: 700
+      fontSize: 15,
+      fontWeight: 700,
+      lineHeight: 1.1
     }
   }, fmt1(dTotalKg), " ", /*#__PURE__*/React.createElement("span", {
     style: {
-      fontSize: 13,
+      fontSize: 10,
       color: T.textMute
     }
   }, "kg"))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
-    className: "lbl"
+    className: "lbl",
+    style: {
+      fontSize: 9,
+      marginBottom: 1
+    }
   }, "Pen total"), /*#__PURE__*/React.createElement("div", {
     className: "mono",
     style: {
-      fontSize: 22,
-      fontWeight: 700
+      fontSize: 15,
+      fontWeight: 700,
+      lineHeight: 1.1
     }
   }, "$", fmt2(dTotal)))), overBudget && /*#__PURE__*/React.createElement("div", {
     style: {
@@ -2310,8 +2355,9 @@ function App() {
     className: "btn btn-primary arc",
     style: {
       width: '100%',
-      fontSize: 15,
-      padding: '14px 14px'
+      fontSize: 13,
+      padding: '10px 14px',
+      minHeight: 36
     },
     disabled: !dValid,
     onClick: () => commitEntry(false)
@@ -2319,13 +2365,14 @@ function App() {
     className: "btn btn-ghost arc",
     style: {
       width: '100%',
-      fontSize: 11,
-      padding: '10px 14px',
-      marginTop: 6
+      fontSize: 10,
+      padding: '7px 10px',
+      marginTop: 4,
+      minHeight: 28
     },
     disabled: !dValid,
     onClick: () => commitEntry(true)
-  }, "LOG AS WATCHED (not bought)")), /*#__PURE__*/React.createElement("section", {
+  }, "LOG AS WATCHED")), /*#__PURE__*/React.createElement("section", {
     className: "card",
     style: {
       padding: 18

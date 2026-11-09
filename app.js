@@ -692,6 +692,14 @@ function App() {
   const dTotalKg = Number.isFinite(dHead) && Number.isFinite(dWt) ? dHead * dWt : 0;
   const dTotal = Number.isFinite(dHead) && Number.isFinite(dPph) ? dHead * dPph : 0;
   const dValid = !!draft.lineCode && dHead > 0 && dWt > 0 && dPpk > 0 && dPph > 0;
+
+  // The inspection currently overriding the ceiling, if any (declared here so
+  // insMaxPph below can see it; inspection-handler useEffects further down also
+  // depend on this, so it is NOT re-declared in the handler section).
+  const appliedInspection = useMemo(() => {
+    if (!appliedInspectionId) return null;
+    return inspections.find(i => i.id === appliedInspectionId) || null;
+  }, [appliedInspectionId, inspections]);
   const lineBudget = draft.lineCode ? budgets[draft.lineCode] : undefined;
   // When an inspection is applied, the pen-specific max $/head replaces the line's $/kg ceiling
   const insMaxPph = appliedInspection ? appliedInspection.maxPph : null;
@@ -1036,11 +1044,9 @@ function App() {
     setAppliedInspectionId(inspection.id);
   }
 
-  // The inspection currently overriding the ceiling, if any
-  const appliedInspection = useMemo(() => {
-    if (!appliedInspectionId) return null;
-    return inspections.find(i => i.id === appliedInspectionId) || null;
-  }, [appliedInspectionId, inspections]);
+  // (appliedInspection useMemo was moved to the price-derivation area above,
+  // because insMaxPph needs to reference it. Leaving a sentinel comment here
+  // so the surrounding handlers stay easy to find.)
 
   // Inspection match for the current pen number (not yet applied)
   const penMatch = useMemo(() => {
